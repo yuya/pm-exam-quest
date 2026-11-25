@@ -322,16 +322,20 @@ const SFX={
 /* ===== 疑似ハプティクス =====
  Android：Vibration API ／ iPhone（iOS 18以降のSafari）：非表示のスイッチ型チェックボックスを切り替えたときに鳴る端末の触覚を利用 */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-const CANVIB=!!navigator.vibrate&&!IOS;let HSW;
-function iosTick(){try{if(!HSW){HSW=document.createElement("label");HSW.setAttribute("aria-hidden","true");HSW.style.cssText="position:fixed;left:-200px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden";HSW.innerHTML='<input type="checkbox" switch tabindex="-1">';document.body.appendChild(HSW)}HSW.click()}catch(e){}}
+const CANVIB=typeof navigator.vibrate==="function"&&!IOS;
+const EMBED=(()=>{try{return window.top!==window.self}catch(e){return true}})();
+// iOS 18+ Safari：switch型チェックボックスのラベルをクリックすると端末の触覚が鳴る（毎回新しく作って head に入れ、display:none にする方式）
+function iosTick(){try{const l=document.createElement("label");l.ariaHidden="true";l.style.display="none";const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");l.appendChild(i);document.head.appendChild(l);l.click();document.head.removeChild(l)}catch(e){}}
 const HP={light:8,select:6,medium:16,heavy:28,success:[12,50,22],error:[28,40,28],combo:[10,30,10,30,24],big:[24,40,24,40,60]};
-function buzz(p){if(S.noHaptic)return;try{if(CANVIB){navigator.vibrate(p)}else if(IOS){const n=Array.isArray(p)?Math.ceil(p.length/2):1;iosTick();for(let i=1;i<n;i++)setTimeout(iosTick,i*70)}}catch(e){}}
+let lastHap=0;
+function buzz(p){if(S.noHaptic)return;try{if(CANVIB){navigator.vibrate(p)}else if(IOS){const now=performance.now();if(now-lastHap<35)return;lastHap=now;iosTick();const n=Array.isArray(p)?Math.ceil(p.length/2):1;for(let k=1;k<n;k++)setTimeout(iosTick,k*90)}}catch(e){}}
 const haptic=k=>buzz(HP[k]||HP.light);
-function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,#askY"))return"heavy";if(el.matches(".btn,.qa,.node,.li"))return"medium";if(el.matches(".ch"))return"select";return"light"}
+function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,#askY,#hpTest"))return"heavy";if(el.matches(".btn,.qa,.node,.li"))return"medium";if(el.matches(".ch"))return"select";return"light"}
 const HSEL="button,a.btn,.li,.node,.qa,.chip,label.check,summary,select";
-// Android は押した瞬間（pointerdown）、iPhone は確定時（click）に発火
+// Android：押した瞬間（pointerdown）。iPhone：タップ確定（click）＝ユーザー操作の中で必ず呼ぶ
 document.addEventListener("pointerdown",e=>{if(!CANVIB)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{passive:true,capture:true});
-document.addEventListener("click",e=>{if(!IOS||!e.isTrusted)return;const el=e.target.closest(HSEL);if(el&&!el.disabled&&!el.closest("label[aria-hidden]"))haptic(hapticFor(el))},{capture:true});
+document.addEventListener("click",e=>{if(!IOS||!e.isTrusted)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{capture:true});
+function hapticEnv(){if(IOS)return{m:"iPhone方式（iOS 18以降のSafariのスイッチ触覚）",ok:true};if(CANVIB)return{m:"Android方式（Vibration API）",ok:true};return{m:"この端末・ブラウザは振動に未対応です",ok:false}}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -482,14 +486,14 @@ async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.o
  L.busy=true;$("#go").disabled=true;
  const lf=$("#lf"),vd=$("#vd"),sb=bs[L.sel],r=sb.getBoundingClientRect(),x0=r.left+r.width/2,y0=r.top+r.height/2,dt=Date.now()-L.qt0;
  if(ok){L.ok++;L.combo++;S.maxCombo=Math.max(S.maxCombo,L.combo);const pw=Math.min(1.9,1+L.combo*.09);
-  sb.classList.add("right");SFX.ok(L.combo);haptic(L.combo>=5?"heavy":"medium");hitmark(x0,y0,"#21c16b",pw);jolt(sb,2+Math.min(6,L.combo*.5),110);
+  sb.classList.add("right");SFX.ok(L.combo);haptic([3,5,8,10,15,20,25,30].includes(L.combo)?"combo":L.combo>=5?"heavy":"medium");hitmark(x0,y0,"#21c16b",pw);jolt(sb,2+Math.min(6,L.combo*.5),110);
   await sleep(RM?0:60+Math.min(90,L.combo*10)); // ヒットストップ：コンボが伸びるほど長く
   sb.animate([{transform:"scale(1)"},{transform:"scale(1.05,.94)"},{transform:"scale(.98,1.04)"},{transform:"none"}],{duration:280,easing:"ease-out"});burst(x0,y0,"#21c16b",12);
   const quick=dt<10000;let g=10+(L.combo>=3?Math.min(10,(L.combo-2)*2):0)+(quick?3:0);L.xp+=g;
   floatXP(r.right-90,r.top-6,"+"+g+"XP");qprog("ok");if(L.combo===5)qprog("c5");
   if(quick){qprog("qk");setTimeout(()=>{SFX.quick();floatXP(r.left+12,r.top-6,"⚡QUICK!","q")},130)}
   const cm=$("#cmb");if(cm){cm.textContent="🔥"+L.combo;cm.classList.toggle("on",L.combo>=2);cm.animate([{transform:"scale(1.6) rotate(-8deg)"},{transform:"none"}],{duration:300,easing:"cubic-bezier(.3,1.6,.5,1)"})}
-  if([3,5,8,10,15,20,25,30].includes(L.combo))setTimeout(()=>{SFX.combo(L.combo);comboPop(`🔥 ${L.combo}連続正解！`);shakeScreen("m");flash("#ff8a00");haptic("combo")},230);
+  if([3,5,8,10,15,20,25,30].includes(L.combo))setTimeout(()=>{SFX.combo(L.combo);comboPop(`🔥 ${L.combo}連続正解！`);shakeScreen("m");flash("#ff8a00")},230);
   lf.className="lfoot ok";vd.innerHTML=`<div class="t">${poco("happy","xs jump")}${PRAISE(L.combo)}</div><div class="ex">${esc(q.ex)}</div>`;$("#go").className="btn ok";$("#go").textContent="つづける"}
  else{L.ng++;const lost=L.combo;L.combo=0;sb.classList.add("wrong");SFX.ng();haptic("error");jolt(sb,12,360,"x");shakeScreen("s");flash("#ff4d5e");
   await sleep(RM?0:110);bs[q.a].classList.add("right");bs[q.a].animate([{transform:"scale(.97)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:300});
@@ -651,7 +655,7 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
  ${S.mock.length?`<h2>模試の履歴</h2><div class="card">${S.mock.slice(-8).reverse().map(m=>`<div class="check"><span>${m.score>=15?"🏅":"📄"}</span><span style="flex:1">${new Date(m.at).toLocaleDateString("ja-JP")}</span><b>${m.score}/25</b></div>`).join("")}</div>`:""}
  <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${b.i}</span>${b.n}</div>`).join("")}</div></div>
  <h2>設定</h2><div class="card">
-  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
+  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><div class="card" style="margin:4px 0 8px;padding:12px;box-shadow:none"><div style="font-size:13px"><b>振動の方式：</b>${hapticEnv().m}</div>${EMBED?`<div style="font-size:12px;color:var(--ng-d);margin-top:4px">⚠ いまはClaudeなど別サイトの中（埋め込み表示）で開いています。ブラウザの制限で振動しないことがあります。公開ページをSafari／Chromeで直接開くと確実です。</div>`:""}${IOS?`<div class="muted" style="font-size:12px;margin-top:4px">iPhoneは「設定 → サウンドと触覚 → システムの触覚」がオンのとき、Safariで振動します。</div>`:""}<button class="btn gold sm" id="hpTest" style="width:100%;margin-top:8px">📳 振動テスト</button></div><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
   <div class="row" style="padding:8px 4px"><span style="flex:1;font-size:14px">1日の目標</span><select id="gl" style="padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)">${[20,50,100,150].map(g=>`<option ${S.goal===g?"selected":""} value="${g}">${g} XP</option>`).join("")}</select></div>
   <div class="grid2" style="margin-top:8px"><button class="btn ghost sm" style="width:100%" onclick="exportData()">📤 引き継ぎコード発行</button><button class="btn ghost sm" style="width:100%" onclick="importData()">📥 コードで復元</button></div>
   <div class="muted" style="margin-top:8px">登録不要のため，記録はこの端末のブラウザに保存されます。機種変更や別の端末へは「引き継ぎコード」で移せます。</div>
@@ -659,7 +663,7 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
  <button class="btn sky" style="margin-top:18px" onclick="share('プロマネ試験の対策アプリ「PM試験クエスト」で勉強中🐝 🔥'+S.streak+'日連続・Lv.'+(levelOf(S.xp)+1))">🔗 友だちにシェア</button>
  <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。</div>`;
  $("#main").innerHTML=h;
- $("#snd").onchange=e=>{S.sound=e.target.checked;save();SFX.tap()};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
+ $("#snd").onchange=e=>{S.sound=e.target.checked;save();SFX.tap()};$("#hpTest").onclick=()=>{const was=S.noHaptic;S.noHaptic=false;haptic("big");S.noHaptic=was;toast(hapticEnv().ok?"振動しましたか？（しない場合は上の注意を確認）":"この環境は振動に未対応です")};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
 function exportData(){const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));modal(`<h2 style="margin:0 0 8px">引き継ぎコード</h2><p class="muted">全文をコピーして，新しい端末の「コードで復元」に貼り付けてください。</p><textarea class="wa" readonly style="font-size:11px;min-height:140px">${code}</textarea><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>toast('コピーしました'))">コピー</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
 function importData(){modal(`<h2 style="margin:0 0 8px">コードで復元</h2><textarea class="wa" id="imp" placeholder="引き継ぎコードを貼り付け"></textarea><button class="btn" onclick="try{const d=JSON.parse(decodeURIComponent(escape(atob($('#imp').value.trim()))));S=Object.assign({},DEF,d);save();closeModal();toast('復元しました！');go('home')}catch(e){toast('コードが正しくありません')}">復元する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">キャンセル</button>`)}
 
