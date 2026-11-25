@@ -217,7 +217,7 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .pre.in{opacity:1;transform:none;transition:opacity .2s,transform .32s cubic-bezier(.3,1.7,.5,1)}
 .lvpop{animation:lvpop .6s cubic-bezier(.3,1.8,.5,1)}
 @keyframes lvpop{from{transform:scale(.2) rotate(-30deg)}}
-.chest{font-size:84px;line-height:1;padding:10px 20px;transition:transform .15s;animation:wob 1.6s ease-in-out infinite;filter:drop-shadow(0 8px 0 rgba(0,0,0,.12))}
+.chest{display:inline-block;font-size:84px;line-height:1;padding:10px 20px;user-select:none;transition:transform .15s;animation:wob 1.6s ease-in-out infinite;filter:drop-shadow(0 8px 0 rgba(0,0,0,.12))}
 .chest.opened{animation:lvpop .5s cubic-bezier(.3,1.8,.5,1)}
 @keyframes wob{0%,80%,100%{rotate:0deg}85%{rotate:-8deg}90%{rotate:8deg}95%{rotate:-4deg}}
 .dots{display:flex;gap:8px;justify-content:center;margin-top:4px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
@@ -332,8 +332,8 @@ const HP={light:8,select:6,medium:16,heavy:28,success:[12,50,22],error:[28,40,28
 let lastHap=0;
 function buzz(p){if(S.noHaptic)return;try{if(CANVIB){navigator.vibrate(p)}else if(IOS){const now=performance.now();if(now-lastHap<35)return;lastHap=now;iosTick();const n=Array.isArray(p)?Math.ceil(p.length/2):1;for(let k=1;k<n;k++)setTimeout(iosTick,k*90)}}catch(e){}}
 const haptic=k=>buzz(HP[k]||HP.light);
-function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,#askY,#hpTest"))return"heavy";if(el.matches(".btn,.qa,.node,.li"))return"medium";if(el.matches(".ch"))return"select";return"light"}
-const HSEL="button,a.btn,.li,.node,.qa,.chip,label.check,summary,select";
+function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,.ov.chesting,#askY,#hpTest"))return"heavy";if(el.matches(".btn,.qa,.node,.li"))return"medium";if(el.matches(".ch"))return"select";return"light"}
+const HSEL="button,a.btn,.li,.node,.qa,.chip,label.check,summary,select,.ov.chesting";
 // Android：押した瞬間（pointerdown）。iPhone：タップ確定（click）＝ユーザー操作の中で必ず呼ぶ
 document.addEventListener("pointerdown",e=>{if(!CANVIB)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{passive:true,capture:true});
 document.addEventListener("click",e=>{if(!IOS||!e.isTrusted||HOV)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{capture:true});
@@ -412,10 +412,13 @@ function questHTML(){const d=dq();const all=d.ks.every(x=>d.done[x]);return `<di
 const RAR=[{n:"ノーマル",c:"#8b8aa8"},{n:"レア",c:"#1cb0f6"},{n:"スーパーレア",c:"#ce82ff"},{n:"ウルトラレア",c:"#ffb21e"}];
 function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"🛡️",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12)return{r:2,i:"❤️",t:"ハート全回復＋30XP",f:()=>{S.hearts=HEART_MAX;S.hTs=0;addXP(30)}};if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"💎",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"🍯",t:`+${x} XP`,f:()=>addXP(x)}}
 function openChest(title="ハニーポットゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
- modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" style="margin:0 0 8px">タップして開けよう！</p><button id="chest" class="chest" aria-label="ハニーポット">🍯</button><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
- const c=$("#chest");c.onclick=()=>{if(taps>=3)return;taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);buzz(15*taps);jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
-  if(taps===3){setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);buzz([30,30,60]);rw.f();save();renderTop();
-   c.textContent=rw.i;c.classList.add("opened");c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:800;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}}})}
+ modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">画面のどこでもタップして開けよう！</p><div id="chest" class="chest" aria-label="ハニーポット">🍯</div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
+ const c=$("#chest"),ov=$$(".ov").pop();ov.classList.add("chesting");
+ const tap=e=>{if(taps>=3)return;e.preventDefault();e.stopPropagation();taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);haptic(taps<3?"medium":"heavy");jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
+  const x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;burst(x,y,"#ffb300",8+taps*3);
+  if(taps===3){ov.classList.remove("chesting");$("#chint").textContent="";setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);rw.f();save();renderTop();
+   c.textContent=rw.i;c.classList.add("opened");c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:800;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}};
+ ov.addEventListener("click",tap,true)})}
 const BADGES=[
  {k:"first",i:"🌱",n:"はじめの一歩",t:s=>Object.keys(s.lessons).length>=1},
  {k:"s3",i:"🔥",n:"3日連続",t:s=>s.best>=3},{k:"s7",i:"🌋",n:"7日連続",t:s=>s.best>=7},{k:"s30",i:"☀️",n:"30日連続",t:s=>s.best>=30},
