@@ -235,6 +235,14 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .chest .ms{font-size:92px;vertical-align:0;color:#FF9A1F;filter:drop-shadow(0 6px 0 rgba(0,0,0,.12))}
 .chest.opened .ms{color:var(--sky)}
 .combo .ms{vertical-align:-.15em}
+.emo{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.22em;object-fit:contain;-webkit-user-drag:none;user-select:none}
+.emo.sm{width:28px;height:28px;vertical-align:middle}
+.big .emo{width:84px;height:84px;vertical-align:0;filter:drop-shadow(0 6px 8px rgba(60,40,0,.18))}
+.chest .emo{width:132px;height:132px;vertical-align:0;filter:drop-shadow(0 8px 10px rgba(60,40,0,.2))}
+.bdg .m{background:linear-gradient(145deg,#FFF6D6,#FFE08A);box-shadow:0 4px 0 #E7B94A}
+.bdg .m .emo{width:40px;height:40px;vertical-align:0}
+.bdg .off .m{background:var(--line);box-shadow:0 4px 0 color-mix(in srgb,var(--line) 70%,#000 12%)}
+.bdg .off .m .emo{filter:grayscale(1) brightness(1.1);opacity:.35}
 @property --p{syntax:"<number>";inherits:false;initial-value:0}
 .ring{transition:--p 1.1s cubic-bezier(.3,1.2,.5,1)}
 .mascot.xs{width:40px;height:40px;flex:none;margin:-6px 2px -6px -4px}
@@ -253,7 +261,7 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .chest{display:inline-block;font-size:84px;line-height:1;padding:10px 20px;user-select:none;transition:transform .15s;animation:wob 1.6s ease-in-out infinite;filter:drop-shadow(0 8px 0 rgba(0,0,0,.12))}
 .chest.opened{animation:lvpop .5s cubic-bezier(.3,1.8,.5,1)}
 @keyframes wob{0%,80%,100%{rotate:0deg}85%{rotate:-8deg}90%{rotate:8deg}95%{rotate:-4deg}}
-.dots{display:flex;gap:8px;justify-content:center;margin-top:4px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:10px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
 .rar{display:inline-block;padding:3px 14px;border-radius:99px;background:var(--rc);color:#fff;font-weight:800;font-size:13px;box-shadow:0 0 18px var(--rc)}
 .chestbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:18px;font-weight:800;font-size:17px;color:#5a3a00;background:linear-gradient(135deg,#ffe07a,#ffb21e);box-shadow:0 4px 0 #d48a00}
 .chestbtn:not(.used){animation:glow 1.4s ease-in-out infinite}
@@ -615,6 +623,7 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const KANA=["ア","イ","ウ","エ"];
 const ICP={"account_balance":983040,"ads_click":983041,"alarm":983042,"architecture":983043,"arrow_forward_ios":983044,"article":983045,"auto_awesome":983046,"auto_stories":983047,"balance":983048,"bedtime":983049,"bolt":983050,"calendar_month":983051,"campaign":983052,"cancel":983053,"casino":983054,"celebration":983055,"check":983056,"check_circle":983057,"checklist":983058,"close":983059,"construction":983060,"content_copy":983061,"crown":983062,"cyclone":983063,"description":983064,"diamond":983065,"download":983066,"eco":983067,"edit":983068,"edit_note":983069,"explore":983070,"extension":983071,"favorite":983072,"handshake":983073,"history_edu":983074,"home":983075,"library_books":983076,"lightbulb":983077,"local_fire_department":983078,"map":983079,"menu_book":983080,"military_tech":983081,"pause":983082,"payments":983083,"play_arrow":983084,"psychology":983085,"push_pin":983086,"redeem":983087,"replay":983088,"school":983089,"share":983090,"shield":983091,"sports_score":983092,"star":983093,"stars":983094,"target":983095,"timer":983096,"trending_up":983097,"trophy":983098,"upload":983099,"vibration":983100,"view_agenda":983101,"volcano":983102,"volume_off":983103,"volume_up":983104,"warning":983105,"wb_sunny":983106,"wb_twilight":983107,"workspace_premium":983108};
+const E=(n,c="")=>`<img class="emo ${c}" src="assets/emoji/${n}.webp" alt="" aria-hidden="true" draggable="false">`;
 const I=(n,c="")=>`<i class="ms ${c}" aria-hidden="true">${ICP[n]?String.fromCodePoint(ICP[n]):""}</i>`;
 const CATS=[
  {k:"int",n:"統合・標準",i:"explore",c:"#5b4cf5",d:"#4234d6"},
@@ -751,7 +760,7 @@ function poco(mood="happy",cls=""){return pocoSVG(mood,cls,cls.includes("logo")?
 function addXP(n){const before=levelOf(S.xp);S.xp+=n;const t=today();S.days[t]=(S.days[t]||0)+n;
  if(S.last!==t){if(S.last&&dayDiff(S.last,t)===1)S.streak++;else S.streak=1;S.last=t;S.best=Math.max(S.best,S.streak);S._streakUp=Date.now();if(S.streak%7===0&&S.shield<2){S.shield++;setTimeout(()=>toast("<i class=ms aria-hidden=true>&#xF0033;</i> 7日連続ボーナス：ストリークシールド獲得！"),1200)}}
  save();renderTop();qprog("xp",n);const after=levelOf(S.xp);if(after>before)setTimeout(()=>levelUp(after),L?1900:700);checkBadges()}
-function levelUp(lv){SFX.lv();flash("#ffb21e");shakeScreen("l");confetti(200);buzz([30,40,30,40,60]);modal(`<div class="rays"><div class="big lvpop"><i class=ms aria-hidden=true>&#xF0044;</i></div></div><h2 style="margin:10px 0 4px">レベル ${lv+1} に到達！</h2><p>称号：<b>${titleOf(lv)}</b></p><p class="muted">次のレベルまで ${lvXP(lv+1)-S.xp} XP</p><button class="btn gold" onclick="closeModal()">やったね！</button>`)}
+function levelUp(lv){SFX.lv();flash("#ffb21e");shakeScreen("l");confetti(200);buzz([30,40,30,40,60]);modal(`<div class="rays"><div class="big lvpop">${E("military_medal")}</div></div><h2 style="margin:10px 0 4px">レベル ${lv+1} に到達！</h2><p>称号：<b>${titleOf(lv)}</b></p><p class="muted">次のレベルまで ${lvXP(lv+1)-S.xp} XP</p><button class="btn gold" onclick="closeModal()">やったね！</button>`)}
 /* ===== デイリークエスト（目的を目の前に吊るす） ===== */
 const QPOOL=[{k:"ok",n:"10問正解する",g:10,i:"check_circle"},{k:"c5",n:"5連続正解を出す",g:1,i:"local_fire_department"},{k:"ls",n:"レッスンを2回クリア",g:2,i:"star"},{k:"pf",n:"パーフェクトを1回",g:1,i:"crown"},{k:"pm1",n:"記述問題に1問挑戦",g:1,i:"edit_note"},{k:"xp",n:"80XP獲得する",g:80,i:"diamond"},{k:"qk",n:"10秒以内の正解を5回",g:5,i:"bolt"},{k:"wk",n:"苦手復習をクリア",g:1,i:"psychology"}];
 function dq(){const t=today();if(!S.dq||S.dq.d!==t){let h=7;for(const c of t)h=(h*31+c.charCodeAt(0))>>>0;const pool=[...QPOOL],pick=[];for(let i=0;i<3;i++){h=(Math.imul(h,1103515245)+12345)>>>0;pick.push(pool.splice(h%pool.length,1)[0].k)}S.dq={d:t,ks:pick,p:{},done:{},bonus:false};save()}return S.dq}
@@ -760,28 +769,28 @@ function qprog(k,n=1){const d=dq();if(!d.ks.includes(k)||d.done[k])return;const 
 function questHTML(){const d=dq();const all=d.ks.every(x=>d.done[x]);return `<div class="card" style="margin-top:14px"><div class="row" style="justify-content:space-between"><h3 style="margin:0"><i class=ms aria-hidden=true>&#xF0037;</i> 今日のクエスト</h3><span class="muted">${all?"全達成！<i class=ms aria-hidden=true>&#xF002F;</i>":"全達成で宝箱"}</span></div>${d.ks.map(k=>{const q=QPOOL.find(x=>x.k===k),p=d.p[k]||0,dn=d.done[k];return `<div class="qrow ${dn?"dn":""}"><span class="qi">${dn?"<i class=ms aria-hidden=true>&#xF0011;</i>":I(q.i)}</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">${q.n}</div><div class="gauge"><i style="width:${p/q.g*100}%;background:${dn?"var(--ok)":"var(--gold)"}"></i></div></div><span class="muted" style="font-weight:800">${p}/${q.g}</span></div>`}).join("")}</div>`}
 /* ===== 宝箱（ランダム報酬：ギュッと溜めてパッと開く） ===== */
 const RAR=[{n:"ノーマル",c:"#8b8aa8"},{n:"レア",c:"#1cb0f6"},{n:"スーパーレア",c:"#ce82ff"},{n:"ウルトラレア",c:"#ffb21e"}];
-function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"shield",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12){const x=50+(Math.random()*21|0);return{r:2,i:"diamond",t:`+${x} XP`,f:()=>addXP(x)}}if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"diamond",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"diamond",t:`+${x} XP`,f:()=>addXP(x)}}
+function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"shield",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12){const x=50+(Math.random()*21|0);return{r:2,i:"gem_stone",t:`+${x} XP`,f:()=>addXP(x)}}if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"gem_stone",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"coin",t:`+${x} XP`,f:()=>addXP(x)}}
 function openChest(title="宝箱ゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
- modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">画面のどこでもタップして開けよう！</p><div id="chest" class="chest" aria-label="宝箱"><i class=ms aria-hidden=true>&#xF002F;</i></div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
+ modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">画面のどこでもタップして開けよう！</p><div id="chest" class="chest" aria-label="宝箱">${E("wrapped_gift")}</div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
  const c=$("#chest"),ov=$$(".ov").pop();ov.classList.add("chesting");
  const tap=e=>{if(taps>=3)return;e.preventDefault();e.stopPropagation();taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);haptic(taps<3?"medium":"heavy");jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
   const x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;burst(x,y,"#ffb300",8+taps*3);
   if(taps===3){ov.classList.remove("chesting");$("#chint").textContent="";setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);rw.f();save();renderTop();
-   c.innerHTML=I(rw.i);c.classList.add("opened");c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:800;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}};
+   c.innerHTML=E(rw.i);c.classList.add("opened");const dt=$(".dots");if(dt)dt.remove();c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:800;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}};
  ov.addEventListener("click",tap,true)})}
 const BADGES=[
- {k:"first",i:"eco",n:"はじめの一歩",t:s=>Object.keys(s.lessons).length>=1},
- {k:"s3",i:"local_fire_department",n:"3日連続",t:s=>s.best>=3},{k:"s7",i:"volcano",n:"7日連続",t:s=>s.best>=7},{k:"s30",i:"wb_sunny",n:"30日連続",t:s=>s.best>=30},
- {k:"c10",i:"bolt",n:"10コンボ",t:s=>s.maxCombo>=10},{k:"c25",i:"cyclone",n:"25コンボ",t:s=>s.maxCombo>=25},
- {k:"perfect",i:"stars",n:"パーフェクト",t:s=>Object.values(s.lessons).some(l=>l.perfect)},
- {k:"ok100",i:"target",n:"100問正解",t:s=>s.totalOk>=100},{k:"ok500",i:"ads_click",n:"500問正解",t:s=>s.totalOk>=500},
- {k:"mock",i:"military_tech",n:"模試合格",t:s=>s.mock.some(m=>m.score>=15)},{k:"mock25",i:"crown",n:"模試満点",t:s=>s.mock.some(m=>m.score>=25)},
- {k:"all",i:"map",n:"全ユニット制覇",t:s=>UNITS.every(u=>u.lessons.every(l=>s.lessons[l.id]))},
- {k:"pm1",i:"edit_note",n:"記述デビュー",t:s=>Object.keys(s.pm1).length>=1},{k:"pm1all",i:"description",n:"記述マスター",t:s=>PM1_CASES.every(c=>c.qs.every((_,i)=>s.pm1[c.id+"-"+i]))},
- {k:"pm2",i:"history_edu",n:"論文完走",t:s=>Object.values(s.pm2).some(p=>p.done)},{k:"pm2x3",i:"account_balance",n:"論文3本",t:s=>Object.values(s.pm2).filter(p=>p.done).length>=3},
- {k:"night",i:"bedtime",n:"夜ふかし学習",t:()=>new Date().getHours()>=23||new Date().getHours()<4},{k:"morning",i:"wb_twilight",n:"朝活",t:()=>{const h=new Date().getHours();return h>=5&&h<7}},
- {k:"lv5",i:"school",n:"PMに昇格",t:s=>levelOf(s.xp)>=10},{k:"xp1k",i:"diamond",n:"1000XP",t:s=>s.xp>=1000}];
-function checkBadges(){for(const b of BADGES){if(!S.badges[b.k]&&b.t(S)){S.badges[b.k]=Date.now();save();setTimeout(()=>{SFX.badge();flash("#ffb21e");confetti(90);modal(`<div class="rays"><div class="big lvpop">${I(b.i)}</div></div><h2 style="margin:12px 0 4px">バッジ獲得！</h2><p style="font-weight:800">${b.n}</p><button class="btn gold" onclick="closeModal()">OK</button>`)},1400);break}}}
+ {k:"first",i:"seedling",n:"はじめの一歩",t:s=>Object.keys(s.lessons).length>=1},
+ {k:"s3",i:"fire",n:"3日連続",t:s=>s.best>=3},{k:"s7",i:"volcano",n:"7日連続",t:s=>s.best>=7},{k:"s30",i:"sun",n:"30日連続",t:s=>s.best>=30},
+ {k:"c10",i:"high_voltage",n:"10コンボ",t:s=>s.maxCombo>=10},{k:"c25",i:"tornado",n:"25コンボ",t:s=>s.maxCombo>=25},
+ {k:"perfect",i:"hundred_points",n:"パーフェクト",t:s=>Object.values(s.lessons).some(l=>l.perfect)},
+ {k:"ok100",i:"bullseye",n:"100問正解",t:s=>s.totalOk>=100},{k:"ok500",i:"bow_and_arrow",n:"500問正解",t:s=>s.totalOk>=500},
+ {k:"mock",i:"sports_medal",n:"模試合格",t:s=>s.mock.some(m=>m.score>=15)},{k:"mock25",i:"crown",n:"模試満点",t:s=>s.mock.some(m=>m.score>=25)},
+ {k:"all",i:"world_map",n:"全ユニット制覇",t:s=>UNITS.every(u=>u.lessons.every(l=>s.lessons[l.id]))},
+ {k:"pm1",i:"writing_hand",n:"記述デビュー",t:s=>Object.keys(s.pm1).length>=1},{k:"pm1all",i:"memo",n:"記述マスター",t:s=>PM1_CASES.every(c=>c.qs.every((_,i)=>s.pm1[c.id+"-"+i]))},
+ {k:"pm2",i:"scroll",n:"論文完走",t:s=>Object.values(s.pm2).some(p=>p.done)},{k:"pm2x3",i:"classical_building",n:"論文3本",t:s=>Object.values(s.pm2).filter(p=>p.done).length>=3},
+ {k:"night",i:"owl",n:"夜ふかし学習",t:()=>new Date().getHours()>=23||new Date().getHours()<4},{k:"morning",i:"sunrise",n:"朝活",t:()=>{const h=new Date().getHours();return h>=5&&h<7}},
+ {k:"lv5",i:"billed_cap",n:"PMに昇格",t:s=>levelOf(s.xp)>=10},{k:"xp1k",i:"gem_stone",n:"1000XP",t:s=>s.xp>=1000}];
+function checkBadges(){for(const b of BADGES){if(!S.badges[b.k]&&b.t(S)){S.badges[b.k]=Date.now();save();setTimeout(()=>{SFX.badge();flash("#ffb21e");confetti(90);modal(`<div class="rays"><div class="big lvpop">${E(b.i)}</div></div><h2 style="margin:12px 0 4px">バッジ獲得！</h2><p style="font-weight:800">${b.n}</p><button class="btn gold" onclick="closeModal()">OK</button>`)},1400);break}}}
 function qstat(id){return S.q[id]||(S.q[id]={c:0,w:0,box:0,due:0})}
 function record(id,ok){const s=qstat(id);s.seen=Date.now();s.n=(s.n||0)+1;if(ok){s.c++;s.box=Math.min(5,s.box+1)}else{s.w++;s.box=0}s.due=Date.now()+[0,1,3,7,14,30][s.box]*864e5*(ok?1:0)+(ok?0:6e4);S.totalAns++;if(ok)S.totalOk++;save()}
 function weakIds(){return Q.filter(q=>{const s=S.q[q.id];return s&&s.w>0&&(s.box<3||s.due<=Date.now())}).sort((a,b)=>(S.q[a.id].box-S.q[b.id].box)||(S.q[b.id].w-S.q[a.id].w)).map(q=>q.id)}
@@ -897,7 +906,7 @@ function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
  <div class="card pre" style="width:100%;text-align:left;padding:12px 14px"><div class="row" style="justify-content:space-between;font-weight:800"><span>Lv.${lv+1} ${titleOf(lv)}</span><span class="muted">あと <b style="color:var(--pri-t)">${nx-S.xp}</b> XP</span></div><div class="gauge" style="height:12px"><i id="lvg" style="width:${fromP}%;background:linear-gradient(90deg,#ffd24a,#ffb300);transition:width .9s cubic-bezier(.3,1.3,.5,1)"></i></div></div>
  ${goalHit?`<div class="say pre"><i class=ms aria-hidden=true>&#xF0037;</i> 今日の目標 ${S.goal}XP 達成！</div>`:""}
  <div class="say pre ${streakUp?"stk":""}"><i class=ms aria-hidden=true>&#xF0026;</i> 連続 <b id="stn">${streakUp&&S.streak>1?S.streak-1:S.streak}</b> 日 ${S.streak>=S.best&&S.streak>1?"・自己ベスト！":""}</div>
- ${chest?`<button class="chestbtn pre" id="cb"><i class=ms aria-hidden=true>&#xF002F;</i> <span>宝箱をあける</span></button>`:""}
+ ${chest?`<button class="chestbtn pre" id="cb">${E("wrapped_gift","sm")} <span>宝箱をあける</span></button>`:""}
  <div style="width:100%;text-align:left" class="pre">${L.ids.map(id=>{const q=QID[id];return `<div class="check"><span>${L.firstTry[id]?"<i class=ms aria-hidden=true>&#xF0011;</i>":"<i class=ms aria-hidden=true>&#xF0030;</i>"}</span><span style="font-size:13px">${esc(q.q.slice(0,46))}…</span></div>`}).join("")}</div></div></div>
  <div class="lfoot"><button class="btn" onclick="endRun()">つづける</button><div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・\u{1F525}${S.streak}日連続')">結果をシェア</button></div>`;
  if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");b.disabled=true;b.classList.add("used");b.querySelector("span").textContent="開封済み";openChest(perfect?"パーフェクト宝箱！":"宝箱ゲット！",perfect?1:0)};
@@ -910,11 +919,11 @@ function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
  $("#rb").addEventListener("click",finishAll,{once:true});L.seq=setTimeout(stepF,260)}
 
 function share(text){const full=text+"\n#PM試験クエスト #プロジェクトマネージャ試験";
- modal(`<div class="big"><i class=ms aria-hidden=true>&#xF000C;</i></div><h2 style="margin:6px 0">シェアしよう</h2><textarea class="wa" id="shT" style="min-height:90px;font-size:14px">${esc(full)}</textarea><p class="muted" style="margin:6px 0 12px">このページのリンクを添えて投稿してね</p><button class="btn" id="shC">テキストをコピー</button><div style="height:10px"></div><a class="btn sky" style="text-decoration:none" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(full)}">𝕏 でポスト</a><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`,null,()=>{$("#shC").onclick=()=>{const v=$("#shT").value;try{navigator.clipboard.writeText(v).then(()=>toast("コピーしました"),()=>{$("#shT").select();toast("選択した文字をコピーしてね")})}catch(e){$("#shT").select()}}})}
+ modal(`<div class="big">${E("megaphone")}</div><h2 style="margin:6px 0">シェアしよう</h2><textarea class="wa" id="shT" style="min-height:90px;font-size:14px">${esc(full)}</textarea><p class="muted" style="margin:6px 0 12px">このページのリンクを添えて投稿してね</p><button class="btn" id="shC">テキストをコピー</button><div style="height:10px"></div><a class="btn sky" style="text-decoration:none" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(full)}">𝕏 でポスト</a><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`,null,()=>{$("#shC").onclick=()=>{const v=$("#shT").value;try{navigator.clipboard.writeText(v).then(()=>toast("コピーしました"),()=>{$("#shT").select();toast("選択した文字をコピーしてね")})}catch(e){$("#shT").select()}}})}
 
 /* ================= 模試 ================= */
 const MOCK_SEC=40*60;
-function mockIntro(){modal(`<div class="big"><i class=ms aria-hidden=true>&#xF0038;</i></div><h2 style="margin:8px 0">本番模試（午前Ⅱ）</h2><p style="font-size:14px;text-align:left">・25問／40分（本番と同じ）<br>・途中で正誤は表示されません<br>・60%（15問）以上で合格ライン</p><button class="btn sky" onclick="closeModal();startMock()">スタート</button>`)}
+function mockIntro(){modal(`<div class="big">${E("stopwatch")}</div><h2 style="margin:8px 0">本番模試（午前Ⅱ）</h2><p style="font-size:14px;text-align:left">・25問／40分（本番と同じ）<br>・途中で正誤は表示されません<br>・60%（15問）以上で合格ライン</p><button class="btn sky" onclick="closeModal();startMock()">スタート</button>`)}
 function startMock(){const w={int:3,scope:1,sched:3,cost:3,qual:2,team:2,stake:1,risk:2,dev:3,svc:2,law:2,sec:1};let ids=[];for(const[k,n]of Object.entries(w)){ids.push(...fresh(Q.filter(q=>q.cat===k).map(q=>q.id),n))}
  const rest=fresh(Q.filter(q=>!ids.includes(q.id)).map(q=>q.id),25);while(ids.length<25)ids.push(rest.shift());ids=shuf(ids.slice(0,25));
  startRun(ids,{title:"本番模試",kind:"mock"});L.end=Date.now()+MOCK_SEC*1000;L.tm=setInterval(tick,1000)}
@@ -1025,7 +1034,7 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
  <h2>学習カレンダー（12週）</h2><div class="card"><div class="heat">${cells.join("")}</div></div>
  <h2>分野別の習熟度</h2><div class="card">${UNITS.map(u=>{const qs=Q.filter(q=>q.cat===u.k);const m=qs.filter(q=>S.q[q.id]&&S.q[q.id].box>=2).length;return `<div class="catbar"><span class="n">${I(u.i)} ${u.n}</span><span class="b"><i style="width:${m/qs.length*100}%;background:${u.c}"></i></span><span style="font-size:12px">${m}/${qs.length}</span></div>`}).join("")}<div class="muted" style="font-size:11px">※2回以上連続で正解した問題を「習熟」としてカウント</div></div>
  ${S.mock.length?`<h2>模試の履歴</h2><div class="card">${S.mock.slice(-8).reverse().map(m=>`<div class="check"><span>${m.score>=15?"<i class=ms aria-hidden=true>&#xF0029;</i>":"<i class=ms aria-hidden=true>&#xF0005;</i>"}</span><span style="flex:1">${new Date(m.at).toLocaleDateString("ja-JP")}</span><b>${m.score}/25</b></div>`).join("")}</div>`:""}
- <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${I(b.i)}</span>${b.n}</div>`).join("")}</div></div>
+ <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${E(b.i)}</span>${b.n}</div>`).join("")}</div></div>
  <h2>設定</h2><div class="card">
   <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><div class="card" style="margin:4px 0 8px;padding:12px;box-shadow:none"><div style="font-size:13px"><b>振動の方式：</b>${hapticEnv().m}</div>${EMBED?`<div style="font-size:12px;color:var(--ng-d);margin-top:4px"><i class=ms aria-hidden=true>&#xF0041;</i> いまはClaudeなど別サイトの中（埋め込み表示）で開いています。ブラウザの制限で振動しないことがあります。公開ページをSafari／Chromeで直接開くと確実です。</div>`:""}${IOS?`<div class="muted" style="font-size:12px;margin-top:4px">iPhoneは「設定 → サウンドと触覚 → システムの触覚」がオンのとき、Safariで振動します。</div>`:""}${IOS?`<label class="row" style="margin-top:8px;font-size:13px;gap:10px"><input type="checkbox" switch style="width:44px;height:26px;flex:none"> <span>①このスイッチを指で切り替えて、ブルッとするか確認</span></label>`:""}<button class="btn gold sm" id="hpTest" style="width:100%;margin-top:8px"><i class=ms aria-hidden=true>&#xF003C;</i> 振動テスト</button></div><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
   <div class="row" style="padding:8px 4px"><span style="flex:1;font-size:14px">1日の目標</span><select id="gl" style="padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)">${[20,50,100,150].map(g=>`<option ${S.goal===g?"selected":""} value="${g}">${g} XP</option>`).join("")}</select></div>
@@ -1033,7 +1042,7 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
   <div class="muted" style="margin-top:8px">登録不要のため，記録はこの端末のブラウザに保存されます。機種変更や別の端末へは「引き継ぎコード」で移せます。</div>
   <button class="btn ghost sm" style="width:100%;margin-top:12px;color:var(--ng)" onclick="ask('すべての記録を消去しますか？','消去する',()=>{try{localStorage.removeItem(KEY)}catch(e){}load();go('home')})">記録をリセット</button></div>
  <button class="btn sky" style="margin-top:18px" onclick="share('プロマネ試験の対策アプリ「PM試験クエスト」で勉強中！<i class=ms aria-hidden=true>&#xF0026;</i>'+S.streak+'日連続・Lv.'+(levelOf(S.xp)+1))"><i class=ms aria-hidden=true>&#xF0032;</i> 友だちにシェア</button>
- <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。</div>`;
+ <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。絵文字：Microsoft Fluent Emoji（MIT License）。アイコン：Material Symbols（Apache License 2.0）。</div>`;
  $("#main").innerHTML=h;
  $("#snd").onchange=e=>{S.sound=e.target.checked;save();$$(".mute").forEach(b=>b.innerHTML=I(S.sound?"volume_up":"volume_off"));SFX.tap()};$("#hpTest").onclick=()=>{const was=S.noHaptic;S.noHaptic=false;haptic("big");S.noHaptic=was;toast(hapticEnv().ok?"振動しましたか？（しない場合は上の注意を確認）":"この環境は振動に未対応です")};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
 function exportData(){const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));modal(`<h2 style="margin:0 0 8px">引き継ぎコード</h2><p class="muted">全文をコピーして，新しい端末の「コードで復元」に貼り付けてください。</p><textarea class="wa" readonly style="font-size:11px;min-height:140px">${code}</textarea><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>toast('コピーしました'))">コピー</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
@@ -1045,6 +1054,7 @@ function fadeUpd(el){const sc=el.scrollHeight-el.clientHeight>4,t=sc&&el.scrollT
 document.addEventListener("scroll",e=>{const el=e.target;if(el.matches&&el.matches(FADE))fadeUpd(el)},{capture:true,passive:true});
 let fadeRaf=0;const fadeAll=()=>{cancelAnimationFrame(fadeRaf);fadeRaf=requestAnimationFrame(()=>$$(FADE).forEach(fadeUpd))};
 new MutationObserver(fadeAll).observe(document.body,{childList:true,subtree:true});addEventListener("resize",fadeAll);
+["wrapped_gift","coin","gem_stone","shield","military_medal"].forEach(n=>{const i=new Image();i.src="assets/emoji/"+n+".webp"});
 /* ================= 起動 ================= */
 checkStreakDecay();regenHearts();go("home");
 setInterval(()=>{if(!L&&!ES)renderTop()},30000);

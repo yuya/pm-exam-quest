@@ -14,7 +14,7 @@ IPA「プロジェクトマネージャ試験」の午前Ⅱ・午後Ⅰ・午�
 - **手応えの演出**：ヒットストップ、ヒットマーク、画面振動、フラッシュ、合成効果音、疑似ハプティクス（Android：Vibration API／iOS 18以降のSafari：スイッチ型チェックボックス）
 - マスコット：現場監督の「ポコ」（オリジナル・紫の体＋黄色いヘルメット）
 - フォント：LINE Seed JP（Google Fonts）
-- アイコン：Material Symbols Rounded（必要なアイコンだけを抜き出して index.html に埋め込み。全OSで同じ見た目）
+- アイコン：UIは Material Symbols Rounded（単色・必要な分だけ埋め込み）、宝箱・報酬・バッジなど主役は Microsoft Fluent Emoji 3D（MIT、`assets/emoji/`）。どちらも全OSで同じ見た目
 
 ## ファイル構成
 
@@ -22,6 +22,7 @@ IPA「プロジェクトマネージャ試験」の午前Ⅱ・午後Ⅰ・午�
 index.html          ← 公開用（ビルド済み）
 favicon.ico ほか    ← favicon（16/32/48）、apple-touch-icon、PWAアイコン、manifest.webmanifest
 ogp.jpg             ← OGP画像（1200×630）
+assets/emoji/       ← 報酬・バッジ用のフルカラー絵文字（Fluent Emoji 3D、160px webp、MIT）
 src/app.html        ← アプリ本体（UI・ロジック）
 src/data_am2.js     ← 午前Ⅱの問題データ
 src/data_pm.js      ← 午後Ⅰ・午後Ⅱのデータ
