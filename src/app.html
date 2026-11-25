@@ -90,7 +90,7 @@ h3{font-size:17px;margin:0 0 6px;font-weight:800;line-height:1.25}
 /* path */
 .unit{margin:26px 0 6px;border-radius:18px;padding:14px 16px;color:#fff;font-weight:800;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 0 rgba(0,0,0,.15)}
 .unit small{display:block;font-weight:400;font-size:12px;opacity:.9}
-.path{display:flex;flex-direction:column;align-items:center;gap:16px;padding:34px 0 8px}
+.path{display:flex;flex-direction:column;align-items:center;gap:26px;padding:34px 0 20px}
 .node{position:relative;width:72px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:28px;transition:transform .1s}
 .node .disc{position:absolute;inset:0;border-radius:50%;background:var(--c);box-shadow:0 7px 0 var(--cd)}
 .node:active .disc{transform:translateY(5px);box-shadow:0 2px 0 var(--cd)}
@@ -99,7 +99,13 @@ h3{font-size:17px;margin:0 0 6px;font-weight:800;line-height:1.25}
 .node.todo .disc{background:var(--line);box-shadow:0 7px 0 color-mix(in srgb,var(--line) 70%,#000 12%)}
 .node.todo .ico{filter:grayscale(1);opacity:.5}
 .node.cur::before{content:"";position:absolute;inset:-9px;border-radius:50%;border:4px solid var(--c);opacity:.35;animation:pulse 1.6s infinite}
-.node .stars{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:12px;white-space:nowrap;z-index:2;letter-spacing:-1px}
+.node .stars{position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);display:flex;gap:1px;padding:3px 7px;background:var(--card);border:2px solid var(--line);border-radius:99px;box-shadow:0 2px 0 var(--line);z-index:2;white-space:nowrap}
+.node .stars .emo{width:17px;height:17px;vertical-align:0}
+.node .stars .emo.off{filter:grayscale(1);opacity:.28}
+.node.gold .disc{background:linear-gradient(160deg,#FFE27A,#FFB800);box-shadow:0 7px 0 #D98A00}
+.node.gold:active .disc{box-shadow:0 2px 0 #D98A00}
+.node.gold .stars{border-color:#FFD24A;box-shadow:0 2px 0 #F0B400,0 0 12px rgba(255,190,0,.45)}
+.node .ico .emo{width:40px;height:40px;vertical-align:0;filter:drop-shadow(0 2px 0 rgba(0,0,0,.12))}
 .bubble{position:absolute;top:-40px;left:50%;transform:translateX(-50%);background:var(--card);color:var(--c);border:2px solid var(--line);font-weight:800;font-size:13px;padding:4px 12px;border-radius:12px;white-space:nowrap;animation:bob 1.2s ease-in-out infinite;z-index:3}
 .bubble::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:var(--card);border-right:2px solid var(--line);border-bottom:2px solid var(--line)}
 @keyframes pulse{0%{transform:scale(.9);opacity:.5}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
@@ -302,7 +308,7 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const KANA=["ア","イ","ウ","エ"];
 const ICP={"account_balance":983040,"ads_click":983041,"alarm":983042,"architecture":983043,"arrow_forward_ios":983044,"article":983045,"auto_awesome":983046,"auto_stories":983047,"balance":983048,"bedtime":983049,"bolt":983050,"calendar_month":983051,"campaign":983052,"cancel":983053,"casino":983054,"celebration":983055,"check":983056,"check_circle":983057,"checklist":983058,"close":983059,"construction":983060,"content_copy":983061,"crown":983062,"cyclone":983063,"description":983064,"diamond":983065,"download":983066,"eco":983067,"edit":983068,"edit_note":983069,"explore":983070,"extension":983071,"favorite":983072,"handshake":983073,"history_edu":983074,"home":983075,"library_books":983076,"lightbulb":983077,"local_fire_department":983078,"map":983079,"menu_book":983080,"military_tech":983081,"pause":983082,"payments":983083,"play_arrow":983084,"psychology":983085,"push_pin":983086,"redeem":983087,"replay":983088,"school":983089,"share":983090,"shield":983091,"sports_score":983092,"star":983093,"stars":983094,"target":983095,"timer":983096,"trending_up":983097,"trophy":983098,"upload":983099,"vibration":983100,"view_agenda":983101,"volcano":983102,"volume_off":983103,"volume_up":983104,"warning":983105,"wb_sunny":983106,"wb_twilight":983107,"workspace_premium":983108};
-const E=(n,c="")=>`<img class="emo ${c}" src="assets/emoji/${n}.svg" alt="" aria-hidden="true" draggable="false">`;
+const E=(n,c="")=>`<img class="emo ${c}" src="assets/emoji/${n}.webp" alt="" aria-hidden="true" draggable="false">`;
 const I=(n,c="")=>`<i class="ms ${c}" aria-hidden="true">${ICP[n]?String.fromCodePoint(ICP[n]):""}</i>`;
 const CATS=[
  {k:"int",n:"統合・標準",i:"explore",c:"#5b4cf5",d:"#4234d6"},
@@ -510,7 +516,8 @@ ${questHTML()}
  for(const u of UNITS){const done=u.lessons.filter(l=>S.lessons[l.id]).length;
   h+=`<div class="unit" style="background:${u.c}"><div>${I(u.i)} ${u.n}<small>${u.total}問・${done}/${u.lessons.length} レッスン完了</small></div><div style="font-size:22px">${done===u.lessons.length?"<i class=ms aria-hidden=true>&#xF0016;</i>":""}</div></div><div class="path">`;
   u.lessons.forEach((l,i)=>{const st=S.lessons[l.id];const isCur=!st&&!curFound;if(isCur)curFound=true;const off=[0,44,64,44,0,-44,-64,-44][i%8];
-   h+=`<button class="node ${st?"":"todo"} ${isCur?"cur":""}" style="--c:${u.c};--cd:${u.d};transform:translateX(${off}px)" onclick="startLesson('${l.id}')" aria-label="${u.n} レッスン${i+1}">${isCur?`<span class="bubble">START</span>`:""}<span class="disc"></span><span class="ico">${st?(st.perfect?"<i class=ms aria-hidden=true>&#xF0016;</i>":"<i class=ms aria-hidden=true>&#xF0035;</i>"):I(u.i)}</span>${st?`<span class="stars">${"<i class=ms aria-hidden=true>&#xF0035;</i>".repeat(st.perfect?3:st.best>=4?2:1)}</span>`:""}</button>`});
+   const nst=st?(st.perfect?3:st.best>=4?2:1):0;
+   h+=`<button class="node ${st?"":"todo"} ${st&&st.perfect?"gold":""} ${isCur?"cur":""}" style="--c:${u.c};--cd:${u.d};transform:translateX(${off}px)" onclick="startLesson('${l.id}')" aria-label="${u.n} レッスン${i+1}${st?`（星${nst}つ）`:""}">${isCur?`<span class="bubble">START</span>`:""}<span class="disc"></span><span class="ico">${st?(st.perfect?E("crown"):I("check")):I(u.i)}</span>${st?`<span class="stars">${[0,1,2].map(k=>E("star",k<nst?"":"off")).join("")}</span>`:""}</button>`});
   h+=`</div>`}
  h+=`<div class="foot">出典：IPA 独立行政法人情報処理推進機構「プロジェクトマネージャ試験」過去問題（平成23〜29年度 午前Ⅱ，平成28〜令和7年度 解答例・出題趣旨）。過去問の正解はIPA公表の解答例と照合済み。解説・オリジナル問題・午後の設問例は本アプリ独自のもので，IPAとは関係ありません。最新の試験制度（CBT化等）は<a href="https://www.ipa.go.jp/shiken/kubun/pm.html" target="_blank" rel="noopener">IPA公式サイト</a>で確認してください。</div>`;
  $("#main").innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#ring");if(r)r.style.setProperty("--p",r.dataset.p)}));
@@ -733,7 +740,7 @@ function fadeUpd(el){const sc=el.scrollHeight-el.clientHeight>4,t=sc&&el.scrollT
 document.addEventListener("scroll",e=>{const el=e.target;if(el.matches&&el.matches(FADE))fadeUpd(el)},{capture:true,passive:true});
 let fadeRaf=0;const fadeAll=()=>{cancelAnimationFrame(fadeRaf);fadeRaf=requestAnimationFrame(()=>$$(FADE).forEach(fadeUpd))};
 new MutationObserver(fadeAll).observe(document.body,{childList:true,subtree:true});addEventListener("resize",fadeAll);
-["wrapped_gift","coin","gem_stone","shield","military_medal"].forEach(n=>{const i=new Image();i.src="assets/emoji/"+n+".svg"});
+["wrapped_gift","coin","gem_stone","shield","military_medal","star","crown"].forEach(n=>{const i=new Image();i.src="assets/emoji/"+n+".webp"});
 /* ================= 起動 ================= */
 checkStreakDecay();regenHearts();go("home");
 setInterval(()=>{if(!L&&!ES)renderTop()},30000);
