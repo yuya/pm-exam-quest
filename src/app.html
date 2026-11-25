@@ -39,7 +39,7 @@
 :root[data-theme=dark]{--ink:#f1f0ff;--sub:#a8a6c6;--line:#2e2c48;--bg:#13121f;--card:#1c1b2e;--pri-l:#3a2c0c;--pri-t:#ffcf5a;--ok-l:#11351f;--ng-l:#3d1820}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink)}
-body{font-family:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.65;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+body{font-family:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.5;font-feature-settings:"palt" 1;font-kerning:normal;text-spacing-trim:trim-start;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:0;background:none}
 textarea,input,select{font-family:inherit;font-size:16px;color:var(--ink)}
 #app{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative}
@@ -69,8 +69,8 @@ main{flex:1;padding:16px 16px calc(96px + var(--safe-b))}
 .btn.ghost{background:var(--card);color:var(--pri-t);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
 .btn.sm{padding:9px 14px;font-size:14px;width:auto;border-radius:12px}
 .btn[disabled]{background:var(--line);color:var(--sub);box-shadow:0 4px 0 color-mix(in srgb,var(--line) 70%,#000 8%);pointer-events:none}
-h2{font-size:20px;margin:22px 0 10px;font-weight:800}
-h3{font-size:17px;margin:0 0 6px;font-weight:800}
+h2{font-size:20px;margin:22px 0 10px;font-weight:800;line-height:1.2}
+h3{font-size:17px;margin:0 0 6px;font-weight:800;line-height:1.25}
 .muted{color:var(--sub);font-size:13px}
 .row{display:flex;gap:10px;align-items:center}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -113,11 +113,13 @@ h3{font-size:17px;margin:0 0 6px;font-weight:800}
 .bar i::after{content:"";position:absolute;left:8px;right:8px;top:3px;height:4px;border-radius:9px;background:rgba(255,255,255,.4)}
 .bar.fire i{background:linear-gradient(90deg,#ffb21e,#ff5f1a,#ff2d55);background-size:200% 100%;animation:flow 1.2s linear infinite}
 @keyframes flow{to{background-position:-200% 0}}
-.lbody{flex:1;overflow:auto;padding:10px 16px 20px}
+.lbody{flex:1;overflow:auto;padding:10px 16px 28px}
+.lbody,.modal,.verdict .ex{--ft:0px;--fb:0px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 var(--ft),#000 calc(100% - var(--fb)),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 var(--ft),#000 calc(100% - var(--fb)),transparent 100%)}
+.nav::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:28px;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 0%,transparent),var(--bg));pointer-events:none}
 .qmeta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
-.qtext{font-size:17px;font-weight:700;line-height:1.75;white-space:pre-wrap}
+.qtext{font-size:17px;font-weight:700;line-height:1.4;white-space:pre-wrap;letter-spacing:.01em}
 .choices{display:flex;flex-direction:column;gap:10px;margin-top:16px}
-.ch{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 14px;border:2px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:15px;line-height:1.6;transition:transform .06s,box-shadow .06s,border-color .15s,background .15s}
+.ch{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 14px;border:2px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:15px;line-height:1.4;transition:transform .06s,box-shadow .06s,border-color .15s,background .15s}
 .ch:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .ch .k{flex:none;width:28px;height:28px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--sub)}
 .ch.sel{border-color:var(--sky);background:color-mix(in srgb,var(--sky) 12%,var(--card));box-shadow:0 4px 0 var(--sky)}
@@ -134,7 +136,7 @@ h3{font-size:17px;margin:0 0 6px;font-weight:800}
 .lfoot.ok .verdict,.lfoot.ng .verdict{display:block;animation:up .25s ease-out}
 .verdict .t{font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px}
 .lfoot.ok .t{color:var(--ok-d)}.lfoot.ng .t{color:var(--ng-d)}
-.verdict .ex{font-size:14px;margin-top:6px;max-height:34vh;overflow:auto;line-height:1.7}
+.verdict .ex{font-size:14px;margin-top:6px;max-height:34vh;overflow:auto;line-height:1.5}
 @keyframes up{from{transform:translateY(16px);opacity:0}}
 table.t{border-collapse:collapse;margin:12px 0;font-size:13px;width:100%;background:var(--card);border-radius:12px;overflow:hidden}
 table.t td,table.t th{border:1.5px solid var(--line);padding:5px 7px;text-align:center}
@@ -177,13 +179,13 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:100;width:100%;heig
 .li:active{transform:translateY(3px);box-shadow:none}
 .li .e{font-size:26px;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--pri-l)}
 .li .m{flex:1;min-width:0}
-.li .m b{display:block;font-size:15px;line-height:1.45}
+.li .m b{display:block;font-size:15px;line-height:1.3}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:none;padding:6px 13px;border-radius:99px;border:2px solid var(--line);font-weight:700;font-size:13px;background:var(--card)}
 .chip.on{background:var(--pri);border-color:var(--pri-t);color:#fff}
 /* writing */
-.wa{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:12px;background:var(--card);resize:vertical;line-height:1.8;outline:none;transition:border-color .2s}
+.wa{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:12px;background:var(--card);resize:vertical;line-height:1.65;outline:none;transition:border-color .2s}
 .wa:focus{border-color:var(--pri-t)}
 .wa.tall{min-height:42vh}
 .cnt{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;margin-top:6px}
@@ -194,7 +196,7 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .tabs{display:flex;gap:6px;margin:10px 0}
 .tabs button{flex:1;padding:9px 0;border-radius:12px;border:2px solid var(--line);font-weight:800;background:var(--card)}
 .tabs button.on{border-color:var(--pri-t);color:var(--pri-t);background:var(--pri-l)}
-.scen{background:var(--card);border:2px solid var(--line);border-left:6px solid var(--pri);border-radius:14px;padding:14px;font-size:15px;line-height:1.85}
+.scen{background:var(--card);border:2px solid var(--line);border-left:6px solid var(--pri);border-radius:14px;padding:14px;font-size:15px;line-height:1.55}
 .check{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
 .check input{width:22px;height:22px;accent-color:var(--ok);flex:none;margin-top:2px}
 /* stats */
@@ -213,7 +215,7 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .catbar .n{width:132px;flex:none;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px}
 .catbar .b{flex:1;height:10px;background:var(--line);border-radius:9px;overflow:hidden}
 .catbar .b i{display:block;height:100%;border-radius:9px}
-.foot{font-size:11px;color:var(--sub);line-height:1.7;margin-top:26px}
+.foot{font-size:11px;color:var(--sub);line-height:1.5;margin-top:26px}
 .foot a{color:var(--sub)}
 .fade-in{animation:fadeIn .25s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}}
@@ -716,6 +718,12 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
 function exportData(){const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));modal(`<h2 style="margin:0 0 8px">引き継ぎコード</h2><p class="muted">全文をコピーして，新しい端末の「コードで復元」に貼り付けてください。</p><textarea class="wa" readonly style="font-size:11px;min-height:140px">${code}</textarea><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>toast('コピーしました'))">コピー</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
 function importData(){modal(`<h2 style="margin:0 0 8px">コードで復元</h2><textarea class="wa" id="imp" placeholder="引き継ぎコードを貼り付け"></textarea><button class="btn" onclick="try{const d=JSON.parse(decodeURIComponent(escape(atob($('#imp').value.trim()))));S=Object.assign({},DEF,d);save();closeModal();toast('復元しました！');go('home')}catch(e){toast('コードが正しくありません')}">復元する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">キャンセル</button>`)}
 
+/* ===== スクロール端のフェード ===== */
+const FADE=".lbody,.modal,.verdict .ex";
+function fadeUpd(el){const sc=el.scrollHeight-el.clientHeight>4,t=sc&&el.scrollTop>4,b=sc&&el.scrollHeight-el.scrollTop-el.clientHeight>4;el.style.setProperty("--ft",t?"18px":"0px");el.style.setProperty("--fb",b?(el.matches(".verdict .ex")?"28px":"56px"):"0px")}
+document.addEventListener("scroll",e=>{const el=e.target;if(el.matches&&el.matches(FADE))fadeUpd(el)},{capture:true,passive:true});
+let fadeRaf=0;const fadeAll=()=>{cancelAnimationFrame(fadeRaf);fadeRaf=requestAnimationFrame(()=>$$(FADE).forEach(fadeUpd))};
+new MutationObserver(fadeAll).observe(document.body,{childList:true,subtree:true});addEventListener("resize",fadeAll);
 /* ================= 起動 ================= */
 checkStreakDecay();regenHearts();go("home");
 setInterval(()=>{if(!L&&!ES)renderTop()},30000);
