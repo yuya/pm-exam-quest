@@ -145,9 +145,9 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:100;width:100%;heig
 /* results */
 .res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:24px 16px}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
-.tile{border-radius:16px;border:2px solid var(--c);overflow:hidden}
+.tile{border-radius:16px;border:2px solid var(--c);overflow:hidden;text-align:center;min-width:0}
 .tile b{display:block;background:var(--c);color:#fff;font-size:12px;padding:3px}
-.tile span{display:block;font-size:22px;font-weight:800;padding:10px 0;color:var(--c)}
+.tile span{display:block;font-size:22px;font-weight:800;padding:10px 4px;color:var(--c);white-space:nowrap}
 /* mascot */
 .mascot{width:120px;height:120px}
 .mascot.s{width:64px;height:64px}
@@ -758,7 +758,7 @@ function dueIds(){return Q.filter(q=>{const s=S.q[q.id];return s&&s.due&&s.due<=
 /* ================= 画面共通 ================= */
 let TAB="home";
 function renderTop(){regenHearts();
- $("#brand").innerHTML=`${poco("happy","logo")}PM試験<b>クエスト</b>`;
+ $("#brand").innerHTML=`${poco("happy","logo")}<span>PM試験<b>クエスト</b></span>`;
  $("#stats").innerHTML=`<span class="stat fire ${S.last===today()?"":"dim"}" title="連続学習日数">🔥${S.streak}</span><span class="stat gem" title="XP（ハチミツ）">🍯${S.xp}</span><span class="stat heart" title="ハート">❤️${S.hearts}</span>`}
 function go(t){TAB=t;$$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));const m=$("#main");m.innerHTML="";m.className="fade-in";void m.offsetWidth;({home:vHome,pm1:vPM1,pm2:vPM2,me:vMe})[t]();scrollTo(0,0)}
 $("#nav").addEventListener("click",e=>{const b=e.target.closest("button");if(b){SFX.tap();go(b.dataset.t)}});
