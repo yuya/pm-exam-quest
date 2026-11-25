@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <meta name="theme-color" content="#ffb300">
 <title>PM試験クエスト｜プロジェクトマネージャ試験 対策</title>
+<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PM試験クエスト">
+<meta property="og:title" content="PM試験クエスト｜プロジェクトマネージャ試験をゲームで">
+<meta property="og:description" content="IPAプロジェクトマネージャ試験の午前Ⅱ・午後Ⅰ・午後Ⅱを、毎日ちょっとずつゲーム感覚で。登録不要・無料。">
+<meta property="og:url" content="https://yuya.github.io/pm-exam-quest/">
+<meta property="og:image" content="https://yuya.github.io/pm-exam-quest/ogp.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://yuya.github.io/pm-exam-quest/ogp.jpg">
+<link rel="preload" as="image" href="assets/mitsu-base.webp">
 <meta name="description" content="IPAプロジェクトマネージャ試験の午前Ⅱ・午後Ⅰ・午後Ⅱをゲーム感覚で。登録不要・無料。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -149,8 +165,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:100;width:100%;heig
 .tile b{display:block;background:var(--c);color:#fff;font-size:12px;padding:3px}
 .tile span{display:block;font-size:22px;font-weight:800;padding:10px 4px;color:var(--c);white-space:nowrap}
 /* mascot */
-.mascot{width:120px;height:120px}
-.mascot.s{width:64px;height:64px}
+.mascot{height:150px;width:auto;display:inline-block;object-fit:contain;-webkit-user-drag:none;user-select:none}
+.mascot.s{height:84px;flex:none}
 .mascot.logo{width:30px;height:30px;margin:-2px 0}
 .mascot .wg{transform-origin:60px 44px;animation:flap .18s ease-in-out infinite alternate}
 @keyframes flap{to{transform:scaleY(.72)}}
@@ -204,7 +220,7 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}}
 @property --p{syntax:"<number>";inherits:false;initial-value:0}
 .ring{transition:--p 1.1s cubic-bezier(.3,1.2,.5,1)}
-.mascot.xs{width:40px;height:40px;flex:none;margin:-6px 2px -6px -4px}
+.mascot.xs{height:48px;width:auto;flex:none;margin:-10px 4px -8px -4px}
 .cmb{font-weight:800;color:var(--fire);font-size:15px;opacity:0;transform:scale(.5);transition:opacity .2s,transform .2s;display:inline-block;min-width:0}
 .cmb.on{opacity:1;transform:none;text-shadow:0 0 12px rgba(255,122,26,.45)}
 .ch{animation:chIn .26s both;animation-delay:var(--d,0ms)}
@@ -381,21 +397,12 @@ function floatXP(x,y,t,cls=""){const e=document.createElement("div");e.className
 function comboPop(t,c){const e=document.createElement("div");e.className="combo";e.textContent=t;if(c)e.style.color=c;document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
 function toast(t,ms=2400){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),ms)}
 
-/* ================= マスコット「ミツ」（オリジナル：必勝ハチマキの働きバチ） ================= */
-function poco(mood="happy",cls=""){
- const E="#2a2140";
- const eyes=mood==="sad"?`<circle cx="47" cy="66" r="4.5" fill="${E}"/><circle cx="73" cy="66" r="4.5" fill="${E}"/><path d="M39 59l12-4M81 59l-12-4" stroke="${E}" stroke-width="3.5" stroke-linecap="round"/>`:mood==="wow"?`<circle cx="47" cy="64" r="7.5" fill="#fff"/><circle cx="73" cy="64" r="7.5" fill="#fff"/><circle cx="48" cy="65" r="4.5" fill="${E}"/><circle cx="74" cy="65" r="4.5" fill="${E}"/><circle cx="50" cy="62.5" r="1.6" fill="#fff"/><circle cx="76" cy="62.5" r="1.6" fill="#fff"/>`:`<path d="M40 66q7-9 14 0M66 66q7-9 14 0" stroke="${E}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
- const mouth=mood==="sad"?`<path d="M53 84q7-6 14 0" stroke="${E}" stroke-width="4" fill="none" stroke-linecap="round"/>`:mood==="wow"?`<ellipse cx="60" cy="83" rx="5.5" ry="6.5" fill="${E}"/>`:`<path d="M49 77q11 13 22 0z" fill="${E}"/><path d="M54 82q6 4 12 0" fill="#ff7a8a"/>`;
- const id="b"+(Math.random()*1e6|0);
- return `<svg class="mascot ${cls}" viewBox="0 0 120 120" aria-hidden="true"><defs><clipPath id="${id}"><ellipse cx="60" cy="72" rx="38" ry="36"/></clipPath></defs><ellipse cx="60" cy="114" rx="30" ry="4.5" fill="rgba(0,0,0,.12)"/>
- <g class="wg"><ellipse cx="30" cy="38" rx="17" ry="11" transform="rotate(-30 30 38)" fill="#e9f7ff" stroke="#b9ddf3" stroke-width="2.5" opacity=".95"/><ellipse cx="90" cy="38" rx="17" ry="11" transform="rotate(30 90 38)" fill="#e9f7ff" stroke="#b9ddf3" stroke-width="2.5" opacity=".95"/></g>
- <path d="M48 38q-6-16-14-20" stroke="${E}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M72 38q6-16 14-20" stroke="${E}" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="34" cy="17" r="5" fill="${E}"/><circle cx="86" cy="17" r="5" fill="${E}"/>
- <ellipse cx="60" cy="72" rx="38" ry="36" fill="#ffc928"/>
- <g clip-path="url(#${id})"><rect x="10" y="92" width="100" height="9" fill="${E}"/><rect x="10" y="106" width="100" height="9" fill="${E}"/><ellipse cx="48" cy="52" rx="20" ry="11" fill="#fff" opacity=".28"/>
- <rect x="10" y="40" width="100" height="11" fill="#fff"/><rect x="10" y="49" width="100" height="2.5" fill="#e8e3f0"/></g>
- <circle cx="60" cy="45.5" r="5" fill="#ff3b4f"/>
- <path d="M96 42l14-7-3 9 5 6-15-3z" fill="#fff" stroke="#e8e3f0" stroke-width="1.5"/>
- <ellipse cx="36" cy="76" rx="6.5" ry="4" fill="#ff9f8f" opacity=".75"/><ellipse cx="84" cy="76" rx="6.5" ry="4" fill="#ff9f8f" opacity=".75"/>${eyes}${mouth}</svg>`}
+/* ================= マスコット「ミツ」（公式デザイン：assets/mitsu-*.webp） =================
+ base=ハニーポット（基本）／adventure=冒険／cheer=応援／study=勉強／trophy=トロフィー
+ 気分→ポーズ：happy→base, wow→cheer, sad→study（不正解でも前向きに「復習しよう」）*/
+const MITSU={happy:"base",wow:"cheer",sad:"study",base:"base",adventure:"adventure",cheer:"cheer",study:"study",trophy:"trophy"};
+function poco(mood="happy",cls=""){if(cls.includes("logo"))return `<img class="mascot logo" src="assets/mitsu-face.webp" alt="" width="30" height="30">`;
+ const k=MITSU[mood]||"base";return `<img class="mascot ${cls}" src="assets/mitsu-${k}.webp" alt="ミツ" decoding="async">`}
 
 /* ================= ゲーミフィケーション中核 ================= */
 function addXP(n){const before=levelOf(S.xp);S.xp+=n;const t=today();S.days[t]=(S.days[t]||0)+n;
@@ -473,7 +480,7 @@ ${questHTML()}
  h+=`<div class="foot">出典：IPA 独立行政法人情報処理推進機構「プロジェクトマネージャ試験」過去問題（平成23〜29年度 午前Ⅱ，平成28〜令和7年度 解答例・出題趣旨）。過去問の正解はIPA公表の解答例と照合済み。解説・オリジナル問題・午後の設問例は本アプリ独自のもので，IPAとは関係ありません。最新の試験制度（CBT化等）は<a href="https://www.ipa.go.jp/shiken/kubun/pm.html" target="_blank" rel="noopener">IPA公式サイト</a>で確認してください。</div>`;
  $("#main").innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#ring");if(r)r.style.setProperty("--p",r.dataset.p)}));
  if(!S.onboard)onboard()}
-function onboard(){S.onboard=true;save();modal(`${poco("happy","jump")}<h2 style="margin:6px 0">ようこそ PM試験クエストへ！</h2><p style="font-size:14px;text-align:left">ぼくは必勝ハチマキの働きバチ<b>ミツ</b>。プロマネ試験の合格まで一緒に飛ぶよ！<br>・登録不要。記録はこの端末に保存<br>・正解でXP，連続正解でコンボ<br>・毎日続けて🔥ストリークを伸ばそう</p><p class="muted" style="margin-top:0">1日の目標を選んでね</p><div class="grid2" style="grid-template-columns:repeat(3,1fr)">${[[20,"ゆるっと"],[50,"ふつう"],[100,"本気"]].map(([g,n])=>`<button class="btn ${g===50?"":"ghost"} sm" style="width:100%" onclick="S.goal=${g};save();closeModal();go('home')">${n}<br>${g}XP</button>`).join("")}</div>`)}
+function onboard(){S.onboard=true;save();modal(`${poco("adventure","jump")}<h2 style="margin:6px 0">ようこそ PM試験クエストへ！</h2><p style="font-size:14px;text-align:left">ぼくは働きバチの<b>ミツ</b>。ハチミツを集めるみたいに、毎日コツコツ合格まで一緒に飛ぶよ！<br>・登録不要。記録はこの端末に保存<br>・正解でXP，連続正解でコンボ<br>・毎日続けて🔥ストリークを伸ばそう</p><p class="muted" style="margin-top:0">1日の目標を選んでね</p><div class="grid2" style="grid-template-columns:repeat(3,1fr)">${[[20,"ゆるっと"],[50,"ふつう"],[100,"本気"]].map(([g,n])=>`<button class="btn ${g===50?"":"ghost"} sm" style="width:100%" onclick="S.goal=${g};save();closeModal();go('home')">${n}<br>${g}XP</button>`).join("")}</div>`)}
 
 /* ================= レッスンエンジン ================= */
 let L=null;
@@ -544,7 +551,7 @@ function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
  // 閃光→爆発→紙吹雪→収束
  flash(perfect?"#ffb21e":"#21c16b");shakeScreen("l");SFX.fin(perfect);haptic("big");setTimeout(()=>confetti(perfect?240:140),70);
  const el=$("#lesson"),chest=L.opt.kind!=="refill";
- el.innerHTML=`<div class="lbody" id="rb"><div class="res">${poco(perfect?"wow":"happy","jump")}<h2 class="pre" style="margin:0;font-size:28px;color:${perfect?"var(--gold-d)":"var(--pri-t)"}">${L.opt.kind==="refill"?"❤️ ハート全回復！":perfect?"パーフェクト！":"レッスン完了！"}</h2><div class="muted">${esc(L.opt.title)}</div>
+ el.innerHTML=`<div class="lbody" id="rb"><div class="res">${poco(perfect?"trophy":"cheer","jump")}<h2 class="pre" style="margin:0;font-size:28px;color:${perfect?"var(--gold-d)":"var(--pri-t)"}">${L.opt.kind==="refill"?"❤️ ハート全回復！":perfect?"パーフェクト！":"レッスン完了！"}</h2><div class="muted">${esc(L.opt.title)}</div>
  <div class="tiles"><div class="tile pre" style="--c:var(--gold)"><b>獲得XP</b><span id="cnt">+0</span></div><div class="tile pre" style="--c:var(--ok)"><b>正答率</b><span>${acc}%</span></div><div class="tile pre" style="--c:var(--sky)"><b>タイム</b><span>${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}</span></div></div>
  <div class="card pre" style="width:100%;text-align:left;padding:12px 14px"><div class="row" style="justify-content:space-between;font-weight:800"><span>Lv.${lv+1} ${titleOf(lv)}</span><span class="muted">あと <b style="color:var(--pri-t)">${nx-S.xp}</b> XP</span></div><div class="gauge" style="height:12px"><i id="lvg" style="width:${fromP}%;background:linear-gradient(90deg,#ffd24a,#ffb300);transition:width .9s cubic-bezier(.3,1.3,.5,1)"></i></div></div>
  ${goalHit?`<div class="say pre">🎯 今日の目標 ${S.goal}XP 達成！</div>`:""}
@@ -575,7 +582,7 @@ function mockResult(){clearInterval(L.tm);const score=L.results.filter(r=>r.ok).
  S.mock.push({at:Date.now(),score,sec});save();addXP(score*3+(pass?50:0));
  if(pass){SFX.fin(true);flash("#21c16b");shakeScreen("l");setTimeout(()=>confetti(260),70)}else SFX.ng();
  const byCat={};L.results.forEach(r=>{const c=QID[r.id].cat;byCat[c]=byCat[c]||[0,0];byCat[c][1]++;if(r.ok)byCat[c][0]++});
- $("#lesson").innerHTML=`<div class="lbody"><div class="res">${poco(pass?"wow":"sad","jump")}<h2 style="margin:0;font-size:28px;color:${pass?"var(--ok-d)":"var(--ng-d)"}">${pass?"合格ライン突破！":score>=11?"あと少し！":"まずは基礎固め！"}</h2>
+ $("#lesson").innerHTML=`<div class="lbody"><div class="res">${poco(pass?"trophy":"sad","jump")}<h2 style="margin:0;font-size:28px;color:${pass?"var(--ok-d)":"var(--ng-d)"}">${pass?"合格ライン突破！":score>=11?"あと少し！":"まずは基礎固め！"}</h2>
  <div class="tiles"><div class="tile" style="--c:${pass?"var(--ok)":"var(--ng)"}"><b>得点</b><span>${score}/25</span></div><div class="tile" style="--c:var(--gold)"><b>獲得XP</b><span>+${score*3+(pass?50:0)}</span></div><div class="tile" style="--c:var(--sky)"><b>タイム</b><span>${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}</span></div></div>
  <div class="card" style="width:100%;text-align:left"><h3>分野別</h3>${Object.entries(byCat).map(([c,[o,n]])=>`<div class="catbar"><span class="n">${CAT[c].i} ${CAT[c].n}</span><span class="b"><i style="width:${o/n*100}%;background:${CAT[c].c}"></i></span><span>${o}/${n}</span></div>`).join("")}</div>
  <div style="width:100%;text-align:left"><h3>見直し</h3>${L.results.map((r,i)=>{const q=QID[r.id];return `<details class="card" style="margin-bottom:8px;padding:12px"><summary style="font-weight:700;font-size:14px;cursor:pointer">${r.ok?"✅":"❌"} 問${i+1} ${esc(q.q.slice(0,34))}…</summary><div style="font-size:14px;margin-top:8px;white-space:pre-wrap">${esc(q.q)}</div>${q.tbl?tblHTML(q.tbl):""}${q.ch.map((c,j)=>`<div style="font-size:13px;margin:4px 0;${j===q.a?"color:var(--ok-d);font-weight:800":j===r.sel?"color:var(--ng-d);text-decoration:line-through":""}">${KANA[j]}　${esc(c)}</div>`).join("")}<div class="muted" style="margin-top:6px">💡 ${esc(q.ex)}</div><div style="margin-top:6px">${fmtSrc(q)}</div></details>`}).join("")}</div></div></div>
@@ -590,7 +597,7 @@ function yearPick(){const ys={};Q.forEach(q=>{const k=q.orig?"オリジナル":s
 let PM1F="all";
 function vPM1(){renderTop();const tags=["all",...new Set(PM1_THEMES.flatMap(t=>t.tag))];
  const doneN=PM1_CASES.reduce((a,c)=>a+c.qs.filter((_,i)=>S.pm1[c.id+"-"+i]).length,0),allN=PM1_CASES.reduce((a,c)=>a+c.qs.length,0);
- let h=`<div class="card hero">${poco("happy","s")}<div><h3 style="margin:0">午後Ⅰ：記述式</h3><div class="muted">事例を読み，PMとしての判断を字数内で書く力を鍛えよう。本文に根拠あり！</div></div></div>
+ let h=`<div class="card hero">${poco("study","s")}<div><h3 style="margin:0">午後Ⅰ：記述式</h3><div class="muted">事例を読み，PMとしての判断を字数内で書く力を鍛えよう。本文に根拠あり！</div></div></div>
  <h2>✍️ 記述トレーニング <span class="pill">${doneN}/${allN}</span></h2>
  <button class="li" onclick="formDrill()"><span class="e">🧩</span><span class="m"><b>解答の“型”ドリル</b><span class="muted">「狙い」「理由」の書き分けを8問でマスター</span></span><span>›</span></button>
  ${PM1_CASES.map(c=>{const d=c.qs.filter((_,i)=>S.pm1[c.id+"-"+i]).length;return `<button class="li" onclick="openCase('${c.id}',0)"><span class="e">${d===c.qs.length?"✅":"📝"}</span><span class="m"><b>${esc(c.title)}</b><span class="muted">${c.qs.length}設問・${esc(c.tag)}　</span><span class="pill ${d===c.qs.length?"ok":""}">${d}/${c.qs.length}</span></span><span>›</span></button>`}).join("")}
@@ -629,7 +636,7 @@ function closeCase(silent){$("#lesson")?.remove();document.body.style.overflow="
 /* ================= 午後Ⅱ ================= */
 const PM2_LIM=[[0,800],[800,1600],[600,1200]];
 function vPM2(){renderTop();const done=Object.values(S.pm2).filter(p=>p.done).length;
- let h=`<div class="card hero">${poco("happy","s")}<div><h3 style="margin:0">午後Ⅱ：論文</h3><div class="muted">2時間で設問ア・イ・ウを書き切る。本番形式のトレーナーで“完走力”をつけよう。</div></div></div>
+ let h=`<div class="card hero">${poco("study","s")}<div><h3 style="margin:0">午後Ⅱ：論文</h3><div class="muted">2時間で設問ア・イ・ウを書き切る。本番形式のトレーナーで“完走力”をつけよう。</div></div></div>
  <div class="quick"><button class="qa b" onclick="openEssay(randTheme())"><span class="e">🎲</span>ランダムお題<small>本番さながらに挑戦</small></button><button class="qa d" onclick="tips()"><span class="e">🧭</span>論文の型<small>構成・時間配分のコツ</small></button></div>
  <h2>📜 過去10年の論文テーマ <span class="pill">完走 ${done}</span></h2>
  ${PM2_THEMES.map((t,i)=>{const p=S.pm2[i];const n=p?p.txt.reduce((a,s)=>a+[...s.replace(/\s/g,"")].length,0):0;return `<button class="li" onclick="openEssay(${i})"><span class="e">${p&&p.done?"🏛️":n?"✏️":"📄"}</span><span class="m"><span class="pill">${t.y} 問${t.n}</span><b style="margin-top:4px">${esc(t.t)}</b><span class="muted">${p&&p.done?"完走済み":n?`下書き ${n}字`:"未着手"}</span></span><span>›</span></button>`}).join("")}
@@ -668,7 +675,7 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
  // heat
  const cells=[];const now=new Date();for(let i=83;i>=0;i--){const d=new Date(now-i*864e5);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");const x=S.days[k]||0;cells.push(`<div class="${x?x>=100?"l4":x>=50?"l3":x>=20?"l2":"l1":""}" title="${k}: ${x}XP"></div>`)}
  const wk=[];for(let i=6;i>=0;i--){const d=new Date(now-i*864e5);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");wk.push([("日月火水木金土")[d.getDay()],S.days[k]||0,i===0])}const mx=Math.max(S.goal,...wk.map(w=>w[1]));
- let h=`<div class="card" style="text-align:center">${poco("happy")}<h2 style="margin:4px 0 0">Lv.${lv+1} ${titleOf(lv)}</h2><div class="muted">累計 ${S.xp} XP</div></div>
+ let h=`<div class="card" style="text-align:center">${poco(levelOf(S.xp)>=2?"trophy":"base")}<h2 style="margin:4px 0 0">Lv.${lv+1} ${titleOf(lv)}</h2><div class="muted">累計 ${S.xp} XP</div></div>
  <div class="tiles" style="margin-top:12px"><div class="tile" style="--c:var(--fire)"><b>連続日数</b><span>🔥${S.streak}</span></div><div class="tile" style="--c:var(--ok)"><b>正答率</b><span>${acc}%</span></div><div class="tile" style="--c:var(--sky)"><b>ベスト連続</b><span>${S.best}日</span></div></div>
  <div class="muted" style="margin-top:6px;text-align:center">🛡️ ストリークシールド ×${S.shield}（7日連続ごとに獲得。1日休んでも記録を守ります）</div>
  <h2>今週のXP</h2><div class="card"><div class="bars">${wk.map(([d,x,t])=>`<div class="${t?"today":""}"><span style="font-weight:700;color:var(--ink)">${x||""}</span><i style="height:${x/mx*80}%"></i>${d}</div>`).join("")}</div></div>

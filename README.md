@@ -12,13 +12,17 @@ IPA「プロジェクトマネージャ試験」の午前Ⅱ・午後Ⅰ・午�
 - **午後Ⅱ**：過去10年20テーマの論文トレーナー（2時間タイマー、設問ア〜ウの字数ゲージ、骨子メモ、自動保存、セルフチェック）
 - **続けたくなる仕組み**：XP・レベル・称号、連続日数🔥とシールド、ハート、コンボ、デイリークエスト、ハニーポット（ランダム報酬）、バッジ20種
 - **手応えの演出**：ヒットストップ、ヒットマーク、画面振動、フラッシュ、合成効果音、疑似ハプティクス（Android：Vibration API／iOS 18以降のSafari：スイッチ型チェックボックス）
-- マスコット：必勝ハチマキの働きバチ「ミツ」（オリジナル）
+- マスコット：働きバチ「ミツ」（公式デザインシート `assets/source/mitsu-sheet.webp` から5ポーズを切り出し）
 - フォント：LINE Seed JP（Google Fonts）
 
 ## ファイル構成
 
 ```
-index.html          ← 公開用（ビルド済み・1ファイル完結）
+index.html          ← 公開用（ビルド済み）
+assets/             ← マスコット画像（mitsu-base / adventure / cheer / study / trophy / face）
+favicon.ico ほか    ← favicon（16/32/48）、apple-touch-icon、PWAアイコン、manifest.webmanifest
+ogp.jpg             ← OGP画像（1200×630）
+tools/mascot/       ← 切り抜き・アイコン・OGP生成に使ったスクリプト（参考）
 src/app.html        ← アプリ本体（UI・ロジック）
 src/data_am2.js     ← 午前Ⅱの問題データ
 src/data_pm.js      ← 午後Ⅰ・午後Ⅱのデータ
@@ -31,6 +35,19 @@ tools/build.py      ← src から index.html を生成
 
 リポジトリの Settings → Pages → Build and deployment で
 「Deploy from a branch」「main」「/ (root)」を選んで保存すると、`index.html` がそのまま公開されます。
+
+## マスコット「ミツ」
+
+| ファイル | ポーズ | 使う場面 |
+|---|---|---|
+| `assets/mitsu-base.webp` | 基本（ハチミツ壺） | 通常 |
+| `assets/mitsu-adventure.webp` | 冒険 | 初回のようこそ |
+| `assets/mitsu-cheer.webp` | 応援 | 正解・レッスン完了・苦手ゼロ |
+| `assets/mitsu-study.webp` | 勉強 | 不正解（復習しよう）・午後Ⅰ/Ⅱ |
+| `assets/mitsu-trophy.webp` | トロフィー | パーフェクト・模試合格・記録 |
+| `assets/mitsu-face.webp` | 顔 | ヘッダーのロゴ |
+
+デザインの決まり：やわらかい3Dのチビ体型、星型ハイライトの大きな目、笑顔、つるっとした半透明の羽（シワ質感なし）、ハチミツ壺。
 
 ## 問題データの差し替え
 
