@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#ffb300">
+<title>PM試験クエスト｜プロジェクトマネージャ試験 対策</title>
+<meta name="description" content="IPAプロジェクトマネージャ試験の午前Ⅱ・午後Ⅰ・午後Ⅱをゲーム感覚で。登録不要・無料。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#ffb300;--pri-d:#d98a00;--pri-l:#fff3d2;--pri-t:#9a5a00;--pri-ink:#3d2600;
+  --ok:#21c16b;--ok-d:#159a52;--ok-l:#dcfbe9;
+  --ng:#ff4d5e;--ng-d:#d93041;--ng-l:#ffe3e6;
+  --gold:#ffb21e;--gold-d:#e08f00;--fire:#ff7a1a;
+  --sky:#1cb0f6;--sky-d:#1693cf;
+  --ink:#1d1b33;--sub:#6b6987;--line:#e6e4f0;--bg:#f7f6fc;--card:#fff;
+  --r:18px;--sh:0 2px 0 var(--line);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#f1f0ff;--sub:#a8a6c6;--line:#2e2c48;--bg:#13121f;--card:#1c1b2e;--pri-l:#3a2c0c;--pri-t:#ffcf5a;--ok-l:#11351f;--ng-l:#3d1820}}
+:root[data-theme=dark]{--ink:#f1f0ff;--sub:#a8a6c6;--line:#2e2c48;--bg:#13121f;--card:#1c1b2e;--pri-l:#3a2c0c;--pri-t:#ffcf5a;--ok-l:#11351f;--ng-l:#3d1820}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink)}
+body{font-family:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.65;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:0;background:none}
+textarea,input,select{font-family:inherit;font-size:16px;color:var(--ink)}
+#app{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative}
+/* top bar */
+.top{position:sticky;top:0;padding-top:max(10px,env(safe-area-inset-top))!important;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:2px solid var(--line)}
+.brand{font-weight:800;font-size:19px;letter-spacing:.02em;display:flex;align-items:center;gap:6px}
+.brand b{color:var(--pri-t)}
+.stats{display:flex;gap:12px;font-weight:800;font-size:15px}
+.stat{display:flex;align-items:center;gap:3px}
+.stat.fire{color:var(--fire)}.stat.gem{color:var(--sky)}.stat.heart{color:var(--ng)}
+.stat.dim{filter:grayscale(1);opacity:.5}
+main{flex:1;padding:16px 16px calc(96px + var(--safe-b))}
+/* nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;z-index:30;background:var(--card);border-top:2px solid var(--line);display:flex;padding:6px 6px calc(6px + var(--safe-b))}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 0;border-radius:14px;font-size:11px;font-weight:700;color:var(--sub);border:2px solid transparent}
+.nav button .ic{font-size:24px;line-height:1.2}
+.nav button.on{color:var(--pri-t);background:var(--pri-l);border-color:color-mix(in srgb,var(--pri) 35%,transparent)}
+/* cards & buttons */
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:0 3px 0 var(--line)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 18px;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:.04em;background:var(--pri);color:var(--pri-ink);box-shadow:0 4px 0 var(--pri-d);transition:transform .06s,box-shadow .06s,filter .2s;user-select:none}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--pri-d)}
+.btn.ok,.btn.ng,.btn.sky{color:#fff}
+.btn.ok{background:var(--ok);box-shadow:0 4px 0 var(--ok-d)}
+.btn.ng{background:var(--ng);box-shadow:0 4px 0 var(--ng-d)}
+.btn.gold{background:var(--gold);box-shadow:0 4px 0 var(--gold-d);color:#4a2e00}
+.btn.sky{background:var(--sky);box-shadow:0 4px 0 var(--sky-d)}
+.btn.ghost{background:var(--card);color:var(--pri-t);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.sm{padding:9px 14px;font-size:14px;width:auto;border-radius:12px}
+.btn[disabled]{background:var(--line);color:var(--sub);box-shadow:0 4px 0 color-mix(in srgb,var(--line) 70%,#000 8%);pointer-events:none}
+h2{font-size:20px;margin:22px 0 10px;font-weight:800}
+h3{font-size:17px;margin:0 0 6px;font-weight:800}
+.muted{color:var(--sub);font-size:13px}
+.row{display:flex;gap:10px;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:800;background:var(--pri-l);color:var(--pri-t)}
+.pill.gold{background:#fff3d6;color:#9a6400}.pill.ok{background:var(--ok-l);color:var(--ok-d)}.pill.ng{background:var(--ng-l);color:var(--ng-d)}
+@media (prefers-color-scheme:dark){.pill.gold{background:#3a2c0c;color:#ffcf6b}}
+/* hero */
+.hero{display:flex;gap:14px;align-items:center}
+.ring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;flex:none;transition:--p 1s}
+.ring>div{color:var(--ink);width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-weight:800;font-size:13px;line-height:1.1;text-align:center}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.qa{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:18px;text-align:left;font-weight:800;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .06s,box-shadow .06s;position:relative;overflow:hidden}
+.qa:active{transform:translateY(4px);box-shadow:none}
+.qa .e{font-size:26px}.qa small{font-weight:400;font-size:12px;opacity:.92}
+.qa.a{background:linear-gradient(135deg,#ff8a3d,#ff5f6d)}.qa.b{background:linear-gradient(135deg,#7b61ff,#5b4cf5)}.qa.c{background:linear-gradient(135deg,#1cb0f6,#3b82f6)}.qa.d{background:linear-gradient(135deg,#22c55e,#0ea371)}
+.qa .badge{position:absolute;top:8px;right:10px;background:#fff;color:var(--ng);font-size:11px;padding:0 7px;border-radius:99px}
+/* path */
+.unit{margin:26px 0 6px;border-radius:18px;padding:14px 16px;color:#fff;font-weight:800;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.unit small{display:block;font-weight:400;font-size:12px;opacity:.9}
+.path{display:flex;flex-direction:column;align-items:center;gap:16px;padding:34px 0 8px}
+.node{position:relative;width:72px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:28px;transition:transform .1s}
+.node .disc{position:absolute;inset:0;border-radius:50%;background:var(--c);box-shadow:0 7px 0 var(--cd)}
+.node:active .disc{transform:translateY(5px);box-shadow:0 2px 0 var(--cd)}
+.node .ico{position:relative;z-index:1;transition:transform .1s;color:#fff;filter:drop-shadow(0 1px 0 rgba(0,0,0,.2))}
+.node:active .ico{transform:translateY(5px)}
+.node.todo .disc{background:var(--line);box-shadow:0 7px 0 color-mix(in srgb,var(--line) 70%,#000 12%)}
+.node.todo .ico{filter:grayscale(1);opacity:.5}
+.node.cur::before{content:"";position:absolute;inset:-9px;border-radius:50%;border:4px solid var(--c);opacity:.35;animation:pulse 1.6s infinite}
+.node .stars{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:12px;white-space:nowrap;z-index:2;letter-spacing:-1px}
+.bubble{position:absolute;top:-40px;left:50%;transform:translateX(-50%);background:var(--card);color:var(--c);border:2px solid var(--line);font-weight:800;font-size:13px;padding:4px 12px;border-radius:12px;white-space:nowrap;animation:bob 1.2s ease-in-out infinite;z-index:3}
+.bubble::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:var(--card);border-right:2px solid var(--line);border-bottom:2px solid var(--line)}
+@keyframes pulse{0%{transform:scale(.9);opacity:.5}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
+@keyframes bob{50%{transform:translate(-50%,-5px)}}
+/* lesson */
+.lesson{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+.lhead{display:flex;align-items:center;gap:12px;padding:max(14px,env(safe-area-inset-top)) 16px 6px}
+.x{font-size:26px;color:var(--sub);width:32px;line-height:1}
+.bar{flex:1;height:16px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--ok);transition:width .45s cubic-bezier(.3,1.4,.5,1);box-shadow:inset 0 -4px 0 rgba(0,0,0,.08)}
+.bar i::after{content:"";position:absolute;left:8px;right:8px;top:3px;height:4px;border-radius:9px;background:rgba(255,255,255,.4)}
+.bar.fire i{background:linear-gradient(90deg,#ffb21e,#ff5f1a,#ff2d55);background-size:200% 100%;animation:flow 1.2s linear infinite}
+@keyframes flow{to{background-position:-200% 0}}
+.lbody{flex:1;overflow:auto;padding:10px 16px 20px}
+.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.qtext{font-size:17px;font-weight:700;line-height:1.75;white-space:pre-wrap}
+.choices{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.ch{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 14px;border:2px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:15px;line-height:1.6;transition:transform .06s,box-shadow .06s,border-color .15s,background .15s}
+.ch:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.ch .k{flex:none;width:28px;height:28px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--sub)}
+.ch.sel{border-color:var(--sky);background:color-mix(in srgb,var(--sky) 12%,var(--card));box-shadow:0 4px 0 var(--sky)}
+.ch.sel .k{border-color:var(--sky);color:var(--sky)}
+.ch.right{border-color:var(--ok);background:var(--ok-l);box-shadow:0 4px 0 var(--ok)}
+.ch.right .k{background:var(--ok);border-color:var(--ok);color:#fff}
+.ch.wrong{border-color:var(--ng);background:var(--ng-l);box-shadow:0 4px 0 var(--ng);animation:shake .4s}
+.ch.wrong .k{background:var(--ng);border-color:var(--ng);color:#fff}
+.ch.lock{pointer-events:none}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.lfoot{padding:14px 16px calc(14px + var(--safe-b));border-top:2px solid var(--line);background:var(--bg);transition:background .2s}
+.lfoot.ok{background:var(--ok-l);border-color:transparent}.lfoot.ng{background:var(--ng-l);border-color:transparent}
+.verdict{display:none;margin-bottom:12px}
+.lfoot.ok .verdict,.lfoot.ng .verdict{display:block;animation:up .25s ease-out}
+.verdict .t{font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px}
+.lfoot.ok .t{color:var(--ok-d)}.lfoot.ng .t{color:var(--ng-d)}
+.verdict .ex{font-size:14px;margin-top:6px;max-height:34vh;overflow:auto;line-height:1.7}
+@keyframes up{from{transform:translateY(16px);opacity:0}}
+table.t{border-collapse:collapse;margin:12px 0;font-size:13px;width:100%;background:var(--card);border-radius:12px;overflow:hidden}
+table.t td,table.t th{border:1.5px solid var(--line);padding:5px 7px;text-align:center}
+table.t tr:first-child td{background:var(--pri-l);font-weight:800}
+.combo{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:60;font-weight:800;font-size:22px;color:var(--fire);text-shadow:0 2px 0 #fff;pointer-events:none;animation:pop .9s forwards}
+@keyframes pop{0%{transform:translate(-50%,10px) scale(.6);opacity:0}25%{transform:translate(-50%,0) scale(1.15);opacity:1}100%{transform:translate(-50%,-30px) scale(1);opacity:0}}
+.xpf{position:fixed;z-index:61;font-weight:800;color:var(--gold-d);pointer-events:none;animation:xpf 1s forwards;font-size:18px}
+@keyframes xpf{to{transform:translateY(-60px);opacity:0}}
+.timer{font-weight:800;font-variant-numeric:tabular-nums;color:var(--sub);min-width:60px;text-align:right}
+.timer.warn{color:var(--ng);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.4}}
+/* overlay / modal */
+.ov{position:fixed;inset:0;z-index:80;background:rgba(15,12,40,.5);display:grid;place-items:center;padding:20px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.modal{background:var(--card);border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;text-align:center;animation:zoom .35s cubic-bezier(.3,1.5,.5,1);max-height:88vh;overflow:auto}
+@keyframes zoom{from{transform:scale(.7);opacity:0}}
+.big{font-size:56px;line-height:1.1}
+.rays{position:relative}
+.rays::before{content:"";position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;background:repeating-conic-gradient(from 0deg,rgba(255,178,30,.25) 0 10deg,transparent 10deg 20deg);border-radius:50%;animation:spin 8s linear infinite;z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:14px;font-weight:700;font-size:14px;z-index:90;animation:up .25s;max-width:90%}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:100;width:100%;height:100%}
+/* results */
+.res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:24px 16px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.tile{border-radius:16px;border:2px solid var(--c);overflow:hidden}
+.tile b{display:block;background:var(--c);color:#fff;font-size:12px;padding:3px}
+.tile span{display:block;font-size:22px;font-weight:800;padding:10px 0;color:var(--c)}
+/* mascot */
+.mascot{width:120px;height:120px}
+.mascot.s{width:64px;height:64px}
+.mascot.logo{width:30px;height:30px;margin:-2px 0}
+.mascot .wg{transform-origin:60px 44px;animation:flap .18s ease-in-out infinite alternate}
+@keyframes flap{to{transform:scaleY(.72)}}
+.jump{animation:jump .6s ease-out}
+@keyframes jump{30%{transform:translateY(-16px) scale(1.05,.95)}60%{transform:translateY(0) scale(.97,1.03)}}
+.say{position:relative;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:700;font-size:14px}
+/* lists */
+.li{display:flex;gap:12px;align-items:center;padding:14px;border:2px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 3px 0 var(--line);text-align:left;width:100%;margin-bottom:10px;transition:transform .06s,box-shadow .06s}
+.li:active{transform:translateY(3px);box-shadow:none}
+.li .e{font-size:26px;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--pri-l)}
+.li .m{flex:1;min-width:0}
+.li .m b{display:block;font-size:15px;line-height:1.45}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:6px 13px;border-radius:99px;border:2px solid var(--line);font-weight:700;font-size:13px;background:var(--card)}
+.chip.on{background:var(--pri);border-color:var(--pri-t);color:#fff}
+/* writing */
+.wa{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:12px;background:var(--card);resize:vertical;line-height:1.8;outline:none;transition:border-color .2s}
+.wa:focus{border-color:var(--pri-t)}
+.wa.tall{min-height:42vh}
+.cnt{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;margin-top:6px}
+.gauge{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px;position:relative}
+.gauge i{position:absolute;inset:0 auto 0 0;background:var(--ng);transition:width .2s,background .2s;border-radius:9px}
+.gauge .mk{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.35}
+mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;border-radius:4px;padding:0 2px}
+.tabs{display:flex;gap:6px;margin:10px 0}
+.tabs button{flex:1;padding:9px 0;border-radius:12px;border:2px solid var(--line);font-weight:800;background:var(--card)}
+.tabs button.on{border-color:var(--pri-t);color:var(--pri-t);background:var(--pri-l)}
+.scen{background:var(--card);border:2px solid var(--line);border-left:6px solid var(--pri);border-radius:14px;padding:14px;font-size:15px;line-height:1.85}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+.check input{width:22px;height:22px;accent-color:var(--ok);flex:none;margin-top:2px}
+/* stats */
+.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.heat div{aspect-ratio:1;border-radius:4px;background:var(--line)}
+.heat .l1{background:#ffe9a8}.heat .l2{background:#ffd04d}.heat .l3{background:#f5a300}.heat .l4{background:#b86e00}
+.bdg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bdg div{display:flex;flex-direction:column;align-items:center;text-align:center;font-size:10.5px;font-weight:700;gap:4px;line-height:1.3}
+.bdg .m{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:linear-gradient(145deg,#ffd76a,#ffa600);box-shadow:0 4px 0 #d48a00}
+.bdg .off .m{background:var(--line);box-shadow:0 4px 0 color-mix(in srgb,var(--line) 70%,#000 12%);filter:grayscale(1);opacity:.55}
+.bars{display:flex;align-items:flex-end;gap:6px;height:110px;padding-top:8px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:10px;color:var(--sub);height:100%}
+.bars i{display:block;width:100%;border-radius:8px 8px 4px 4px;background:var(--pri);min-height:3px;transition:height .6s cubic-bezier(.3,1.4,.5,1)}
+.bars .today i{background:var(--gold)}
+.catbar{display:flex;align-items:center;gap:10px;font-size:13px;margin:7px 0}
+.catbar .n{width:132px;flex:none;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px}
+.catbar .b{flex:1;height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+.catbar .b i{display:block;height:100%;border-radius:9px}
+.foot{font-size:11px;color:var(--sub);line-height:1.7;margin-top:26px}
+.foot a{color:var(--sub)}
+.fade-in{animation:fadeIn .25s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}}
+@property --p{syntax:"<number>";inherits:false;initial-value:0}
+.ring{transition:--p 1.1s cubic-bezier(.3,1.2,.5,1)}
+.mascot.xs{width:40px;height:40px;flex:none;margin:-6px 2px -6px -4px}
+.cmb{font-weight:800;color:var(--fire);font-size:15px;opacity:0;transform:scale(.5);transition:opacity .2s,transform .2s;display:inline-block;min-width:0}
+.cmb.on{opacity:1;transform:none;text-shadow:0 0 12px rgba(255,122,26,.45)}
+.ch{animation:chIn .26s both;animation-delay:var(--d,0ms)}
+@keyframes chIn{from{opacity:0;transform:translateY(10px)}}
+.ch.wrong{animation:none}
+.slide-in{animation:slideIn .2s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateX(24px)}}
+.xpf.q{color:var(--sky-d)}
+.pre{opacity:0;transform:scale(.7) translateY(8px)}
+.pre.in{opacity:1;transform:none;transition:opacity .2s,transform .32s cubic-bezier(.3,1.7,.5,1)}
+.lvpop{animation:lvpop .6s cubic-bezier(.3,1.8,.5,1)}
+@keyframes lvpop{from{transform:scale(.2) rotate(-30deg)}}
+.chest{font-size:84px;line-height:1;padding:10px 20px;transition:transform .15s;animation:wob 1.6s ease-in-out infinite;filter:drop-shadow(0 8px 0 rgba(0,0,0,.12))}
+.chest.opened{animation:lvpop .5s cubic-bezier(.3,1.8,.5,1)}
+@keyframes wob{0%,80%,100%{rotate:0deg}85%{rotate:-8deg}90%{rotate:8deg}95%{rotate:-4deg}}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:4px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
+.rar{display:inline-block;padding:3px 14px;border-radius:99px;background:var(--rc);color:#fff;font-weight:800;font-size:13px;box-shadow:0 0 18px var(--rc)}
+.chestbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:18px;font-weight:800;font-size:17px;color:#5a3a00;background:linear-gradient(135deg,#ffe07a,#ffb21e);box-shadow:0 4px 0 #d48a00}
+.chestbtn:not(.used){animation:glow 1.4s ease-in-out infinite}
+.chestbtn.used{filter:grayscale(.8);opacity:.6;box-shadow:none}
+@keyframes glow{50%{box-shadow:0 4px 0 #d48a00,0 0 22px rgba(255,178,30,.8)}}
+.qrow{display:flex;gap:10px;align-items:center;padding:8px 0}
+.qrow .qi{font-size:22px;width:30px;text-align:center}
+.qrow.dn{opacity:.75}
+.say.stk{border-color:var(--fire)}
+.chip,.tabs button,.nav button,.x,.cmb,summary{transition:transform .08s}
+.chip:active,.tabs button:active,.nav button:active,.x:active{transform:scale(.92)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand" id="brand"></div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <main id="main"></main>
+  <nav class="nav" id="nav">
+    <button data-t="home"><span class="ic">🏠</span>午前Ⅱ</button>
+    <button data-t="pm1"><span class="ic">✍️</span>午後Ⅰ</button>
+    <button data-t="pm2"><span class="ic">📜</span>午後Ⅱ</button>
+    <button data-t="me"><span class="ic">🏆</span>記録</button>
+  </nav>
+</div>
+<canvas id="fx"></canvas>
+<script>/*__DATA__*/</script>
+<script>
+"use strict";
+/* ================= 基本 ================= */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const KANA=["ア","イ","ウ","エ"];
+const CATS=[
+ {k:"int",n:"統合・標準",i:"🧭",c:"#5b4cf5",d:"#4234d6"},
+ {k:"scope",n:"スコープ",i:"🎯",c:"#ff6b6b",d:"#d94848"},
+ {k:"sched",n:"スケジュール",i:"📅",c:"#1cb0f6",d:"#1693cf"},
+ {k:"cost",n:"コスト・見積り",i:"💰",c:"#ffb21e",d:"#e08f00"},
+ {k:"qual",n:"品質",i:"💎",c:"#ce82ff",d:"#a95fdb"},
+ {k:"team",n:"チーム・資源",i:"🤝",c:"#21c16b",d:"#159a52"},
+ {k:"stake",n:"ステークホルダ",i:"📣",c:"#ff8a3d",d:"#dc6a20"},
+ {k:"risk",n:"リスク",i:"⚡",c:"#ff4d8d",d:"#d6306d"},
+ {k:"dev",n:"開発技術・アジャイル",i:"🛠️",c:"#14b8a6",d:"#0f8f81"},
+ {k:"svc",n:"サービス・戦略",i:"📈",c:"#3b82f6",d:"#2563c9"},
+ {k:"law",n:"法務・契約",i:"⚖️",c:"#8b5cf6",d:"#6d3fd6"},
+ {k:"sec",n:"セキュリティ",i:"🛡️",c:"#64748b",d:"#475569"}];
+const CAT=Object.fromEntries(CATS.map(c=>[c.k,c]));
+const Q=window.AM2, QID=Object.fromEntries(Q.map(q=>[q.id,q]));
+const LESSON_SIZE=5;
+const UNITS=CATS.map(c=>{const qs=Q.filter(q=>q.cat===c.k);const ls=[];for(let i=0;i<qs.length;i+=LESSON_SIZE)ls.push({id:c.k+"-"+(i/LESSON_SIZE),qs:qs.slice(i,i+LESSON_SIZE).map(q=>q.id)});return{...c,lessons:ls,total:qs.length}}).filter(u=>u.total);
+const srcs=q=>[].concat(q.src||[]);
+const TITLES=["見習いメンバー","メンバー","サブリーダー","チームリーダー","プロジェクトリーダー","プロジェクトマネージャ","シニアPM","PMO長","プログラムマネージャ","ポートフォリオマネージャ","伝説のPM"];
+const lvXP=n=>50*n*(n+1); // レベルnに必要な累計XP
+const levelOf=xp=>{let n=0;while(xp>=lvXP(n+1))n++;return n};
+const titleOf=lv=>TITLES[Math.min(TITLES.length-1,Math.floor(lv/2))];
+const HEART_MAX=5, HEART_MS=20*60*1000;
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const dayDiff=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+
+/* ================= ストア ================= */
+const KEY="pmquest.v1";
+const DEF={xp:0,goal:50,days:{},streak:0,best:0,last:null,shield:0,hearts:HEART_MAX,hTs:0,q:{},lessons:{},badges:{},pm1:{},pm2:{},mock:[],sound:true,combo:0,maxCombo:0,totalOk:0,totalAns:0,onboard:false};
+let S;
+function load(){try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){S={...DEF}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+load();
+function regenHearts(){if(S.hearts>=HEART_MAX){S.hTs=0;return}const n=Math.floor((Date.now()-S.hTs)/HEART_MS);if(n>0){S.hearts=Math.min(HEART_MAX,S.hearts+n);S.hTs=S.hearts>=HEART_MAX?0:S.hTs+n*HEART_MS;save()}}
+function checkStreakDecay(){const t=today();if(!S.last)return;const d=dayDiff(S.last,t);if(d>1){if(S.shield>0&&d===2){S.shield--;S.last=new Date(Date.now()-864e5).toISOString().slice(0,10);toast("🛡️ ストリークシールドで連続記録を守りました！")}else{S.streak=0}save()}}
+function todayXP(){return S.days[today()]||0}
+
+/* ================= サウンド（桜井流：アタック強め・残響ほどほど・影響度で優先順位） ================= */
+// 優先度（大→小）：レベルアップ ＞ レッスン完了/宝箱 ＞ コンボ ＞ 正解 ＞ 不正解 ＞ 選択 ＞ UIタップ
+let AC,MG,NZ;
+function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();const comp=AC.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=5;comp.attack.value=.002;comp.release.value=.12;MG=AC.createGain();MG.gain.value=.95;MG.connect(comp).connect(AC.destination);const len=AC.sampleRate*.6|0,b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;NZ=b}if(AC.state==="suspended")AC.resume();return AC}
+function osc(f,dur,st=0,type="sine",v=.2,f2){const a=ac(),t=a.currentTime+st,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(MG);o.start(t);o.stop(t+dur+.02)}
+function noise(dur,st=0,v=.2,hp=2000,lp=12000){const a=ac(),t=a.currentTime+st,s=a.createBufferSource(),g=a.createGain(),h=a.createBiquadFilter(),l=a.createBiquadFilter();s.buffer=NZ;h.type="highpass";h.frequency.value=hp;l.type="lowpass";l.frequency.value=lp;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(h).connect(l).connect(g).connect(MG);s.start(t);s.stop(t+dur+.02)}
+const play=fn=>{if(!S.sound)return;try{fn()}catch(e){}};
+const semi=n=>Math.pow(2,n/12);
+const SFX={
+ tap:()=>play(()=>{noise(.02,0,.08,3500);osc(1000,.035,0,"triangle",.05)}),
+ sel:()=>play(()=>{noise(.018,0,.12,4500);osc(1320,.045,0,"square",.035)}),
+ // 正解：コンボごとに半音ずつ上がる（最大1オクターブ）。出だしにノイズのアタック
+ ok:(c=1)=>play(()=>{const k=semi(Math.min(c-1,12));noise(.035,0,.24,1800);osc(784*k,.07,0,"square",.07);osc(1046*k,.2,.045,"triangle",.22);osc(2093*k,.18,.045,"sine",.05)}),
+ ng:()=>play(()=>{noise(.06,0,.2,150,900);osc(196,.14,0,"square",.07,110);osc(131,.18,.05,"triangle",.12,92)}),
+ combo:c=>play(()=>{const k=semi(Math.min(c,16)/2);[0,4,7,12].forEach((n,i)=>osc(659*k*semi(n),.11,i*.045,"square",.06));osc(659*k*2,.35,.18,"triangle",.12);noise(.12,.16,.07,6000)}),
+ tick:(i=0)=>play(()=>osc(1400+Math.min(i,40)*22,.028,0,"square",.028)),
+ quick:()=>play(()=>{osc(1568,.05,0,"square",.05);osc(2349,.1,.045,"square",.045)}),
+ heart:()=>play(()=>{osc(330,.12,0,"sine",.15,165);noise(.05,0,.1,300,1500)}),
+ fin:p=>play(()=>{noise(.08,0,.22,700);const s=p?[0,4,7,12,16,19,24]:[0,4,7,12];s.forEach((n,i)=>osc(523*semi(n),.16,i*.065,"triangle",.17));const L=s.length*.065;osc(523*semi(s[s.length-1]),.55,L,"sine",.12);osc(523*semi(s[s.length-1]-5),.55,L,"sine",.07)}),
+ lv:()=>play(()=>{[[0,0],[4,.09],[7,.18],[12,.27]].forEach(([n,t])=>{osc(523*semi(n),.1,t,"square",.07);osc(523*semi(n+7),.1,t,"square",.035)});[0,4,7].forEach(n=>osc(1046*semi(n),.8,.38,"triangle",.13));noise(.5,.38,.06,6500)}),
+ shake:i=>play(()=>{noise(.07,0,.14+i*.06,140,900);osc(110+i*35,.1,0,"triangle",.16,70)}),
+ open:r=>play(()=>{noise(.35,0,.26,900);osc(392,.07,0,"square",.08);[0,4,7,11,12,16,19].slice(0,3+r).forEach((n,i)=>osc(784*semi(n),.22,.05+i*.055,"triangle",.15));osc(1568*semi(r*2),.9,.42,"sine",.09)}),
+ badge:()=>play(()=>{[0,7,12,16].forEach((n,i)=>osc(659*semi(n),.18,i*.08,"triangle",.16));noise(.3,.3,.05,7000)}),
+ quest:()=>play(()=>{osc(988,.07,0,"square",.06);osc(1319,.22,.06,"triangle",.17);noise(.04,0,.1,3000)}),
+ streak:()=>play(()=>{noise(.25,0,.12,400,4000);[0,7,12].forEach((n,i)=>osc(440*semi(n),.2,.08+i*.07,"sawtooth",.05));osc(880*semi(7),.5,.3,"triangle",.12)})};
+/* ===== 疑似ハプティクス =====
+ Android：Vibration API ／ iPhone（iOS 18以降のSafari）：非表示のスイッチ型チェックボックスを切り替えたときに鳴る端末の触覚を利用 */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const CANVIB=!!navigator.vibrate&&!IOS;let HSW;
+function iosTick(){try{if(!HSW){HSW=document.createElement("label");HSW.setAttribute("aria-hidden","true");HSW.style.cssText="position:fixed;left:-200px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden";HSW.innerHTML='<input type="checkbox" switch tabindex="-1">';document.body.appendChild(HSW)}HSW.click()}catch(e){}}
+const HP={light:8,select:6,medium:16,heavy:28,success:[12,50,22],error:[28,40,28],combo:[10,30,10,30,24],big:[24,40,24,40,60]};
+function buzz(p){if(S.noHaptic)return;try{if(CANVIB){navigator.vibrate(p)}else if(IOS){const n=Array.isArray(p)?Math.ceil(p.length/2):1;iosTick();for(let i=1;i<n;i++)setTimeout(iosTick,i*70)}}catch(e){}}
+const haptic=k=>buzz(HP[k]||HP.light);
+function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,#askY"))return"heavy";if(el.matches(".btn,.qa,.node,.li"))return"medium";if(el.matches(".ch"))return"select";return"light"}
+const HSEL="button,a.btn,.li,.node,.qa,.chip,label.check,summary,select";
+// Android は押した瞬間（pointerdown）、iPhone は確定時（click）に発火
+document.addEventListener("pointerdown",e=>{if(!CANVIB)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{passive:true,capture:true});
+document.addEventListener("click",e=>{if(!IOS||!e.isTrusted)return;const el=e.target.closest(HSEL);if(el&&!el.disabled&&!el.closest("label[aria-hidden]"))haptic(hapticFor(el))},{capture:true});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ================= エフェクト（ヒットマーク・振動・フラッシュ・紙吹雪） ================= */
+const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=0;
+function sizeCv(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}sizeCv();addEventListener("resize",sizeCv);
+const COLS=["#5b4cf5","#21c16b","#ffb21e","#ff4d8d","#1cb0f6","#ff7a1a","#ce82ff"];
+function confetti(n=140,y=.35){if(RM)n=Math.min(n,30);for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*innerWidth*.3,y:innerHeight*y,vx:(Math.random()-.5)*15,vy:-Math.random()*15-4,g:.32,w:6+Math.random()*7,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:COLS[i%COLS.length],life:150+Math.random()*60,sh:Math.random()<.3?"c":"r"});run()}
+function burst(x,y,c="#21c16b",n=14){for(let i=0;i<n;i++){const a=Math.PI*2*i/n,s=3+Math.random()*4;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,g:.12,w:5,h:5,r:0,vr:0,c,life:34,sh:"c"})}run()}
+// ヒットマーク：衝撃波リング＋火花。暗い縁取りで明るい背景でも見える。短く消す
+function hitmark(x,y,c,pw=1){parts.push({t:"ring",x,y,rad:10,vr:7*pw,life:15,max:15,c,lw:5*pw});const n=8;for(let i=0;i<n;i++){const a=Math.PI*2*i/n+Math.random()*.35,s=(6+Math.random()*4)*pw;parts.push({t:"spark",x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,a,len:(16+Math.random()*8)*pw,life:13,max:13,c})}parts.push({t:"star",x,y,s:26*pw,life:10,max:10,c:"#fff"});run()}
+function drawP(p){const k=p.life/p.max;
+ if(p.t==="ring"){p.rad+=p.vr;p.vr*=.82;cx.globalAlpha=k;cx.lineWidth=p.lw+3;cx.strokeStyle="rgba(20,18,40,.35)";cx.beginPath();cx.arc(p.x,p.y,p.rad,0,7);cx.stroke();cx.lineWidth=p.lw;cx.strokeStyle=p.c;cx.stroke();return}
+ if(p.t==="spark"){p.x+=p.vx;p.y+=p.vy;p.vx*=.8;p.vy*=.8;p.len*=.88;const ex=p.x+Math.cos(p.a)*p.len,ey=p.y+Math.sin(p.a)*p.len;cx.globalAlpha=Math.min(1,k*1.5);cx.lineCap="round";cx.lineWidth=7;cx.strokeStyle="rgba(20,18,40,.35)";cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(ex,ey);cx.stroke();cx.lineWidth=4;cx.strokeStyle=p.c;cx.stroke();return}
+ if(p.t==="star"){const s=p.s*(1.3-k*.3);cx.globalAlpha=k;cx.save();cx.translate(p.x,p.y);cx.rotate((1-k)*.6);cx.beginPath();for(let i=0;i<8;i++){const r=i%2?s*.32:s,a=i*Math.PI/4;cx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}cx.closePath();cx.fillStyle=p.c;cx.strokeStyle="rgba(20,18,40,.3)";cx.lineWidth=2;cx.fill();cx.stroke();cx.restore();return}
+ p.vy+=p.g;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.globalAlpha=Math.min(1,p.life/30);cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;if(p.sh==="c"){cx.beginPath();cx.arc(0,0,p.w/2,0,7);cx.fill()}else cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()}
+function run(){if(raf)return;const step=()=>{cx.clearRect(0,0,innerWidth,innerHeight);parts=parts.filter(p=>p.life-->0&&p.y<innerHeight+40);for(const p of parts){cx.save();drawP(p);cx.restore()}if(parts.length)raf=requestAnimationFrame(step);else{raf=0;cx.clearRect(0,0,innerWidth,innerHeight)}};raf=requestAnimationFrame(step)}
+// 振動：最初に強く→収束、少しランダム。大中小で揺れ方のパターン自体を変える
+function jolt(el,amp,ms,mode="xy"){if(!el||!el.animate||RM)return;const n=Math.max(4,Math.round(ms/28)),kf=[];for(let i=0;i<=n;i++){const a=amp*Math.pow(1-i/n,1.4),sx=i%2?1:-1;kf.push({transform:`translate(${mode!=="y"?sx*a*(.6+Math.random()*.4):0}px,${mode!=="x"?(Math.random()*2-1)*a:0}px)`})}kf.push({transform:"none"});el.animate(kf,{duration:ms,easing:"linear"})}
+function shakeScreen(size){if(S.noShake)return;const el=$("#lesson")||$("#app");({s:()=>jolt(el,3,170,"y"),m:()=>jolt(el,6,260),l:()=>jolt(el,10,420)})[size]()}
+// フラッシュ：明暗を交互に（白一色の加算にしない）・一瞬
+function flash(c){if(RM||S.noShake)return;const f=document.createElement("div");f.style.cssText="position:fixed;inset:0;z-index:95;pointer-events:none";document.body.appendChild(f);f.animate([{background:"#fff",opacity:.45},{background:"#140f30",opacity:.18},{background:c,opacity:.28},{background:c,opacity:0}],{duration:230,easing:"linear"}).onfinish=()=>f.remove()}
+function floatXP(x,y,t,cls=""){const e=document.createElement("div");e.className="xpf "+cls;e.textContent=t;e.style.left=Math.min(innerWidth-110,Math.max(8,x))+"px";e.style.top=y+"px";document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
+function comboPop(t,c){const e=document.createElement("div");e.className="combo";e.textContent=t;if(c)e.style.color=c;document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
+function toast(t,ms=2400){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),ms)}
+
+/* ================= マスコット「ミツ」（オリジナル：必勝ハチマキの働きバチ） ================= */
+function poco(mood="happy",cls=""){
+ const E="#2a2140";
+ const eyes=mood==="sad"?`<circle cx="47" cy="66" r="4.5" fill="${E}"/><circle cx="73" cy="66" r="4.5" fill="${E}"/><path d="M39 59l12-4M81 59l-12-4" stroke="${E}" stroke-width="3.5" stroke-linecap="round"/>`:mood==="wow"?`<circle cx="47" cy="64" r="7.5" fill="#fff"/><circle cx="73" cy="64" r="7.5" fill="#fff"/><circle cx="48" cy="65" r="4.5" fill="${E}"/><circle cx="74" cy="65" r="4.5" fill="${E}"/><circle cx="50" cy="62.5" r="1.6" fill="#fff"/><circle cx="76" cy="62.5" r="1.6" fill="#fff"/>`:`<path d="M40 66q7-9 14 0M66 66q7-9 14 0" stroke="${E}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+ const mouth=mood==="sad"?`<path d="M53 84q7-6 14 0" stroke="${E}" stroke-width="4" fill="none" stroke-linecap="round"/>`:mood==="wow"?`<ellipse cx="60" cy="83" rx="5.5" ry="6.5" fill="${E}"/>`:`<path d="M49 77q11 13 22 0z" fill="${E}"/><path d="M54 82q6 4 12 0" fill="#ff7a8a"/>`;
+ const id="b"+(Math.random()*1e6|0);
+ return `<svg class="mascot ${cls}" viewBox="0 0 120 120" aria-hidden="true"><defs><clipPath id="${id}"><ellipse cx="60" cy="72" rx="38" ry="36"/></clipPath></defs><ellipse cx="60" cy="114" rx="30" ry="4.5" fill="rgba(0,0,0,.12)"/>
+ <g class="wg"><ellipse cx="30" cy="38" rx="17" ry="11" transform="rotate(-30 30 38)" fill="#e9f7ff" stroke="#b9ddf3" stroke-width="2.5" opacity=".95"/><ellipse cx="90" cy="38" rx="17" ry="11" transform="rotate(30 90 38)" fill="#e9f7ff" stroke="#b9ddf3" stroke-width="2.5" opacity=".95"/></g>
+ <path d="M48 38q-6-16-14-20" stroke="${E}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M72 38q6-16 14-20" stroke="${E}" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="34" cy="17" r="5" fill="${E}"/><circle cx="86" cy="17" r="5" fill="${E}"/>
+ <ellipse cx="60" cy="72" rx="38" ry="36" fill="#ffc928"/>
+ <g clip-path="url(#${id})"><rect x="10" y="92" width="100" height="9" fill="${E}"/><rect x="10" y="106" width="100" height="9" fill="${E}"/><ellipse cx="48" cy="52" rx="20" ry="11" fill="#fff" opacity=".28"/>
+ <rect x="10" y="40" width="100" height="11" fill="#fff"/><rect x="10" y="49" width="100" height="2.5" fill="#e8e3f0"/></g>
+ <circle cx="60" cy="45.5" r="5" fill="#ff3b4f"/>
+ <path d="M96 42l14-7-3 9 5 6-15-3z" fill="#fff" stroke="#e8e3f0" stroke-width="1.5"/>
+ <ellipse cx="36" cy="76" rx="6.5" ry="4" fill="#ff9f8f" opacity=".75"/><ellipse cx="84" cy="76" rx="6.5" ry="4" fill="#ff9f8f" opacity=".75"/>${eyes}${mouth}</svg>`}
+
+/* ================= ゲーミフィケーション中核 ================= */
+function addXP(n){const before=levelOf(S.xp);S.xp+=n;const t=today();S.days[t]=(S.days[t]||0)+n;
+ if(S.last!==t){if(S.last&&dayDiff(S.last,t)===1)S.streak++;else S.streak=1;S.last=t;S.best=Math.max(S.best,S.streak);S._streakUp=Date.now();if(S.streak%7===0&&S.shield<2){S.shield++;setTimeout(()=>toast("🛡️ 7日連続ボーナス：ストリークシールド獲得！"),1200)}}
+ save();renderTop();qprog("xp",n);const after=levelOf(S.xp);if(after>before)setTimeout(()=>levelUp(after),L?1900:700);checkBadges()}
+function levelUp(lv){SFX.lv();flash("#ffb21e");shakeScreen("l");confetti(200);buzz([30,40,30,40,60]);modal(`<div class="rays"><div class="big lvpop">🎖️</div></div><h2 style="margin:10px 0 4px">レベル ${lv+1} に到達！</h2><p>称号：<b>${titleOf(lv)}</b></p><p class="muted">次のレベルまで ${lvXP(lv+1)-S.xp} XP</p><button class="btn gold" onclick="closeModal()">やったね！</button>`)}
+/* ===== デイリークエスト（目的を目の前に吊るす） ===== */
+const QPOOL=[{k:"ok",n:"10問正解する",g:10,i:"✅"},{k:"c5",n:"5連続正解を出す",g:1,i:"🔥"},{k:"ls",n:"レッスンを2回クリア",g:2,i:"⭐"},{k:"pf",n:"パーフェクトを1回",g:1,i:"👑"},{k:"pm1",n:"記述問題に1問挑戦",g:1,i:"✍️"},{k:"xp",n:"80XP獲得する",g:80,i:"🍯"},{k:"qk",n:"10秒以内の正解を5回",g:5,i:"⚡"},{k:"wk",n:"苦手復習をクリア",g:1,i:"🧠"}];
+function dq(){const t=today();if(!S.dq||S.dq.d!==t){let h=7;for(const c of t)h=(h*31+c.charCodeAt(0))>>>0;const pool=[...QPOOL],pick=[];for(let i=0;i<3;i++){h=(Math.imul(h,1103515245)+12345)>>>0;pick.push(pool.splice(h%pool.length,1)[0].k)}S.dq={d:t,ks:pick,p:{},done:{},bonus:false};save()}return S.dq}
+function qprog(k,n=1){const d=dq();if(!d.ks.includes(k)||d.done[k])return;const q=QPOOL.find(x=>x.k===k);d.p[k]=Math.min(q.g,(d.p[k]||0)+n);save();
+ if(d.p[k]>=q.g){d.done[k]=true;save();setTimeout(()=>{SFX.quest();haptic("success");toast(`🎯 クエスト達成「${q.n}」 +20XP`);addXP(20);if(d.ks.every(x=>d.done[x])&&!d.bonus){d.bonus=true;save();setTimeout(()=>openChest("デイリークエスト全達成！",2),1500)}},L?400:200)}}
+function questHTML(){const d=dq();const all=d.ks.every(x=>d.done[x]);return `<div class="card" style="margin-top:14px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🎯 今日のクエスト</h3><span class="muted">${all?"全達成！🍯":"全達成でハニーポット"}</span></div>${d.ks.map(k=>{const q=QPOOL.find(x=>x.k===k),p=d.p[k]||0,dn=d.done[k];return `<div class="qrow ${dn?"dn":""}"><span class="qi">${dn?"✅":q.i}</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">${q.n}</div><div class="gauge"><i style="width:${p/q.g*100}%;background:${dn?"var(--ok)":"var(--gold)"}"></i></div></div><span class="muted" style="font-weight:800">${p}/${q.g}</span></div>`}).join("")}</div>`}
+/* ===== 宝箱（ランダム報酬：ギュッと溜めてパッと開く） ===== */
+const RAR=[{n:"ノーマル",c:"#8b8aa8"},{n:"レア",c:"#1cb0f6"},{n:"スーパーレア",c:"#ce82ff"},{n:"ウルトラレア",c:"#ffb21e"}];
+function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"🛡️",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12)return{r:2,i:"❤️",t:"ハート全回復＋30XP",f:()=>{S.hearts=HEART_MAX;S.hTs=0;addXP(30)}};if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"💎",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"🍯",t:`+${x} XP`,f:()=>addXP(x)}}
+function openChest(title="ハニーポットゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
+ modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" style="margin:0 0 8px">タップして開けよう！</p><button id="chest" class="chest" aria-label="ハニーポット">🍯</button><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
+ const c=$("#chest");c.onclick=()=>{if(taps>=3)return;taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);buzz(15*taps);jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
+  if(taps===3){setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);buzz([30,30,60]);rw.f();save();renderTop();
+   c.textContent=rw.i;c.classList.add("opened");c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:800;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}}})}
+const BADGES=[
+ {k:"first",i:"🌱",n:"はじめの一歩",t:s=>Object.keys(s.lessons).length>=1},
+ {k:"s3",i:"🔥",n:"3日連続",t:s=>s.best>=3},{k:"s7",i:"🌋",n:"7日連続",t:s=>s.best>=7},{k:"s30",i:"☀️",n:"30日連続",t:s=>s.best>=30},
+ {k:"c10",i:"⚡",n:"10コンボ",t:s=>s.maxCombo>=10},{k:"c25",i:"🌪️",n:"25コンボ",t:s=>s.maxCombo>=25},
+ {k:"perfect",i:"💯",n:"パーフェクト",t:s=>Object.values(s.lessons).some(l=>l.perfect)},
+ {k:"ok100",i:"🎯",n:"100問正解",t:s=>s.totalOk>=100},{k:"ok500",i:"🏹",n:"500問正解",t:s=>s.totalOk>=500},
+ {k:"mock",i:"🏅",n:"模試合格",t:s=>s.mock.some(m=>m.score>=15)},{k:"mock25",i:"👑",n:"模試満点",t:s=>s.mock.some(m=>m.score>=25)},
+ {k:"all",i:"🗺️",n:"全ユニット制覇",t:s=>UNITS.every(u=>u.lessons.every(l=>s.lessons[l.id]))},
+ {k:"pm1",i:"✍️",n:"記述デビュー",t:s=>Object.keys(s.pm1).length>=1},{k:"pm1all",i:"📝",n:"記述マスター",t:s=>PM1_CASES.every(c=>c.qs.every((_,i)=>s.pm1[c.id+"-"+i]))},
+ {k:"pm2",i:"📜",n:"論文完走",t:s=>Object.values(s.pm2).some(p=>p.done)},{k:"pm2x3",i:"🏛️",n:"論文3本",t:s=>Object.values(s.pm2).filter(p=>p.done).length>=3},
+ {k:"night",i:"🦉",n:"夜ふかし学習",t:()=>new Date().getHours()>=23||new Date().getHours()<4},{k:"morning",i:"🌅",n:"朝活",t:()=>{const h=new Date().getHours();return h>=5&&h<7}},
+ {k:"lv5",i:"🐝",n:"PMに昇格",t:s=>levelOf(s.xp)>=10},{k:"xp1k",i:"🍯",n:"1000XP",t:s=>s.xp>=1000}];
+function checkBadges(){for(const b of BADGES){if(!S.badges[b.k]&&b.t(S)){S.badges[b.k]=Date.now();save();setTimeout(()=>{SFX.badge();flash("#ffb21e");confetti(90);modal(`<div class="rays"><div class="big lvpop">${b.i}</div></div><h2 style="margin:12px 0 4px">バッジ獲得！</h2><p style="font-weight:800">${b.n}</p><button class="btn gold" onclick="closeModal()">OK</button>`)},1400);break}}}
+function qstat(id){return S.q[id]||(S.q[id]={c:0,w:0,box:0,due:0})}
+function record(id,ok){const s=qstat(id);if(ok){s.c++;s.box=Math.min(5,s.box+1)}else{s.w++;s.box=0}s.due=Date.now()+[0,1,3,7,14,30][s.box]*864e5*(ok?1:0)+(ok?0:6e4);S.totalAns++;if(ok)S.totalOk++;save()}
+function weakIds(){return Q.filter(q=>{const s=S.q[q.id];return s&&s.w>0&&(s.box<3||s.due<=Date.now())}).sort((a,b)=>(S.q[a.id].box-S.q[b.id].box)||(S.q[b.id].w-S.q[a.id].w)).map(q=>q.id)}
+function dueIds(){return Q.filter(q=>{const s=S.q[q.id];return s&&s.due&&s.due<=Date.now()}).map(q=>q.id)}
+
+/* ================= 画面共通 ================= */
+let TAB="home";
+function renderTop(){regenHearts();
+ $("#brand").innerHTML=`${poco("happy","logo")}PM試験<b>クエスト</b>`;
+ $("#stats").innerHTML=`<span class="stat fire ${S.last===today()?"":"dim"}" title="連続学習日数">🔥${S.streak}</span><span class="stat gem" title="XP（ハチミツ）">🍯${S.xp}</span><span class="stat heart" title="ハート">❤️${S.hearts}</span>`}
+function go(t){TAB=t;$$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));const m=$("#main");m.innerHTML="";m.className="fade-in";void m.offsetWidth;({home:vHome,pm1:vPM1,pm2:vPM2,me:vMe})[t]();scrollTo(0,0)}
+$("#nav").addEventListener("click",e=>{const b=e.target.closest("button");if(b){SFX.tap();go(b.dataset.t)}});
+const MQ=[];
+function modal(html,onClose,onShow){if($(".ov")){MQ.push([html,onClose,onShow]);return}const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="modal">${html}</div>`;o.addEventListener("click",e=>{if(e.target===o)closeModal()});document.body.appendChild(o);o._close=onClose;onShow&&onShow()}
+function closeModal(){const o=$$(".ov").pop();if(o){o.remove();o._close&&o._close()}if(!$(".ov")&&MQ.length){const m=MQ.shift();setTimeout(()=>modal(...m),180)}}
+window.closeModal=closeModal;
+function fmtSrc(q){return q.orig?'<span class="pill gold">オリジナル</span>':srcs(q).map(s=>`<span class="pill">${esc(s)}</span>`).join(" ")+(srcs(q).length>1?' <span class="pill ng">頻出</span>':"")}
+function lifecycleSVG(){return `<svg viewBox="0 0 300 150" style="width:100%;max-width:340px;margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:12px"><line x1="40" y1="120" x2="285" y2="120" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="120" x2="40" y2="12" stroke="currentColor" stroke-width="1.5"/><text x="8" y="22" font-size="11" fill="currentColor">大</text><text x="8" y="118" font-size="11" fill="currentColor">小</text><text x="200" y="140" font-size="11" fill="currentColor">経過時間 →</text><path d="M45 24C120 30 180 90 280 108" stroke="#5b4cf5" stroke-width="3" fill="none"/><path d="M45 110C140 104 200 70 280 22" stroke="#ff4d5e" stroke-width="3" fill="none" stroke-dasharray="6 4"/><text x="70" y="22" font-size="13" font-weight="700" fill="#5b4cf5">a</text><text x="262" y="20" font-size="13" font-weight="700" fill="#ff4d5e">b</text></svg>`}
+function tblHTML(t){return `<div style="overflow-x:auto"><table class="t">${t.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table></div>`}
+
+/* ================= ホーム（午前Ⅱ） ================= */
+function vHome(){renderTop();
+ const tx=todayXP(),p=Math.min(100,Math.round(tx/S.goal*100)),weak=weakIds().length,lv=levelOf(S.xp),nx=lvXP(lv+1),pv=lvXP(lv);
+ const greet=["今日も1問から。","コツコツが合格への近道。","昨日の自分を超えよう！","ストリークを伸ばそう🔥"][new Date().getDate()%4];
+ let h=`<div class="card hero"><div class="ring" id="ring" data-p="${p}" style="--p:0"><div>${tx}<br><span class="muted" style="font-size:10px">/${S.goal}XP</span></div></div><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">${p>=100?"🎉 今日の目標達成！":greet}</div><div class="muted">Lv.${lv+1} ${titleOf(lv)}</div><div class="gauge" style="margin-top:8px"><i style="width:${(S.xp-pv)/(nx-pv)*100}%;background:var(--pri)"></i></div><div class="muted" style="font-size:11px;margin-top:2px">次のレベルまで ${nx-S.xp} XP</div></div></div>
+${questHTML()}
+ <div class="quick">
+  <button class="qa a" onclick="startDaily()"><span class="e">⚡</span>今日の5問<small>全分野からランダム</small></button>
+  <button class="qa b" onclick="startWeak()"><span class="e">🧠</span>苦手を復習<small>間違えた問題を集中特訓</small>${weak?`<span class="badge">${weak}</span>`:""}</button>
+  <button class="qa c" onclick="mockIntro()"><span class="e">⏱️</span>本番模試<small>25問・40分</small></button>
+  <button class="qa d" onclick="yearPick()"><span class="e">📚</span>年度別・全問<small>出典つき一覧</small></button>
+ </div>`;
+ let curFound=false;
+ for(const u of UNITS){const done=u.lessons.filter(l=>S.lessons[l.id]).length;
+  h+=`<div class="unit" style="background:${u.c}"><div>${u.i} ${u.n}<small>${u.total}問・${done}/${u.lessons.length} レッスン完了</small></div><div style="font-size:22px">${done===u.lessons.length?"👑":""}</div></div><div class="path">`;
+  u.lessons.forEach((l,i)=>{const st=S.lessons[l.id];const isCur=!st&&!curFound;if(isCur)curFound=true;const off=[0,44,64,44,0,-44,-64,-44][i%8];
+   h+=`<button class="node ${st?"":"todo"} ${isCur?"cur":""}" style="--c:${u.c};--cd:${u.d};transform:translateX(${off}px)" onclick="startLesson('${l.id}')" aria-label="${u.n} レッスン${i+1}">${isCur?`<span class="bubble">START</span>`:""}<span class="disc"></span><span class="ico">${st?(st.perfect?"👑":"⭐"):u.i}</span>${st?`<span class="stars">${"★".repeat(st.perfect?3:st.best>=4?2:1)}</span>`:""}</button>`});
+  h+=`</div>`}
+ h+=`<div class="foot">出典：IPA 独立行政法人情報処理推進機構「プロジェクトマネージャ試験」過去問題（平成23〜29年度 午前Ⅱ，平成28〜令和7年度 解答例・出題趣旨）。過去問の正解はIPA公表の解答例と照合済み。解説・オリジナル問題・午後の設問例は本アプリ独自のもので，IPAとは関係ありません。最新の試験制度（CBT化等）は<a href="https://www.ipa.go.jp/shiken/kubun/pm.html" target="_blank" rel="noopener">IPA公式サイト</a>で確認してください。</div>`;
+ $("#main").innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#ring");if(r)r.style.setProperty("--p",r.dataset.p)}));
+ if(!S.onboard)onboard()}
+function onboard(){S.onboard=true;save();modal(`${poco("happy","jump")}<h2 style="margin:6px 0">ようこそ PM試験クエストへ！</h2><p style="font-size:14px;text-align:left">ぼくは必勝ハチマキの働きバチ<b>ミツ</b>。プロマネ試験の合格まで一緒に飛ぶよ！<br>・登録不要。記録はこの端末に保存<br>・正解でXP，連続正解でコンボ<br>・毎日続けて🔥ストリークを伸ばそう</p><p class="muted" style="margin-top:0">1日の目標を選んでね</p><div class="grid2" style="grid-template-columns:repeat(3,1fr)">${[[20,"ゆるっと"],[50,"ふつう"],[100,"本気"]].map(([g,n])=>`<button class="btn ${g===50?"":"ghost"} sm" style="width:100%" onclick="S.goal=${g};save();closeModal();go('home')">${n}<br>${g}XP</button>`).join("")}</div>`)}
+
+/* ================= レッスンエンジン ================= */
+let L=null;
+function startDaily(){const pool=[...Q].sort(()=>Math.random()-.5);const ids=[...dueIds().slice(0,2),...pool.map(q=>q.id)];startRun([...new Set(ids)].slice(0,5),{title:"今日の5問",kind:"daily"})}
+function startWeak(){const w=weakIds();if(!w.length){modal(`${poco("wow")}<h3>苦手な問題はまだないよ！</h3><p class="muted">間違えた問題がここにたまっていきます。</p><button class="btn" onclick="closeModal()">OK</button>`);return}startRun(w.slice(0,8),{title:"苦手を復習",kind:"weak"})}
+function startLesson(lid){const u=UNITS.find(u=>u.lessons.some(l=>l.id===lid));const l=u.lessons.find(l=>l.id===lid);startRun([...l.qs],{title:u.n,kind:"lesson",lid,color:u.c})}
+function startRun(ids,opt){regenHearts();
+ if(S.hearts<=0&&opt.kind!=="mock"&&opt.kind!=="refill"){noHearts();return}
+ L={ids:[...ids],queue:[...ids],idx:0,ok:0,ng:0,xp:0,combo:0,firstTry:{},opt,t0:Date.now(),sel:-1,answered:false,results:[]};
+ const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";drawQ()}
+function noHearts(){const m=HEART_MS-((Date.now()-S.hTs)%HEART_MS);modal(`${poco("sad")}<h2 style="margin:6px 0">ハートが切れちゃった…</h2><p class="muted">あと約${Math.ceil(m/6e4)}分で1つ回復します。<br>復習チャレンジ（3問全問正解）ですぐに全回復できるよ！</p><button class="btn ng" onclick="closeModal();refill()">❤️ 復習チャレンジ</button><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">あとで</button>`)}
+function refill(){const pool=(weakIds().length>=3?weakIds():Q.map(q=>q.id)).sort(()=>Math.random()-.5).slice(0,3);startRun(pool,{title:"ハート回復チャレンジ",kind:"refill"})}
+const PRAISE=c=>c>=10?"止まらない！":c>=5?"絶好調！":c>=3?"ノッてきた！":["すばらしい！","正解！","その調子！","ナイス判断！","いいね！"][Math.random()*5|0];
+function drawQ(){const el=$("#lesson");const id=L.queue[L.idx];const q=QID[id];const mock=L.opt.kind==="mock";
+ const prog=mock?L.idx/L.queue.length:L.ok/(L.ids.length);
+ el.innerHTML=`<div class="lhead"><button class="x" onclick="quitRun()" aria-label="やめる">✕</button><div class="bar ${L.combo>=3?"fire":""}"><i style="width:${Math.max(3,prog*100)}%"></i></div>${mock?`<span class="timer" id="tm"></span>`:`<span class="cmb ${L.combo>=2?"on":""}" id="cmb">🔥${L.combo}</span><span class="stat heart" id="lh" style="font-weight:800">❤️${S.hearts}</span>`}</div>
+ <div class="lbody" id="lb"><div class="qmeta"><span class="pill" style="background:${CAT[q.cat].c};color:#fff">${CAT[q.cat].i} ${CAT[q.cat].n}</span>${fmtSrc(q)}${L.firstTry[id]===false?'<span class="pill ng">リトライ</span>':""}${mock?`<span class="pill">${L.idx+1}/${L.queue.length}</span>`:""}</div>
+ <div class="qtext">${esc(q.q)}</div>${q.fig==="lifecycle"?lifecycleSVG():""}${q.tbl?tblHTML(q.tbl):""}
+ <div class="choices">${q.ch.map((c,i)=>`<button class="ch" data-i="${i}" style="--d:${i*45}ms"><span class="k">${KANA[i]}</span><span>${esc(c)}</span></button>`).join("")}</div></div>
+ <div class="lfoot" id="lf"><div class="verdict" id="vd"></div><button class="btn" id="go" disabled>${mock?"回答する":"チェック"}</button></div>`;
+ L.sel=-1;L.answered=false;L.qt0=Date.now();
+ $$(".ch",el).forEach(b=>b.onclick=()=>{if(L.answered)return;SFX.sel();buzz(6);$$(".ch",el).forEach(x=>x.classList.remove("sel"));b.classList.add("sel");b.animate([{transform:"scale(.95)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:160,easing:"ease-out"});L.sel=+b.dataset.i;$("#go").disabled=false});
+ $("#go").onclick=()=>{if(L.busy)return;L.answered?next():check()};
+ if(!mock&&L.queue.length-L.idx===1&&L.ids.length>2)setTimeout(()=>comboPop("ラスト1問！","#1cb0f6"),120);
+ if(mock)tick()}
+document.addEventListener("keydown",e=>{if(!L||!$("#lesson"))return;const k={"1":0,"2":1,"3":2,"4":3,"a":0,"b":1,"c":2,"d":3}[e.key];if(k!=null&&!L.answered){$$(".ch")[k]?.click()}if(e.key==="Enter"&&!$("#go").disabled)$("#go").click()});
+async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.opt.kind==="mock";L.answered=true;
+ const bs=$$(".ch");bs.forEach(b=>b.classList.add("lock"));
+ if(L.firstTry[id]===undefined){L.firstTry[id]=ok;record(id,ok)}
+ L.results.push({id,ok,sel:L.sel});
+ if(mock){if(ok)L.ok++;else L.ng++;SFX.tap();next();return}
+ L.busy=true;$("#go").disabled=true;
+ const lf=$("#lf"),vd=$("#vd"),sb=bs[L.sel],r=sb.getBoundingClientRect(),x0=r.left+r.width/2,y0=r.top+r.height/2,dt=Date.now()-L.qt0;
+ if(ok){L.ok++;L.combo++;S.maxCombo=Math.max(S.maxCombo,L.combo);const pw=Math.min(1.9,1+L.combo*.09);
+  sb.classList.add("right");SFX.ok(L.combo);haptic(L.combo>=5?"heavy":"medium");hitmark(x0,y0,"#21c16b",pw);jolt(sb,2+Math.min(6,L.combo*.5),110);
+  await sleep(RM?0:60+Math.min(90,L.combo*10)); // ヒットストップ：コンボが伸びるほど長く
+  sb.animate([{transform:"scale(1)"},{transform:"scale(1.05,.94)"},{transform:"scale(.98,1.04)"},{transform:"none"}],{duration:280,easing:"ease-out"});burst(x0,y0,"#21c16b",12);
+  const quick=dt<10000;let g=10+(L.combo>=3?Math.min(10,(L.combo-2)*2):0)+(quick?3:0);L.xp+=g;
+  floatXP(r.right-90,r.top-6,"+"+g+"XP");qprog("ok");if(L.combo===5)qprog("c5");
+  if(quick){qprog("qk");setTimeout(()=>{SFX.quick();floatXP(r.left+12,r.top-6,"⚡QUICK!","q")},130)}
+  const cm=$("#cmb");if(cm){cm.textContent="🔥"+L.combo;cm.classList.toggle("on",L.combo>=2);cm.animate([{transform:"scale(1.6) rotate(-8deg)"},{transform:"none"}],{duration:300,easing:"cubic-bezier(.3,1.6,.5,1)"})}
+  if([3,5,8,10,15,20,25,30].includes(L.combo))setTimeout(()=>{SFX.combo(L.combo);comboPop(`🔥 ${L.combo}連続正解！`);shakeScreen("m");flash("#ff8a00");haptic("combo")},230);
+  lf.className="lfoot ok";vd.innerHTML=`<div class="t">${poco("happy","xs jump")}${PRAISE(L.combo)}</div><div class="ex">${esc(q.ex)}</div>`;$("#go").className="btn ok";$("#go").textContent="つづける"}
+ else{L.ng++;const lost=L.combo;L.combo=0;sb.classList.add("wrong");SFX.ng();haptic("error");jolt(sb,12,360,"x");shakeScreen("s");flash("#ff4d5e");
+  await sleep(RM?0:110);bs[q.a].classList.add("right");bs[q.a].animate([{transform:"scale(.97)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:300});
+  if(L.opt.kind!=="refill"){S.hearts=Math.max(0,S.hearts-1);if(!S.hTs)S.hTs=Date.now();save();renderTop();const lh=$("#lh");if(lh){lh.textContent="❤️"+S.hearts;jolt(lh,6,300);lh.animate([{transform:"scale(1.5)",filter:"grayscale(1)"},{transform:"none"}],{duration:400});setTimeout(SFX.heart,120)}}
+  const cm=$("#cmb");if(cm)cm.classList.remove("on");
+  if(!L.queue.slice(L.idx+1).includes(id))L.queue.push(id);
+  lf.className="lfoot ng";vd.innerHTML=`<div class="t">${poco("sad","xs")}正解は「${KANA[q.a]}」</div><div class="ex">${esc(q.ex)}</div><div class="muted" style="margin-top:6px">${lost>=3?`🔥${lost}コンボが途切れた…でも`:""}この問題はあとでもう一度出ます</div>`;$("#go").className="btn ng";$("#go").textContent="わかった"}
+ S.combo=L.combo;save();
+ $(".bar").classList.toggle("fire",L.combo>=3);$(".bar i").style.width=Math.max(3,L.ok/L.ids.length*100)+"%";
+ L.busy=false;$("#go").disabled=false;
+ if(L.opt.kind==="refill"&&!ok){$("#go").textContent="終了";$("#go").onclick=()=>{endRun(true);toast("惜しい！また挑戦してね")}}
+ if(!ok&&S.hearts<=0&&L.opt.kind!=="refill"){$("#go").textContent="ハートがなくなった…";$("#go").onclick=()=>{endRun(true);noHearts()}}}
+function next(){L.idx++;if(L.idx>=L.queue.length){finish();return}drawQ();$("#lb").classList.add("slide-in")}
+function ask(msg,yes,onYes){modal(`${poco("sad","s")}<h3 style="margin:8px 0 14px">${msg}</h3><button class="btn ng" id="askY">${yes}</button><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">つづける</button>`,null,()=>{$("#askY").onclick=()=>{closeModal();onYes()}})}
+function quitRun(){if(L.opt.kind==="mock")ask("模試を中断しますか？<br><span class='muted'>結果は保存されません</span>","中断する",()=>endRun(true));else if(L.ok>0)ask("本当にやめる？<br><span class='muted'>このレッスンの進捗は保存されません</span>","やめる",()=>endRun(true));else endRun(true)}
+function endRun(){clearInterval(L&&L.tm);clearTimeout(L&&L.seq);$("#lesson")?.remove();document.body.style.overflow="";L=null;go(TAB)}
+function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
+ const firstOk=L.ids.filter(id=>L.firstTry[id]).length,acc=Math.round(firstOk/L.ids.length*100),perfect=firstOk===L.ids.length;
+ const bonus=10+(perfect?10:0);
+ if(L.opt.kind==="refill"){S.hearts=HEART_MAX;S.hTs=0;save()}
+ if(L.opt.lid){const o=S.lessons[L.opt.lid]||{best:0};S.lessons[L.opt.lid]={best:Math.max(o.best,firstOk),perfect:o.perfect||perfect,at:Date.now()};qprog("ls")}
+ if(perfect&&L.opt.kind!=="refill")qprog("pf");if(L.opt.kind==="weak")qprog("wk");
+ const total=L.xp+bonus,sec=Math.round((Date.now()-L.t0)/1000),beforeToday=todayXP(),xpB=S.xp,lvB=levelOf(S.xp),stB=S.last===today()?S.streak:null;
+ addXP(total);const lv=levelOf(S.xp),pv=lvXP(lv),nx=lvXP(lv+1),fromP=lv>lvB?0:(xpB-pv)/(nx-pv)*100,toP=(S.xp-pv)/(nx-pv)*100;
+ const goalHit=beforeToday<S.goal&&todayXP()>=S.goal,streakUp=stB===null;
+ // 閃光→爆発→紙吹雪→収束
+ flash(perfect?"#ffb21e":"#21c16b");shakeScreen("l");SFX.fin(perfect);haptic("big");setTimeout(()=>confetti(perfect?240:140),70);
+ const el=$("#lesson"),chest=L.opt.kind!=="refill";
+ el.innerHTML=`<div class="lbody" id="rb"><div class="res">${poco(perfect?"wow":"happy","jump")}<h2 class="pre" style="margin:0;font-size:28px;color:${perfect?"var(--gold-d)":"var(--pri-t)"}">${L.opt.kind==="refill"?"❤️ ハート全回復！":perfect?"パーフェクト！":"レッスン完了！"}</h2><div class="muted">${esc(L.opt.title)}</div>
+ <div class="tiles"><div class="tile pre" style="--c:var(--gold)"><b>獲得XP</b><span id="cnt">+0</span></div><div class="tile pre" style="--c:var(--ok)"><b>正答率</b><span>${acc}%</span></div><div class="tile pre" style="--c:var(--sky)"><b>タイム</b><span>${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}</span></div></div>
+ <div class="card pre" style="width:100%;text-align:left;padding:12px 14px"><div class="row" style="justify-content:space-between;font-weight:800"><span>Lv.${lv+1} ${titleOf(lv)}</span><span class="muted">あと <b style="color:var(--pri-t)">${nx-S.xp}</b> XP</span></div><div class="gauge" style="height:12px"><i id="lvg" style="width:${fromP}%;background:linear-gradient(90deg,#ffd24a,#ffb300);transition:width .9s cubic-bezier(.3,1.3,.5,1)"></i></div></div>
+ ${goalHit?`<div class="say pre">🎯 今日の目標 ${S.goal}XP 達成！</div>`:""}
+ <div class="say pre ${streakUp?"stk":""}">🔥 連続 <b id="stn">${streakUp&&S.streak>1?S.streak-1:S.streak}</b> 日 ${S.streak>=S.best&&S.streak>1?"・自己ベスト！":""}</div>
+ ${chest?`<button class="chestbtn pre" id="cb">🍯 <span>ハニーポットをあける</span></button>`:""}
+ <div style="width:100%;text-align:left" class="pre">${L.ids.map(id=>{const q=QID[id];return `<div class="check"><span>${L.firstTry[id]?"✅":"🔁"}</span><span style="font-size:13px">${esc(q.q.slice(0,46))}…</span></div>`}).join("")}</div></div></div>
+ <div class="lfoot"><button class="btn" onclick="endRun()">つづける</button><div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・🔥${S.streak}日連続')">結果をシェア</button></div>`;
+ if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");b.disabled=true;b.classList.add("used");b.querySelector("span").textContent="開封済み";openChest(perfect?"パーフェクト・ハニーポット！":"ハニーポットゲット！",perfect?1:0)};
+ // 段階的に見せる（タップでスキップ可）
+ const items=$$("#rb .pre");let i=0,n=0,done=false;const cnt=$("#cnt");
+ const countUp=()=>{const step=Math.max(1,Math.ceil(total/24));const iv=setInterval(()=>{n=Math.min(total,n+step);cnt.textContent="+"+n;SFX.tick(n/step|0);if(n>=total){clearInterval(iv);cnt.parentNode.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:250})}},28)};
+ const bumpStreak=()=>{if(!streakUp||S.streak<2)return;setTimeout(()=>{const s=$("#stn");if(!s)return;SFX.streak();s.textContent=S.streak;s.parentNode.animate([{transform:"scale(1.25)"},{transform:"none"}],{duration:420,easing:"cubic-bezier(.3,1.6,.5,1)"})},250)};
+ const stepF=()=>{if(done||!items[i])return finishAll();const it=items[i++];it.classList.add("in");SFX.tick(i*3);if(it.contains(cnt)&&n===0)countUp();if(it.contains($("#lvg")))setTimeout(()=>$("#lvg").style.width=toP+"%",120);if(it.classList.contains("stk"))bumpStreak();L.seq=setTimeout(stepF,170)};
+ const finishAll=()=>{if(done)return;done=true;items.forEach(x=>x.classList.add("in"));if(n<total){n=total;cnt.textContent="+"+total}$("#lvg").style.width=toP+"%"};
+ $("#rb").addEventListener("click",finishAll,{once:true});L.seq=setTimeout(stepF,260)}
+
+function share(text){const full=text+"\n#PM試験クエスト #プロジェクトマネージャ試験";
+ modal(`<div class="big">📣</div><h2 style="margin:6px 0">シェアしよう</h2><textarea class="wa" id="shT" style="min-height:90px;font-size:14px">${esc(full)}</textarea><p class="muted" style="margin:6px 0 12px">このページのリンクを添えて投稿してね</p><button class="btn" id="shC">テキストをコピー</button><div style="height:10px"></div><a class="btn sky" style="text-decoration:none" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(full)}">𝕏 でポスト</a><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`,null,()=>{$("#shC").onclick=()=>{const v=$("#shT").value;try{navigator.clipboard.writeText(v).then(()=>toast("コピーしました"),()=>{$("#shT").select();toast("選択した文字をコピーしてね")})}catch(e){$("#shT").select()}}})}
+
+/* ================= 模試 ================= */
+const MOCK_SEC=40*60;
+function mockIntro(){modal(`<div class="big">⏱️</div><h2 style="margin:8px 0">本番模試（午前Ⅱ）</h2><p style="font-size:14px;text-align:left">・25問／40分（本番と同じ）<br>・途中で正誤は表示されません<br>・60%（15問）以上で合格ライン<br>・ハートは減りません</p><button class="btn sky" onclick="closeModal();startMock()">スタート</button>`)}
+function startMock(){const w={int:3,scope:1,sched:3,cost:3,qual:2,team:2,stake:1,risk:2,dev:3,svc:2,law:2,sec:1};let ids=[];for(const[k,n]of Object.entries(w)){ids.push(...Q.filter(q=>q.cat===k).sort(()=>Math.random()-.5).slice(0,n).map(q=>q.id))}
+ const rest=Q.filter(q=>!ids.includes(q.id)).sort(()=>Math.random()-.5);while(ids.length<25)ids.push(rest.pop().id);ids=ids.slice(0,25).sort(()=>Math.random()-.5);
+ startRun(ids,{title:"本番模試",kind:"mock"});L.end=Date.now()+MOCK_SEC*1000;L.tm=setInterval(tick,1000)}
+function tick(){if(!L||!L.end)return;const r=Math.max(0,Math.round((L.end-Date.now())/1000));const t=$("#tm");if(t){t.textContent=`${Math.floor(r/60)}:${String(r%60).padStart(2,"0")}`;t.classList.toggle("warn",r<300)}if(r<=0){clearInterval(L.tm);toast("⏰ 時間切れ！");while(L.results.length<L.queue.length){const id=L.queue[L.results.length];L.results.push({id,ok:false,sel:-1});record(id,false)}mockResult()}}
+function mockResult(){clearInterval(L.tm);const score=L.results.filter(r=>r.ok).length,pass=score>=15,sec=Math.round((Date.now()-L.t0)/1000);
+ S.mock.push({at:Date.now(),score,sec});save();addXP(score*3+(pass?50:0));
+ if(pass){SFX.fin(true);flash("#21c16b");shakeScreen("l");setTimeout(()=>confetti(260),70)}else SFX.ng();
+ const byCat={};L.results.forEach(r=>{const c=QID[r.id].cat;byCat[c]=byCat[c]||[0,0];byCat[c][1]++;if(r.ok)byCat[c][0]++});
+ $("#lesson").innerHTML=`<div class="lbody"><div class="res">${poco(pass?"wow":"sad","jump")}<h2 style="margin:0;font-size:28px;color:${pass?"var(--ok-d)":"var(--ng-d)"}">${pass?"合格ライン突破！":score>=11?"あと少し！":"まずは基礎固め！"}</h2>
+ <div class="tiles"><div class="tile" style="--c:${pass?"var(--ok)":"var(--ng)"}"><b>得点</b><span>${score}/25</span></div><div class="tile" style="--c:var(--gold)"><b>獲得XP</b><span>+${score*3+(pass?50:0)}</span></div><div class="tile" style="--c:var(--sky)"><b>タイム</b><span>${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}</span></div></div>
+ <div class="card" style="width:100%;text-align:left"><h3>分野別</h3>${Object.entries(byCat).map(([c,[o,n]])=>`<div class="catbar"><span class="n">${CAT[c].i} ${CAT[c].n}</span><span class="b"><i style="width:${o/n*100}%;background:${CAT[c].c}"></i></span><span>${o}/${n}</span></div>`).join("")}</div>
+ <div style="width:100%;text-align:left"><h3>見直し</h3>${L.results.map((r,i)=>{const q=QID[r.id];return `<details class="card" style="margin-bottom:8px;padding:12px"><summary style="font-weight:700;font-size:14px;cursor:pointer">${r.ok?"✅":"❌"} 問${i+1} ${esc(q.q.slice(0,34))}…</summary><div style="font-size:14px;margin-top:8px;white-space:pre-wrap">${esc(q.q)}</div>${q.tbl?tblHTML(q.tbl):""}${q.ch.map((c,j)=>`<div style="font-size:13px;margin:4px 0;${j===q.a?"color:var(--ok-d);font-weight:800":j===r.sel?"color:var(--ng-d);text-decoration:line-through":""}">${KANA[j]}　${esc(c)}</div>`).join("")}<div class="muted" style="margin-top:6px">💡 ${esc(q.ex)}</div><div style="margin-top:6px">${fmtSrc(q)}</div></details>`}).join("")}</div></div></div>
+ <div class="lfoot"><button class="btn" onclick="endRun()">ホームへ</button><div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストの午前Ⅱ模試で${score}/25点！${pass?"合格ライン突破🎉":"リベンジするぞ"}')">結果をシェア</button></div>`;L.end=0}
+
+/* ================= 年度別 ================= */
+function yearPick(){const ys={};Q.forEach(q=>{const k=q.orig?"オリジナル":srcs(q)[0].replace(/ .*/,"");(ys[k]=ys[k]||[]).push(q.id)});
+ const order=Object.keys(ys).sort((a,b)=>a==="オリジナル"?1:b==="オリジナル"?-1:b.localeCompare(a));
+ modal(`<h2 style="margin:0 0 10px">年度別に解く</h2><div style="text-align:left">${order.map(k=>{const ids=ys[k],c=ids.filter(id=>S.q[id]&&S.q[id].c).length;return `<button class="li" onclick="closeModal();startRun(${esc(JSON.stringify(ids))},{title:'${k}',kind:'year'})"><span class="e">${k==="オリジナル"?"✨":"📘"}</span><span class="m"><b>${k==="オリジナル"?"オリジナル（頻出論点・最新シラバス）":k+"　午前Ⅱ"}</b><span class="muted">${ids.length}問・正解済み ${c}</span></span><span>›</span></button>`}).join("")}</div><p class="muted" style="text-align:left">※図やグラフが必須の問題は収録していません。複数年度で出題された問題は最初の年度に収録。</p><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
+
+/* ================= 午後Ⅰ ================= */
+let PM1F="all";
+function vPM1(){renderTop();const tags=["all",...new Set(PM1_THEMES.flatMap(t=>t.tag))];
+ const doneN=PM1_CASES.reduce((a,c)=>a+c.qs.filter((_,i)=>S.pm1[c.id+"-"+i]).length,0),allN=PM1_CASES.reduce((a,c)=>a+c.qs.length,0);
+ let h=`<div class="card hero">${poco("happy","s")}<div><h3 style="margin:0">午後Ⅰ：記述式</h3><div class="muted">事例を読み，PMとしての判断を字数内で書く力を鍛えよう。本文に根拠あり！</div></div></div>
+ <h2>✍️ 記述トレーニング <span class="pill">${doneN}/${allN}</span></h2>
+ <button class="li" onclick="formDrill()"><span class="e">🧩</span><span class="m"><b>解答の“型”ドリル</b><span class="muted">「狙い」「理由」の書き分けを8問でマスター</span></span><span>›</span></button>
+ ${PM1_CASES.map(c=>{const d=c.qs.filter((_,i)=>S.pm1[c.id+"-"+i]).length;return `<button class="li" onclick="openCase('${c.id}',0)"><span class="e">${d===c.qs.length?"✅":"📝"}</span><span class="m"><b>${esc(c.title)}</b><span class="muted">${c.qs.length}設問・${esc(c.tag)}　</span><span class="pill ${d===c.qs.length?"ok":""}">${d}/${c.qs.length}</span></span><span>›</span></button>`}).join("")}
+ <h2>📖 過去10年の出題テーマ</h2><div class="chips">${tags.map(t=>`<button class="chip ${PM1F===t?"on":""}" onclick="PM1F='${t}';go('pm1')">${t==="all"?"すべて":t}</button>`).join("")}</div>
+ ${PM1_THEMES.filter(t=>PM1F==="all"||t.tag.includes(PM1F)).map(t=>`<details class="card" style="margin-bottom:10px"><summary style="cursor:pointer;list-style:none"><div class="row" style="align-items:flex-start"><span class="pill" style="flex:none">${t.y} 問${t.n}</span><b style="font-size:15px;line-height:1.5">${esc(t.t)}</b></div></summary><div style="font-size:14px;margin-top:10px"><div class="muted">問われた力</div>${esc(t.ab)}<div class="muted" style="margin-top:8px">IPA解答例より（答え方の参考）</div>${t.ex.map(e=>`<div style="margin:4px 0;padding:8px 10px;background:var(--pri-l);border-radius:10px;font-size:13px">${esc(e)}</div>`).join("")}<div style="margin-top:6px">${t.tag.map(g=>`<span class="pill gold">${esc(g)}</span>`).join(" ")}</div></div></details>`).join("")}
+ <div class="foot">テーマ・問われた力はIPA公表の「解答例（出題趣旨）」を本アプリで要約したもの。解答例の引用元：IPA 各年度 プロジェクトマネージャ試験 午後Ⅰ 解答例。問題本文はIPAサイトの問題冊子で確認してください。記述トレーニングの事例は本アプリのオリジナルです。</div>`;
+ $("#main").innerHTML=h}
+function formDrill(){const ids=PM1_FORM.map((f,i)=>{const id="f"+i;QID[id]={id,cat:"int",q:f.q,ch:f.ch,a:f.a,ex:f.ex,orig:1};return id});
+ // 選択肢をシャッフル
+ ids.forEach(id=>{const q=QID[id];if(q._s)return;const ord=[0,1,2,3].sort(()=>Math.random()-.5);q.ch=ord.map(i=>PM1_FORM[+id.slice(1)].ch[i]);q.a=ord.indexOf(PM1_FORM[+id.slice(1)].a);q._s=1});
+ startRun(ids,{title:"解答の型ドリル",kind:"form"})}
+function openCase(cid,qi){const c=PM1_CASES.find(x=>x.id===cid),q=c.qs[qi],key=c.id+"-"+qi,prev=S.pm1[key];
+ const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";
+ el.innerHTML=`<div class="lhead"><button class="x" onclick="closeCase()">✕</button><div class="bar"><i style="width:${(qi)/c.qs.length*100+3}%"></i></div><span class="muted" style="font-weight:800">${qi+1}/${c.qs.length}</span></div>
+ <div class="lbody"><div class="qmeta"><span class="pill">${esc(c.tag)}</span><span class="pill gold">オリジナル事例</span>${prev?`<span class="pill ok">前回 ${["×","○","◎"][prev.g]}</span>`:""}</div><h3>${esc(c.title)}</h3><div class="scen">${esc(c.text)}</div>
+ <div class="qtext" style="margin-top:16px">設問${qi+1}　${esc(q.q)}</div>
+ <textarea class="wa" id="ans" placeholder="ここに解答を入力（${q.lim}字以内）">${esc(prev?.a||"")}</textarea>
+ <div class="cnt"><span id="cc">0 / ${q.lim}字</span><span class="muted">目安：${Math.round(q.lim*.8)}字以上</span></div><div class="gauge"><i id="cg"></i><span class="mk" style="left:80%"></span></div>
+ <div id="fb"></div></div><div class="lfoot" id="lf"><button class="btn" id="go">答え合わせ</button></div>`;
+ const ta=$("#ans"),upd=()=>{const n=[...ta.value.replace(/\s/g,"")].length;$("#cc").textContent=`${n} / ${q.lim}字`;$("#cc").style.color=n>q.lim?"var(--ng)":n>=q.lim*.8?"var(--ok-d)":"";const g=$("#cg");g.style.width=Math.min(100,n/q.lim*100)+"%";g.style.background=n>q.lim?"var(--ng)":n>=q.lim*.8?"var(--ok)":"var(--gold)"};ta.oninput=upd;upd();
+ $("#go").onclick=()=>{const a=ta.value.trim();if(!a){toast("まずは書いてみよう！");return}
+  const hit=q.kw.map(g=>g.find(w=>a.includes(w)));const nh=hit.filter(Boolean).length;let hl=esc(a);hit.filter(Boolean).forEach(w=>{hl=hl.split(esc(w)).join(`<mark>${esc(w)}</mark>`)});
+  const n=[...a.replace(/\s/g,"")].length,over=n>q.lim;
+  $("#fb").innerHTML=`<div class="card fade-in" style="margin-top:14px"><div class="muted">あなたの解答（キーワードをハイライト）</div><div style="margin:6px 0 10px">${hl}</div>
+  <div class="row" style="flex-wrap:wrap;gap:6px">${q.kw.map((g,i)=>`<span class="pill ${hit[i]?"ok":"ng"}">${hit[i]?"✓":"・"} ${esc(g[0])}</span>`).join("")}</div>
+  <div style="margin-top:6px;font-weight:800">キーワード一致 ${nh}/${q.kw.length}${over?'　<span style="color:var(--ng)">⚠ 字数オーバー</span>':""}</div>
+  <div class="muted" style="margin-top:12px">模範解答（例）</div><div style="padding:10px;border-radius:12px;background:var(--ok-l);font-weight:700">${esc(q.ans)}</div>
+  <div class="muted" style="margin-top:10px">解説</div><div style="font-size:14px">${esc(q.ex)}</div></div>
+  <h3 style="margin-top:16px">自己採点しよう</h3><div class="grid2" style="grid-template-columns:repeat(3,1fr)"><button class="btn ok sm" style="width:100%" data-g="2">◎ 書けた</button><button class="btn gold sm" style="width:100%" data-g="1">○ 惜しい</button><button class="btn ng sm" style="width:100%" data-g="0">× まだ</button></div>`;
+  $("#lf").style.display="none";SFX.tap();
+  $$("[data-g]").forEach(b=>b.onclick=()=>{const g=+b.dataset.g;S.pm1[key]={a,g,at:Date.now()};save();qprog("pm1");const xp=[3,10,20][g];addXP(xp);if(g===2){SFX.ok(3);flash("#21c16b");const rr=b.getBoundingClientRect();hitmark(rr.left+rr.width/2,rr.top+rr.height/2,"#21c16b",1.3);confetti(70)}else if(g===1)SFX.ok(1);else SFX.tap();
+   const r=b.getBoundingClientRect();floatXP(r.left+20,r.top,"+"+xp+"XP");
+   setTimeout(()=>{closeCase(true);if(qi+1<c.qs.length)openCase(cid,qi+1);else{SFX.fin(true);flash("#ffb21e");confetti(150);modal(`${poco("wow","jump")}<h2 style="margin:6px 0">事例クリア！</h2><p class="muted">「${esc(c.title)}」の全設問に取り組みました</p><button class="btn" onclick="closeModal()">OK</button>`);go("pm1")}},650)})}}
+function closeCase(silent){$("#lesson")?.remove();document.body.style.overflow="";if(!silent)go("pm1")}
+
+/* ================= 午後Ⅱ ================= */
+const PM2_LIM=[[0,800],[800,1600],[600,1200]];
+function vPM2(){renderTop();const done=Object.values(S.pm2).filter(p=>p.done).length;
+ let h=`<div class="card hero">${poco("happy","s")}<div><h3 style="margin:0">午後Ⅱ：論文</h3><div class="muted">2時間で設問ア・イ・ウを書き切る。本番形式のトレーナーで“完走力”をつけよう。</div></div></div>
+ <div class="quick"><button class="qa b" onclick="openEssay(randTheme())"><span class="e">🎲</span>ランダムお題<small>本番さながらに挑戦</small></button><button class="qa d" onclick="tips()"><span class="e">🧭</span>論文の型<small>構成・時間配分のコツ</small></button></div>
+ <h2>📜 過去10年の論文テーマ <span class="pill">完走 ${done}</span></h2>
+ ${PM2_THEMES.map((t,i)=>{const p=S.pm2[i];const n=p?p.txt.reduce((a,s)=>a+[...s.replace(/\s/g,"")].length,0):0;return `<button class="li" onclick="openEssay(${i})"><span class="e">${p&&p.done?"🏛️":n?"✏️":"📄"}</span><span class="m"><span class="pill">${t.y} 問${t.n}</span><b style="margin-top:4px">${esc(t.t)}</b><span class="muted">${p&&p.done?"完走済み":n?`下書き ${n}字`:"未着手"}</span></span><span>›</span></button>`}).join("")}
+ <div class="foot">テーマと狙いはIPA公表の「出題趣旨」（平成28〜令和7年度）を本アプリで要約したもの。設問ア・イ・ウの文面は出題趣旨をもとに本アプリで作成した練習用で，本番の設問文とは異なります（本番の設問はIPAの問題冊子で確認してください）。</div>`;
+ $("#main").innerHTML=h}
+function randTheme(){return Math.random()*PM2_THEMES.length|0}
+function tips(){modal(`<h2 style="margin:0 0 8px">論文の型 🧭</h2><div style="text-align:left;font-size:14px;line-height:1.8">
+<b>⏱️ 時間配分（120分）</b><br>設問の読解・骨子づくり 15分 → ア 20分 → イ 45分 → ウ 30分 → 見直し 10分<br><br>
+<b>📐 字数</b><br>ア：800字以内（目安600〜800）<br>イ：800〜1,600字（目安1,200以上）<br>ウ：600〜1,200字（目安800以上）<br><br>
+<b>🧱 構成の型</b><br>ア＝プロジェクトの概要（目的・規模・期間・体制・自分の立場）＋設問の論点につながる“特徴”<br>イ＝「〜という状況だった。そこで私は〜と考え，〜した。」を繰り返す。<u>状況→考え→行動</u>をセットで書く<br>ウ＝結果の評価（定量的に）＋残った課題と今後の改善<br><br>
+<b>✅ 採点講評でよく指摘される点</b><br>・一般論で終わり，経験が感じられない<br>・プロジェクト概要と本文が整合しない<br>・PMとしての判断や工夫が書かれていない<br>・設問で問われていることに答えていない</div><button class="btn" onclick="closeModal()">OK</button>`)}
+let ES=null;
+function openEssay(i){const t=PM2_THEMES[i];const p=S.pm2[i]||(S.pm2[i]={txt:["","",""],plan:["","",""],used:0,done:false});ES={i,tab:0,run:false,t0:0};
+ const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";
+ el.innerHTML=`<div class="lhead"><button class="x" onclick="closeEssay()">✕</button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(t.t)}</div><div class="muted" style="font-size:11px">${t.y} 午後Ⅱ 問${t.n}</div></div><button class="btn sm sky" id="tbtn">▶ 120:00</button></div>
+ <div class="lbody"><details class="card" style="padding:12px"><summary style="font-weight:800;cursor:pointer">📌 出題の狙い・設問</summary><div style="font-size:14px;margin-top:8px">${esc(t.ab)}</div>${t.s.map((s,j)=>`<div style="font-size:13px;margin-top:8px"><b>設問${"アイウ"[j]}</b>　${esc(s)}</div>`).join("")}</details>
+ <div class="tabs">${["ア","イ","ウ","骨子"].map((n,j)=>`<button data-tab="${j}" class="${j===0?"on":""}">${j<3?"設問"+n:"🦴 "+n}</button>`).join("")}</div><div id="ed"></div></div>
+ <div class="lfoot"><div class="row"><button class="btn ghost sm" style="flex:1" onclick="dlEssay()">📋 全文コピー</button><button class="btn ok sm" style="flex:2" onclick="submitEssay()">🏁 書き終えた！</button></div></div>`;
+ $$(".tabs button",el).forEach(b=>b.onclick=()=>{ES.tab=+b.dataset.tab;$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));drawEd()});
+ $("#tbtn").onclick=()=>{ES.run=!ES.run;if(ES.run){ES.t0=Date.now()-p.used*1000;ES.iv=setInterval(updT,500)}else{clearInterval(ES.iv);p.used=Math.round((Date.now()-ES.t0)/1000);save()}updT()};updT();drawEd()}
+function updT(){const p=S.pm2[ES.i];if(ES.run)p.used=Math.round((Date.now()-ES.t0)/1000);const r=7200-p.used,b=$("#tbtn");if(!b)return;const a=Math.abs(r);b.textContent=(ES.run?"⏸ ":"▶ ")+(r<0?"-":"")+Math.floor(a/60)+":"+String(a%60).padStart(2,"0");b.className="btn sm "+(r<0?"ng":r<1200?"gold":"sky");if(ES.run&&p.used%15===0)save()}
+function drawEd(){const p=S.pm2[ES.i],t=PM2_THEMES[ES.i],j=ES.tab,ed=$("#ed");
+ if(j===3){ed.innerHTML=`<p class="muted">書き始める前に，各設問で書く要素を箇条書きで決めよう（ここは字数に含まれません）。</p>${["ア：概要と特徴","イ：状況→考え→行動","ウ：評価と改善"].map((n,k)=>`<div style="font-weight:800;margin:12px 0 4px">${n}</div><textarea class="wa" data-k="${k}" placeholder="・\n・\n・">${esc(p.plan[k])}</textarea>`).join("")}`;$$("textarea",ed).forEach(a=>a.oninput=()=>{p.plan[+a.dataset.k]=a.value;save()});return}
+ const [mn,mx]=PM2_LIM[j];ed.innerHTML=`<div class="muted" style="font-size:13px">${esc(t.s[j])}</div><textarea class="wa tall" id="et" placeholder="ここに論述を入力…（自動保存されます）">${esc(p.txt[j])}</textarea><div class="cnt"><span id="ec"></span><span class="muted">${mn?mn+"字以上 ":""}${mx}字以内</span></div><div class="gauge"><i id="eg"></i>${mn?`<span class="mk" style="left:${mn/mx*100}%"></span>`:""}</div>`;
+ const a=$("#et"),u=()=>{p.txt[j]=a.value;const n=[...a.value.replace(/\s/g,"")].length;const okz=n>=mn&&n<=mx&&(mn||n>=600);$("#ec").textContent=n+"字";$("#ec").style.color=n>mx?"var(--ng)":okz?"var(--ok-d)":"";const g=$("#eg");g.style.width=Math.min(100,n/mx*100)+"%";g.style.background=n>mx?"var(--ng)":okz?"var(--ok)":"var(--gold)";save()};a.oninput=u;u()}
+function closeEssay(){clearInterval(ES&&ES.iv);if(ES&&ES.run){S.pm2[ES.i].used=Math.round((Date.now()-ES.t0)/1000);save()}$("#lesson")?.remove();document.body.style.overflow="";ES=null;go("pm2")}
+function dlEssay(){const p=S.pm2[ES.i],t=PM2_THEMES[ES.i];const s=`【${t.y} 午後Ⅱ 問${t.n}】${t.t}\n\n`+["ア","イ","ウ"].map((n,j)=>`■設問${n}\n${p.txt[j]}\n`).join("\n");try{navigator.clipboard.writeText(s).then(()=>toast("論文全文をコピーしました（メモ帳などに貼り付けて保存できます）"),()=>toast("コピーできませんでした"))}catch(e){toast("コピーできませんでした")}}
+function submitEssay(){const p=S.pm2[ES.i];const ns=p.txt.map(s=>[...s.replace(/\s/g,"")].length);
+ const ok=[ns[0]>=400&&ns[0]<=800,ns[1]>=800&&ns[1]<=1600,ns[2]>=600&&ns[2]<=1200];
+ const CK=["設問で問われていることに，設問の順に答えている","プロジェクトの特徴（ア）とイ・ウの内容が整合している","「状況→考え→行動」がセットで書けている","PMとしての判断・工夫が具体的に書けている（一般論で終わっていない）","数値（期間・規模・工数・効果など）を使っている","ウで結果を評価し，今後の改善点を書いている","本番と同じく時間内（120分）に書けた"];
+ modal(`<h2 style="margin:0 0 6px">セルフチェック 📝</h2><div style="text-align:left">${["ア","イ","ウ"].map((n,j)=>`<div class="check"><span>${ok[j]?"✅":"⚠️"}</span><span>設問${n}：${ns[j]}字 <span class="muted">（${PM2_LIM[j][0]||"目安400"}〜${PM2_LIM[j][1]}字）</span></span></div>`).join("")}${CK.map((c,k)=>`<label class="check"><input type="checkbox" class="ck" ${k===6&&p.used<=7200&&p.used>0?"checked":""}><span>${c}</span></label>`).join("")}</div><div style="height:12px"></div><button class="btn ok" id="fin">提出する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">書き直す</button>`,null,()=>{$("#fin").onclick=()=>{const c=$$(".ck").filter(x=>x.checked).length;const total=ns.reduce((a,b)=>a+b,0);const xp=Math.min(60,Math.round(total/50))+c*5+(ok.every(Boolean)?30:0);const first=!p.done;p.done=true;p.score=c;save();closeModal();addXP(xp);SFX.fin(true);flash("#ffb21e");shakeScreen("l");confetti(240);buzz([30,40,30]);
+  modal(`${poco("wow","jump")}<h2 style="margin:6px 0">論文 完走！</h2><p>合計 <b>${total}</b> 字・チェック ${c}/${CK.length}</p><div class="say" style="margin-bottom:12px">+${xp} XP 獲得！${first?"":"（再提出）"}</div><button class="btn" onclick="closeModal();closeEssay()">OK</button>`)}})}
+
+/* ================= 記録 ================= */
+function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.round(S.totalOk/S.totalAns*100):0;
+ // heat
+ const cells=[];const now=new Date();for(let i=83;i>=0;i--){const d=new Date(now-i*864e5);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");const x=S.days[k]||0;cells.push(`<div class="${x?x>=100?"l4":x>=50?"l3":x>=20?"l2":"l1":""}" title="${k}: ${x}XP"></div>`)}
+ const wk=[];for(let i=6;i>=0;i--){const d=new Date(now-i*864e5);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");wk.push([("日月火水木金土")[d.getDay()],S.days[k]||0,i===0])}const mx=Math.max(S.goal,...wk.map(w=>w[1]));
+ let h=`<div class="card" style="text-align:center">${poco("happy")}<h2 style="margin:4px 0 0">Lv.${lv+1} ${titleOf(lv)}</h2><div class="muted">累計 ${S.xp} XP</div></div>
+ <div class="tiles" style="margin-top:12px"><div class="tile" style="--c:var(--fire)"><b>連続日数</b><span>🔥${S.streak}</span></div><div class="tile" style="--c:var(--ok)"><b>正答率</b><span>${acc}%</span></div><div class="tile" style="--c:var(--sky)"><b>ベスト連続</b><span>${S.best}日</span></div></div>
+ <div class="muted" style="margin-top:6px;text-align:center">🛡️ ストリークシールド ×${S.shield}（7日連続ごとに獲得。1日休んでも記録を守ります）</div>
+ <h2>今週のXP</h2><div class="card"><div class="bars">${wk.map(([d,x,t])=>`<div class="${t?"today":""}"><span style="font-weight:700;color:var(--ink)">${x||""}</span><i style="height:${x/mx*80}%"></i>${d}</div>`).join("")}</div></div>
+ <h2>学習カレンダー（12週）</h2><div class="card"><div class="heat">${cells.join("")}</div></div>
+ <h2>分野別の習熟度</h2><div class="card">${UNITS.map(u=>{const qs=Q.filter(q=>q.cat===u.k);const m=qs.filter(q=>S.q[q.id]&&S.q[q.id].box>=2).length;return `<div class="catbar"><span class="n">${u.i} ${u.n}</span><span class="b"><i style="width:${m/qs.length*100}%;background:${u.c}"></i></span><span style="font-size:12px">${m}/${qs.length}</span></div>`}).join("")}<div class="muted" style="font-size:11px">※2回以上連続で正解した問題を「習熟」としてカウント</div></div>
+ ${S.mock.length?`<h2>模試の履歴</h2><div class="card">${S.mock.slice(-8).reverse().map(m=>`<div class="check"><span>${m.score>=15?"🏅":"📄"}</span><span style="flex:1">${new Date(m.at).toLocaleDateString("ja-JP")}</span><b>${m.score}/25</b></div>`).join("")}</div>`:""}
+ <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${b.i}</span>${b.n}</div>`).join("")}</div></div>
+ <h2>設定</h2><div class="card">
+  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
+  <div class="row" style="padding:8px 4px"><span style="flex:1;font-size:14px">1日の目標</span><select id="gl" style="padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)">${[20,50,100,150].map(g=>`<option ${S.goal===g?"selected":""} value="${g}">${g} XP</option>`).join("")}</select></div>
+  <div class="grid2" style="margin-top:8px"><button class="btn ghost sm" style="width:100%" onclick="exportData()">📤 引き継ぎコード発行</button><button class="btn ghost sm" style="width:100%" onclick="importData()">📥 コードで復元</button></div>
+  <div class="muted" style="margin-top:8px">登録不要のため，記録はこの端末のブラウザに保存されます。機種変更や別の端末へは「引き継ぎコード」で移せます。</div>
+  <button class="btn ghost sm" style="width:100%;margin-top:12px;color:var(--ng)" onclick="ask('すべての記録を消去しますか？','消去する',()=>{try{localStorage.removeItem(KEY)}catch(e){}load();go('home')})">記録をリセット</button></div>
+ <button class="btn sky" style="margin-top:18px" onclick="share('プロマネ試験の対策アプリ「PM試験クエスト」で勉強中🐝 🔥'+S.streak+'日連続・Lv.'+(levelOf(S.xp)+1))">🔗 友だちにシェア</button>
+ <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。</div>`;
+ $("#main").innerHTML=h;
+ $("#snd").onchange=e=>{S.sound=e.target.checked;save();SFX.tap()};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
+function exportData(){const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));modal(`<h2 style="margin:0 0 8px">引き継ぎコード</h2><p class="muted">全文をコピーして，新しい端末の「コードで復元」に貼り付けてください。</p><textarea class="wa" readonly style="font-size:11px;min-height:140px">${code}</textarea><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>toast('コピーしました'))">コピー</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
+function importData(){modal(`<h2 style="margin:0 0 8px">コードで復元</h2><textarea class="wa" id="imp" placeholder="引き継ぎコードを貼り付け"></textarea><button class="btn" onclick="try{const d=JSON.parse(decodeURIComponent(escape(atob($('#imp').value.trim()))));S=Object.assign({},DEF,d);save();closeModal();toast('復元しました！');go('home')}catch(e){toast('コードが正しくありません')}">復元する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">キャンセル</button>`)}
+
+/* ================= 起動 ================= */
+checkStreakDecay();regenHearts();go("home");
+setInterval(()=>{if(!L&&!ES)renderTop()},30000);
+</script>
+</body>
+</html>

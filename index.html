@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#ffb300">
+<title>PM試験クエスト｜プロジェクトマネージャ試験 対策</title>
+<meta name="description" content="IPAプロジェクトマネージャ試験の午前Ⅱ・午後Ⅰ・午後Ⅱをゲーム感覚で。登録不要・無料。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#ffb300;--pri-d:#d98a00;--pri-l:#fff3d2;--pri-t:#9a5a00;--pri-ink:#3d2600;
+  --ok:#21c16b;--ok-d:#159a52;--ok-l:#dcfbe9;
+  --ng:#ff4d5e;--ng-d:#d93041;--ng-l:#ffe3e6;
+  --gold:#ffb21e;--gold-d:#e08f00;--fire:#ff7a1a;
+  --sky:#1cb0f6;--sky-d:#1693cf;
+  --ink:#1d1b33;--sub:#6b6987;--line:#e6e4f0;--bg:#f7f6fc;--card:#fff;
+  --r:18px;--sh:0 2px 0 var(--line);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#f1f0ff;--sub:#a8a6c6;--line:#2e2c48;--bg:#13121f;--card:#1c1b2e;--pri-l:#3a2c0c;--pri-t:#ffcf5a;--ok-l:#11351f;--ng-l:#3d1820}}
+:root[data-theme=dark]{--ink:#f1f0ff;--sub:#a8a6c6;--line:#2e2c48;--bg:#13121f;--card:#1c1b2e;--pri-l:#3a2c0c;--pri-t:#ffcf5a;--ok-l:#11351f;--ng-l:#3d1820}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink)}
+body{font-family:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.65;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:0;background:none}
+textarea,input,select{font-family:inherit;font-size:16px;color:var(--ink)}
+#app{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative}
+/* top bar */
+.top{position:sticky;top:0;padding-top:max(10px,env(safe-area-inset-top))!important;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:2px solid var(--line)}
+.brand{font-weight:800;font-size:19px;letter-spacing:.02em;display:flex;align-items:center;gap:6px}
+.brand b{color:var(--pri-t)}
+.stats{display:flex;gap:12px;font-weight:800;font-size:15px}
+.stat{display:flex;align-items:center;gap:3px}
+.stat.fire{color:var(--fire)}.stat.gem{color:var(--sky)}.stat.heart{color:var(--ng)}
+.stat.dim{filter:grayscale(1);opacity:.5}
+main{flex:1;padding:16px 16px calc(96px + var(--safe-b))}
+/* nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;z-index:30;background:var(--card);border-top:2px solid var(--line);display:flex;padding:6px 6px calc(6px + var(--safe-b))}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 0;border-radius:14px;font-size:11px;font-weight:700;color:var(--sub);border:2px solid transparent}
+.nav button .ic{font-size:24px;line-height:1.2}
+.nav button.on{color:var(--pri-t);background:var(--pri-l);border-color:color-mix(in srgb,var(--pri) 35%,transparent)}
+/* cards & buttons */
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:0 3px 0 var(--line)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 18px;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:.04em;background:var(--pri);color:var(--pri-ink);box-shadow:0 4px 0 var(--pri-d);transition:transform .06s,box-shadow .06s,filter .2s;user-select:none}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--pri-d)}
+.btn.ok,.btn.ng,.btn.sky{color:#fff}
+.btn.ok{background:var(--ok);box-shadow:0 4px 0 var(--ok-d)}
+.btn.ng{background:var(--ng);box-shadow:0 4px 0 var(--ng-d)}
+.btn.gold{background:var(--gold);box-shadow:0 4px 0 var(--gold-d);color:#4a2e00}
+.btn.sky{background:var(--sky);box-shadow:0 4px 0 var(--sky-d)}
+.btn.ghost{background:var(--card);color:var(--pri-t);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.sm{padding:9px 14px;font-size:14px;width:auto;border-radius:12px}
+.btn[disabled]{background:var(--line);color:var(--sub);box-shadow:0 4px 0 color-mix(in srgb,var(--line) 70%,#000 8%);pointer-events:none}
+h2{font-size:20px;margin:22px 0 10px;font-weight:800}
+h3{font-size:17px;margin:0 0 6px;font-weight:800}
+.muted{color:var(--sub);font-size:13px}
+.row{display:flex;gap:10px;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:800;background:var(--pri-l);color:var(--pri-t)}
+.pill.gold{background:#fff3d6;color:#9a6400}.pill.ok{background:var(--ok-l);color:var(--ok-d)}.pill.ng{background:var(--ng-l);color:var(--ng-d)}
+@media (prefers-color-scheme:dark){.pill.gold{background:#3a2c0c;color:#ffcf6b}}
+/* hero */
+.hero{display:flex;gap:14px;align-items:center}
+.ring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;flex:none;transition:--p 1s}
+.ring>div{color:var(--ink);width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-weight:800;font-size:13px;line-height:1.1;text-align:center}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.qa{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:18px;text-align:left;font-weight:800;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .06s,box-shadow .06s;position:relative;overflow:hidden}
+.qa:active{transform:translateY(4px);box-shadow:none}
+.qa .e{font-size:26px}.qa small{font-weight:400;font-size:12px;opacity:.92}
+.qa.a{background:linear-gradient(135deg,#ff8a3d,#ff5f6d)}.qa.b{background:linear-gradient(135deg,#7b61ff,#5b4cf5)}.qa.c{background:linear-gradient(135deg,#1cb0f6,#3b82f6)}.qa.d{background:linear-gradient(135deg,#22c55e,#0ea371)}
+.qa .badge{position:absolute;top:8px;right:10px;background:#fff;color:var(--ng);font-size:11px;padding:0 7px;border-radius:99px}
+/* path */
+.unit{margin:26px 0 6px;border-radius:18px;padding:14px 16px;color:#fff;font-weight:800;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.unit small{display:block;font-weight:400;font-size:12px;opacity:.9}
+.path{display:flex;flex-direction:column;align-items:center;gap:16px;padding:34px 0 8px}
+.node{position:relative;width:72px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:28px;transition:transform .1s}
+.node .disc{position:absolute;inset:0;border-radius:50%;background:var(--c);box-shadow:0 7px 0 var(--cd)}
+.node:active .disc{transform:translateY(5px);box-shadow:0 2px 0 var(--cd)}
+.node .ico{position:relative;z-index:1;transition:transform .1s;color:#fff;filter:drop-shadow(0 1px 0 rgba(0,0,0,.2))}
+.node:active .ico{transform:translateY(5px)}
+.node.todo .disc{background:var(--line);box-shadow:0 7px 0 color-mix(in srgb,var(--line) 70%,#000 12%)}
+.node.todo .ico{filter:grayscale(1);opacity:.5}
+.node.cur::before{content:"";position:absolute;inset:-9px;border-radius:50%;border:4px solid var(--c);opacity:.35;animation:pulse 1.6s infinite}
+.node .stars{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:12px;white-space:nowrap;z-index:2;letter-spacing:-1px}
+.bubble{position:absolute;top:-40px;left:50%;transform:translateX(-50%);background:var(--card);color:var(--c);border:2px solid var(--line);font-weight:800;font-size:13px;padding:4px 12px;border-radius:12px;white-space:nowrap;animation:bob 1.2s ease-in-out infinite;z-index:3}
+.bubble::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:var(--card);border-right:2px solid var(--line);border-bottom:2px solid var(--line)}
+@keyframes pulse{0%{transform:scale(.9);opacity:.5}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
+@keyframes bob{50%{transform:translate(-50%,-5px)}}
+/* lesson */
+.lesson{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+.lhead{display:flex;align-items:center;gap:12px;padding:max(14px,env(safe-area-inset-top)) 16px 6px}
+.x{font-size:26px;color:var(--sub);width:32px;line-height:1}
+.bar{flex:1;height:16px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--ok);transition:width .45s cubic-bezier(.3,1.4,.5,1);box-shadow:inset 0 -4px 0 rgba(0,0,0,.08)}
+.bar i::after{content:"";position:absolute;left:8px;right:8px;top:3px;height:4px;border-radius:9px;background:rgba(255,255,255,.4)}
+.bar.fire i{background:linear-gradient(90deg,#ffb21e,#ff5f1a,#ff2d55);background-size:200% 100%;animation:flow 1.2s linear infinite}
+@keyframes flow{to{background-position:-200% 0}}
+.lbody{flex:1;overflow:auto;padding:10px 16px 20px}
+.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.qtext{font-size:17px;font-weight:700;line-height:1.75;white-space:pre-wrap}
+.choices{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.ch{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 14px;border:2px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:15px;line-height:1.6;transition:transform .06s,box-shadow .06s,border-color .15s,background .15s}
+.ch:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.ch .k{flex:none;width:28px;height:28px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--sub)}
+.ch.sel{border-color:var(--sky);background:color-mix(in srgb,var(--sky) 12%,var(--card));box-shadow:0 4px 0 var(--sky)}
+.ch.sel .k{border-color:var(--sky);color:var(--sky)}
+.ch.right{border-color:var(--ok);background:var(--ok-l);box-shadow:0 4px 0 var(--ok)}
+.ch.right .k{background:var(--ok);border-color:var(--ok);color:#fff}
+.ch.wrong{border-color:var(--ng);background:var(--ng-l);box-shadow:0 4px 0 var(--ng);animation:shake .4s}
+.ch.wrong .k{background:var(--ng);border-color:var(--ng);color:#fff}
+.ch.lock{pointer-events:none}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.lfoot{padding:14px 16px calc(14px + var(--safe-b));border-top:2px solid var(--line);background:var(--bg);transition:background .2s}
+.lfoot.ok{background:var(--ok-l);border-color:transparent}.lfoot.ng{background:var(--ng-l);border-color:transparent}
+.verdict{display:none;margin-bottom:12px}
+.lfoot.ok .verdict,.lfoot.ng .verdict{display:block;animation:up .25s ease-out}
+.verdict .t{font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px}
+.lfoot.ok .t{color:var(--ok-d)}.lfoot.ng .t{color:var(--ng-d)}
+.verdict .ex{font-size:14px;margin-top:6px;max-height:34vh;overflow:auto;line-height:1.7}
+@keyframes up{from{transform:translateY(16px);opacity:0}}
+table.t{border-collapse:collapse;margin:12px 0;font-size:13px;width:100%;background:var(--card);border-radius:12px;overflow:hidden}
+table.t td,table.t th{border:1.5px solid var(--line);padding:5px 7px;text-align:center}
+table.t tr:first-child td{background:var(--pri-l);font-weight:800}
+.combo{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:60;font-weight:800;font-size:22px;color:var(--fire);text-shadow:0 2px 0 #fff;pointer-events:none;animation:pop .9s forwards}
+@keyframes pop{0%{transform:translate(-50%,10px) scale(.6);opacity:0}25%{transform:translate(-50%,0) scale(1.15);opacity:1}100%{transform:translate(-50%,-30px) scale(1);opacity:0}}
+.xpf{position:fixed;z-index:61;font-weight:800;color:var(--gold-d);pointer-events:none;animation:xpf 1s forwards;font-size:18px}
+@keyframes xpf{to{transform:translateY(-60px);opacity:0}}
+.timer{font-weight:800;font-variant-numeric:tabular-nums;color:var(--sub);min-width:60px;text-align:right}
+.timer.warn{color:var(--ng);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.4}}
+/* overlay / modal */
+.ov{position:fixed;inset:0;z-index:80;background:rgba(15,12,40,.5);display:grid;place-items:center;padding:20px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.modal{background:var(--card);border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;text-align:center;animation:zoom .35s cubic-bezier(.3,1.5,.5,1);max-height:88vh;overflow:auto}
+@keyframes zoom{from{transform:scale(.7);opacity:0}}
+.big{font-size:56px;line-height:1.1}
+.rays{position:relative}
+.rays::before{content:"";position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;background:repeating-conic-gradient(from 0deg,rgba(255,178,30,.25) 0 10deg,transparent 10deg 20deg);border-radius:50%;animation:spin 8s linear infinite;z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:14px;font-weight:700;font-size:14px;z-index:90;animation:up .25s;max-width:90%}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:100;width:100%;height:100%}
+/* results */
+.res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:24px 16px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.tile{border-radius:16px;border:2px solid var(--c);overflow:hidden}
+.tile b{display:block;background:var(--c);color:#fff;font-size:12px;padding:3px}
+.tile span{display:block;font-size:22px;font-weight:800;padding:10px 0;color:var(--c)}
+/* mascot */
+.mascot{width:120px;height:120px}
+.mascot.s{width:64px;height:64px}
+.mascot.logo{width:30px;height:30px;margin:-2px 0}
+.mascot .wg{transform-origin:60px 44px;animation:flap .18s ease-in-out infinite alternate}
+@keyframes flap{to{transform:scaleY(.72)}}
+.jump{animation:jump .6s ease-out}
+@keyframes jump{30%{transform:translateY(-16px) scale(1.05,.95)}60%{transform:translateY(0) scale(.97,1.03)}}
+.say{position:relative;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:700;font-size:14px}
+/* lists */
+.li{display:flex;gap:12px;align-items:center;padding:14px;border:2px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 3px 0 var(--line);text-align:left;width:100%;margin-bottom:10px;transition:transform .06s,box-shadow .06s}
+.li:active{transform:translateY(3px);box-shadow:none}
+.li .e{font-size:26px;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--pri-l)}
+.li .m{flex:1;min-width:0}
+.li .m b{display:block;font-size:15px;line-height:1.45}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:6px 13px;border-radius:99px;border:2px solid var(--line);font-weight:700;font-size:13px;background:var(--card)}
+.chip.on{background:var(--pri);border-color:var(--pri-t);color:#fff}
+/* writing */
+.wa{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:12px;background:var(--card);resize:vertical;line-height:1.8;outline:none;transition:border-color .2s}
+.wa:focus{border-color:var(--pri-t)}
+.wa.tall{min-height:42vh}
+.cnt{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;margin-top:6px}
+.gauge{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px;position:relative}
+.gauge i{position:absolute;inset:0 auto 0 0;background:var(--ng);transition:width .2s,background .2s;border-radius:9px}
+.gauge .mk{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.35}
+mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;border-radius:4px;padding:0 2px}
+.tabs{display:flex;gap:6px;margin:10px 0}
+.tabs button{flex:1;padding:9px 0;border-radius:12px;border:2px solid var(--line);font-weight:800;background:var(--card)}
+.tabs button.on{border-color:var(--pri-t);color:var(--pri-t);background:var(--pri-l)}
+.scen{background:var(--card);border:2px solid var(--line);border-left:6px solid var(--pri);border-radius:14px;padding:14px;font-size:15px;line-height:1.85}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+.check input{width:22px;height:22px;accent-color:var(--ok);flex:none;margin-top:2px}
+/* stats */
+.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.heat div{aspect-ratio:1;border-radius:4px;background:var(--line)}
+.heat .l1{background:#ffe9a8}.heat .l2{background:#ffd04d}.heat .l3{background:#f5a300}.heat .l4{background:#b86e00}
+.bdg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bdg div{display:flex;flex-direction:column;align-items:center;text-align:center;font-size:10.5px;font-weight:700;gap:4px;line-height:1.3}
+.bdg .m{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:linear-gradient(145deg,#ffd76a,#ffa600);box-shadow:0 4px 0 #d48a00}
+.bdg .off .m{background:var(--line);box-shadow:0 4px 0 color-mix(in srgb,var(--line) 70%,#000 12%);filter:grayscale(1);opacity:.55}
+.bars{display:flex;align-items:flex-end;gap:6px;height:110px;padding-top:8px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:10px;color:var(--sub);height:100%}
+.bars i{display:block;width:100%;border-radius:8px 8px 4px 4px;background:var(--pri);min-height:3px;transition:height .6s cubic-bezier(.3,1.4,.5,1)}
+.bars .today i{background:var(--gold)}
+.catbar{display:flex;align-items:center;gap:10px;font-size:13px;margin:7px 0}
+.catbar .n{width:132px;flex:none;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px}
+.catbar .b{flex:1;height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+.catbar .b i{display:block;height:100%;border-radius:9px}
+.foot{font-size:11px;color:var(--sub);line-height:1.7;margin-top:26px}
+.foot a{color:var(--sub)}
+.fade-in{animation:fadeIn .25s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}}
+@property --p{syntax:"<number>";inherits:false;initial-value:0}
+.ring{transition:--p 1.1s cubic-bezier(.3,1.2,.5,1)}
+.mascot.xs{width:40px;height:40px;flex:none;margin:-6px 2px -6px -4px}
+.cmb{font-weight:800;color:var(--fire);font-size:15px;opacity:0;transform:scale(.5);transition:opacity .2s,transform .2s;display:inline-block;min-width:0}
+.cmb.on{opacity:1;transform:none;text-shadow:0 0 12px rgba(255,122,26,.45)}
+.ch{animation:chIn .26s both;animation-delay:var(--d,0ms)}
+@keyframes chIn{from{opacity:0;transform:translateY(10px)}}
+.ch.wrong{animation:none}
+.slide-in{animation:slideIn .2s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateX(24px)}}
+.xpf.q{color:var(--sky-d)}
+.pre{opacity:0;transform:scale(.7) translateY(8px)}
+.pre.in{opacity:1;transform:none;transition:opacity .2s,transform .32s cubic-bezier(.3,1.7,.5,1)}
+.lvpop{animation:lvpop .6s cubic-bezier(.3,1.8,.5,1)}
+@keyframes lvpop{from{transform:scale(.2) rotate(-30deg)}}
+.chest{font-size:84px;line-height:1;padding:10px 20px;transition:transform .15s;animation:wob 1.6s ease-in-out infinite;filter:drop-shadow(0 8px 0 rgba(0,0,0,.12))}
+.chest.opened{animation:lvpop .5s cubic-bezier(.3,1.8,.5,1)}
+@keyframes wob{0%,80%,100%{rotate:0deg}85%{rotate:-8deg}90%{rotate:8deg}95%{rotate:-4deg}}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:4px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
+.rar{display:inline-block;padding:3px 14px;border-radius:99px;background:var(--rc);color:#fff;font-weight:800;font-size:13px;box-shadow:0 0 18px var(--rc)}
+.chestbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:18px;font-weight:800;font-size:17px;color:#5a3a00;background:linear-gradient(135deg,#ffe07a,#ffb21e);box-shadow:0 4px 0 #d48a00}
+.chestbtn:not(.used){animation:glow 1.4s ease-in-out infinite}
+.chestbtn.used{filter:grayscale(.8);opacity:.6;box-shadow:none}
+@keyframes glow{50%{box-shadow:0 4px 0 #d48a00,0 0 22px rgba(255,178,30,.8)}}
+.qrow{display:flex;gap:10px;align-items:center;padding:8px 0}
+.qrow .qi{font-size:22px;width:30px;text-align:center}
+.qrow.dn{opacity:.75}
+.say.stk{border-color:var(--fire)}
+.chip,.tabs button,.nav button,.x,.cmb,summary{transition:transform .08s}
+.chip:active,.tabs button:active,.nav button:active,.x:active{transform:scale(.92)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand" id="brand"></div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <main id="main"></main>
+  <nav class="nav" id="nav">
+    <button data-t="home"><span class="ic">🏠</span>午前Ⅱ</button>
+    <button data-t="pm1"><span class="ic">✍️</span>午後Ⅰ</button>
+    <button data-t="pm2"><span class="ic">📜</span>午後Ⅱ</button>
+    <button data-t="me"><span class="ic">🏆</span>記録</button>
+  </nav>
+</div>
+<canvas id="fx"></canvas>
+<script>// 午前Ⅱ 問題データ
+// src: 出典（IPA 過去問は「H27春 問4」形式。複数年で同一論点が出題されたものは配列）
+// orig:true は IPA 過去問の出題傾向をもとにしたオリジナル問題
+// a: 正解の添字（0=ア 1=イ 2=ウ 3=エ）  ex: 解説（本アプリ独自）
+// 差し替え時はこの配列だけ編集すればOK
+window.AM2 = [
+{"id":"h26-1","src":["H26春 問1","H28春 問1"],"cat":"int","q":"情報システムの企画，開発，運用，保守作業に関わる国際標準の一つであるSPA（Software Process Assessment）の説明として，適切なものはどれか。","ch":["ソフトウェアプロセスがどの程度の能力水準にあり，継続的に改善されているかを判定することを目的としている。","ソフトウェアライフサイクルを合意プロセス，テクニカルプロセス，運用・サービスプロセスなどのプロセス群に分け，作業内容を定めている。","品質保証に関する要求項目を体系的に規定した国際規格の一部である。","プロジェクトマネジメントの知識体系と応用のためのガイドである。"],"a":0,"ex":"SPA（ISO/IEC 15504 系）は「プロセスの能力水準を評価し改善につなげる」ための枠組み。イは共通フレーム（SLCP），ウはISO 9000系，エはPMBOKの説明。"},
+{"id":"h26-2","src":"H26春 問2","cat":"int","fig":"lifecycle","q":"図は一般的なプロジェクトにおける開始から終結までの時間の経過に伴って変動する要素を表している（a は時間とともに小さくなり，b は時間とともに大きくなる）。a，b に対応する要素の適切な組はどれか。","ch":["a：ステークホルダの影響力　b：要件変更への対応コスト","a：プロジェクト要員数　b：リスク","a：要件変更への対応コスト　b：プロジェクト要員数","a：リスク　b：ステークホルダの影響力"],"a":0,"ex":"ステークホルダの影響力（と不確実性・リスク）は初期が最大で徐々に小さくなる。一方，変更やエラー訂正のコストは終盤ほど大きくなる。要員数は中盤がピークの山型。"},
+{"id":"h26-3","src":"H26春 問3","cat":"int","q":"PMBOKにおいて，プロジェクト憲章は，どの知識エリアのどのプロセス群で作成するか。","ch":["プロジェクトコミュニケーションマネジメントの実行プロセス群","プロジェクトスコープマネジメントの計画プロセス群","プロジェクト統合マネジメントの計画プロセス群","プロジェクト統合マネジメントの立上げプロセス群"],"a":3,"ex":"プロジェクト憲章はプロジェクトを公式に認可し，PMに権限を与える文書。統合マネジメントの「立上げ」で作る。"},
+{"id":"h26-4","src":"H26春 問4","cat":"int","q":"PMBOKにおける組織のプロセス資産のうち，“企業の知識ベース”に含まれるものはどれか。","ch":["WBSやリスク評価のテンプレート","過去のプロジェクトのパフォーマンスや品質のベースラインなどを含むプロジェクトファイル","使用するコミュニケーション媒体やセキュリティ要求事項","標準化された作業指示書やパフォーマンス測定基準"],"a":1,"ex":"組織のプロセス資産は「プロセスと手順」と「企業の知識ベース」に分かれる。テンプレート・手順・基準は前者，過去のプロジェクトファイルや教訓は後者。"},
+{"id":"h26-5","src":"H26春 問5","cat":"stake","q":"PMBOKにおけるプロジェクトとステークホルダの関係の記述として，適切なものはどれか。","ch":["サプライヤは，プロジェクトの成果物を使用する。","スポンサは，契約に基づき必要な構成アイテムやサービスを提供する。","納入者は，資金などの財政的資源を提供する。","プログラムマネージャは，関連するプロジェクトの調和を図り，個々のプロジェクトを支援・指導する。"],"a":3,"ex":"成果物を使うのは顧客・ユーザー，資金を出すのはスポンサ，構成アイテムを提供するのはサプライヤ（納入者）。役割が入れ替えられた選択肢に注意。"},
+{"id":"h26-6","src":["H26春 問6","H29春 問4"],"cat":"scope","q":"WBSの作成に用いるローリングウェーブ計画法の説明はどれか。","ch":["WBSを補完するため，WBS要素ごとに詳細な作業の内容などを記述する。","過去に実施したプロジェクトのWBSをテンプレートとして，新たなWBSを作成する。","将来実施される作業については，上位レベルのWBSにとどめておき，詳細が明確になってから，要素分解して詳細なWBSを作成する。","プロジェクトの作業をより詳細化するために，WBSの最下位レベルの作業内容や要素成果物を定義する。"],"a":2,"ex":"近い作業は詳細に，遠い作業は粗く計画し，時間の経過とともに段階的に詳細化する（段階的詳細化）。アはWBS辞書，イはテンプレート活用。"},
+{"id":"h26-7","src":["H26春 問7","H28春 問6"],"cat":"team","q":"責任分担表（RAM）の一つであるRACIチャートで示す4種類の役割及び責任の組合せのうち，適切なものはどれか。","ch":["実行責任，情報提供，説明責任，相談対応","実行責任，情報提供，説明責任，リスク管理","実行責任，情報提供，相談対応，リスク管理","実行責任，説明責任，相談対応，リスク管理"],"a":0,"ex":"R=Responsible（実行責任），A=Accountable（説明責任），C=Consulted（相談対応），I=Informed（情報提供）。リスク管理は含まれない。"},
+{"id":"h26-9","src":["H26春 問9","H29春 問1"],"cat":"sched","q":"クリティカルチェーン法の特徴（実施例）として，適切なものはどれか。","ch":["クリティカルパス上の作業に，生産性を向上させるための開発ツールを導入する。","クリティカルパス上の作業に，要員を追加投入する。","クリティカルパス上の先行作業が終了する前に後続作業に着手し，並行して実施する。","合流（フィーディング）バッファとプロジェクト（所要期間）バッファを設け，クリティカルパスを守る。"],"a":3,"ex":"CCPMは各作業の安全余裕を取り除き，まとめてバッファとして管理する手法。イはクラッシング，ウはファストトラッキング。"},
+{"id":"h26-10","src":"H26春 問10","cat":"int","q":"実績報告のプロセスにおいて，スコープ，コスト，スケジュールのベースラインと実績とのかい離を明確にする技法はどれか。","ch":["what-ifシナリオ分析","傾向分析","差異分析","モンテカルロ分析"],"a":2,"ex":"計画（ベースライン）と実績の差を見るのが差異分析。傾向分析は時間経過に伴う変化，モンテカルロはシミュレーションによる確率的分析。"},
+{"id":"h26-11","src":["H26春 問11","H28春 問10"],"cat":"cost","q":"社員が週40時間働くソフトウェア会社が，1人で開発すると440人時のプログラム開発を引き受けた。次の条件で見積もるとき，10人のチームで開発する場合のコストは，1人で開発する場合のコストの約何倍か。\n〔条件〕(1)10人のチームでは，コミュニケーションのための工数が余分に発生する。(2)コミュニケーションはメンバが総当たりでとり，その工数は2人1組の組合せごとに週当たり4人時である。(3)社員の週当たりコストは同じ。(4)その他の条件は無視できる。","ch":["1.2","1.5","1.8","2.1"],"a":2,"ex":"1人なら440÷40＝11人週。10人だと組合せは10C2＝45組で，コミュニケーション工数は45×4＝180人時/週。チーム全体の作業可能時間は400人時/週なので，開発に使えるのは220人時/週 → 440÷220＝2週。コストは10人×2週＝20人週。20÷11≒1.8倍。"},
+{"id":"h26-12","src":"H26春 問12","cat":"risk","q":"リスクマネジメントにおけるEMV（期待金額価値）の算出式はどれか。","ch":["影響金額 × 発生確率","影響金額 ÷ 発生確率","影響金額 × 対応コスト","影響金額 ÷ 対応コスト"],"a":0,"ex":"EMV＝影響金額×発生確率。デシジョンツリー分析で各選択肢の期待値を比較するときに使う。"},
+{"id":"h26-13","src":["H26春 問13","H28春 問15"],"cat":"risk","q":"PMBOKのリスク対応戦略の適用に関する記述のうち，適切なものはどれか。","ch":["強化は，マイナスのリスクに対して使用される戦略である。","共有は，プラスのリスクとマイナスのリスクのどちらにも使用される戦略である。","受容は，プラスのリスクとマイナスのリスクのどちらにも使用される戦略である。","転嫁は，プラスのリスクに対して使用される戦略である。"],"a":2,"ex":"脅威（マイナス）：回避・転嫁・軽減。好機（プラス）：活用・共有・強化。両方に使えるのは「受容」（第6版では「エスカレーション」も両方）。"},
+{"id":"h26-15","src":"H26春 問15","cat":"qual","q":"品質管理に用いるパレート図の用途として，適切なものはどれか。","ch":["工程の時系列の状態を示し，工程が安定しているかどうかを判断する。","項目別の出現度数を大きい順に並べ，累積和を示して，主要な原因を識別する。","二つの特性の間に相関があるかどうかを判断する。","特性と要因の関係を樹形図で示し，影響関係を分析する。"],"a":1,"ex":"パレート図＝重点指向（少数の原因が大半を占める）。アは管理図，ウは散布図，エは特性要因図。"},
+{"id":"h26-16","src":"H26春 問16","cat":"qual","q":"エラー埋込み法において，100個のエラーを埋め込んだプログラムを検査したところ，30個のエラーが発見され，そのうち20個が埋め込んだエラーであった。埋め込んだエラーを除く残存エラー数は幾つと推定されるか。","ch":["40","50","70","150"],"a":0,"ex":"埋込みエラーの発見率は20/100＝20％。固有エラーも同率で発見されたとみなすと，固有エラーの発見数10個 → 総数は10÷0.2＝50個。残存は50−10＝40個。"},
+{"id":"h26-17","src":["H26春 問17","H28春 問19"],"cat":"dev","q":"XP（eXtreme Programming）のプラクティスの一つに取り入れられているものはどれか。","ch":["構造化プログラミング","コンポーネント指向プログラミング","ビジュアルプログラミング","ペアプログラミング"],"a":3,"ex":"XPの代表的プラクティス：ペアプログラミング，テスト駆動開発，リファクタリング，継続的インテグレーションなど。"},
+{"id":"h26-18","src":"H26春 問18","cat":"dev","q":"開発方針 a〜c に対応する開発モデルの組合せとして，適切なものはどれか。\na：全機能を一斉に開発する。\nb：コアとなる部分を開発し，機能を順次追加していく。\nc：開発を繰り返しながら要求を洗練していく。","ch":["a：ウォータフォール　b：進化的　c：段階的","a：ウォータフォール　b：段階的　c：進化的","a：進化的　b：ウォータフォール　c：段階的","a：段階的　b：進化的　c：ウォータフォール"],"a":1,"ex":"段階的（インクリメンタル）＝機能を少しずつ追加。進化的＝要求自体を繰り返しの中で洗練。"},
+{"id":"h26-20","src":"H26春 問20","cat":"svc","tbl":[["","セキュリティ強化(重み4)","運用品質向上(重み2)","作業コスト削減(重み3)","スケジュールリスク(重み8)","技術リスク(重み3)"],["案1","3","2","5","2","4"],["案2","4","4","4","4","1"],["案3","5","2","2","1","5"],["案4","2","5","4","5","1"]],"q":"四つの案を，効果3項目とリスク2項目で採点した（表）。総合評価点＝効果の重み付き合計−リスクの重み付き合計 とするとき，総合評価点が最も高い案はどれか。","ch":["案1","案2","案3","案4"],"a":2,"ex":"案1：(12+4+15)−(16+12)＝3。案2：(16+8+12)−(32+3)＝1。案3：(20+4+6)−(8+15)＝7。案4：(8+10+12)−(40+3)＝−13。案3が最高。"},
+{"id":"h26-21","src":"H26春 問21","cat":"law","q":"ランニングロイヤリティの説明として，適切なものはどれか。","ch":["技術サポートを受ける際に課される技術料","技術の開示を受ける際に課される一時金","特許発明の実施実績に応じて決まる使用料","毎年のメンテナンス費用として課される料金"],"a":2,"ex":"ランニングロイヤリティは売上や生産数など「実施の実績」に応じて継続的に支払う使用料。一時金はイニシャルペイメント。"},
+{"id":"h26-22","src":"H26春 問22","cat":"law","q":"下請代金支払遅延等防止法に照らして，禁止されている行為はどれか。","ch":["継続的な取引で，支払条件などを記載した書面をあらかじめ交付し，個々の発注書面ではその記載を省略する。","顧客の都合による仕様変更に伴う費用増加分を，協議のうえ下請代金に加算する。","発注時に仕様が未確定の書面を交付し，仕様確定後は書面ではなく口頭で伝える。","振込手数料を下請事業者が負担する旨を書面で合意し，実費の範囲で差し引いて支払う。"],"a":2,"ex":"親事業者には発注内容を書面（3条書面）で交付する義務がある。未定事項が確定したら，直ちに補充の書面を交付しなければならない。口頭は不可。"},
+{"id":"h26-23","src":"H26春 問23","cat":"svc","q":"コンティンジェンシープランの留意点として，適切なものはどれか。","ch":["全システムを対象とせず，復旧の重要性と緊急性を考慮して対象を決める。","バックアップデータは，コンピュータ室内又はセンタ内に保存しておく。","バックアップ対象は，機密情報の中から機密度に応じて選ぶ。","被害シナリオを作成し，それに基づく予防策の策定手順を立てる。"],"a":0,"ex":"コンティンジェンシープランは「起きた後」の緊急時対応計画。優先度で対象を絞る。バックアップは遠隔地保管が原則。エの予防策は別の話。"},
+{"id":"h26-24","src":"H26春 問24","cat":"sec","q":"メールサーバ（SMTPサーバ）の不正利用を防止するために行う設定はどれか。","ch":["ゾーン転送のアクセス元を制限する。","第三者中継を禁止する。","ディレクトリのファイル名表示を禁止する。","特定のディレクトリ以外でのCGIプログラムの実行を禁止する。"],"a":1,"ex":"第三者中継（オープンリレー）を許すとスパムの踏み台にされる。アはDNS，ウ・エはWebサーバの設定。"},
+{"id":"h26-25","src":"H26春 問25","cat":"sec","q":"SSLに関する記述のうち，適切なものはどれか。","ch":["ディジタル証明書にはIPアドレスの組込みが必須であり，IPアドレス変更時には証明書の再取得が必要である。","個人認証用のディジタル証明書はICカードなどに格納でき，格納場所を特定のPCに限定する必要はない。","特定の利用者間の通信のために開発されたもので，Webサーバへの事前の利用者登録が不可欠である。","日本国内では，SSLで使用する共通鍵の長さは128ビット未満に制限されている。"],"a":1,"ex":"クライアント証明書はICカード等に格納し持ち運べる。サーバ証明書はFQDNに対して発行され，IPアドレスは必須ではない。"},
+{"id":"h27-1","src":"H27春 問1","cat":"int","q":"ISO 21500によれば，プロジェクトガバナンスを維持する責任は誰にあるか。","ch":["プロジェクトの管理面でプロジェクトマネージャを支援するプロジェクトマネジメントチーム","プロジェクトの立上げから終結までのプロセスを指揮するプロジェクトマネージャ","プロジェクトの要求事項を明確にし，プロジェクトの成果を享受する顧客","プロジェクトを承認して経営的判断を下すプロジェクトスポンサ，又は上級経営レベルでの指導をするプロジェクト運営委員会"],"a":3,"ex":"ガバナンスはPMより上位の視点で監督する仕組み。その維持責任はスポンサや運営委員会にある。"},
+{"id":"h27-2","src":["H27春 問2","H29春 問14"],"cat":"cost","q":"工程別の生産性が，設計工程 X ステップ/人月，製造工程 Y ステップ/人月，試験工程 Z ステップ/人月 であるとき，全体の生産性（ステップ/人月）を表す式はどれか。（選択肢の数式は表記を簡略化）","ch":["X + Y + Z","(X + Y + Z) ÷ 3","1/X + 1/Y + 1/Z","1 ÷ (1/X + 1/Y + 1/Z)"],"a":3,"ex":"1ステップ当たりの工数は各工程の 1/X，1/Y，1/Z の合計。全体の生産性はその逆数 1/(1/X+1/Y+1/Z)。"},
+{"id":"h27-3","src":["H27春 問3","H29春 問2"],"cat":"int","q":"PMBOKによれば，組織のプロセス資産に分類されるものはどれか。","ch":["課題と欠陥のマネジメントの手順","ステークホルダのリスク許容度","組織のインフラストラクチャ","組織の文化，体制，ガバナンス"],"a":0,"ex":"手順・テンプレート・教訓＝組織のプロセス資産。リスク許容度，インフラ，文化・体制は組織体の環境要因（EEF）。"},
+{"id":"h27-4","src":"H27春 問4","cat":"sched","tbl":[["工程","工数比","期間比"],["要件定義","0.17","0.25"],["外部設計","0.21","0.21"],["内部設計","0.16","0.11"],["プログラム開発","0.16","0.11"],["システム結合","0.11","0.11"],["システムテスト","0.19","0.21"]],"q":"過去の実績から構築した作業分配モデル（表）がある。要件定義から内部設計までをモデルどおりに進め，228日で完了してプログラム開発を開始した。現在，200本のプログラムのうち100本を完了し，残り100本は未着手である。以降もモデルどおりに進むとき，プロジェクト全体の完了まであと何日掛かるか。","ch":["140","150","161","172"],"a":1,"ex":"期間比で考える。要件定義〜内部設計＝0.25+0.21+0.11＝0.57 → 228日なので全体は400日。残りはプログラム開発の半分0.055＋結合0.11＋テスト0.21＝0.375 → 400×0.375＝150日。"},
+{"id":"h27-5","src":["H27春 問5","H29春 問6"],"cat":"team","tbl":[["要員","要件定義","設計","開発","テスト"],["阿部","C","R","A","I"],["伊藤","A","I","−","I"],["佐藤","I","I","R","C"],["鈴木","I","C","−","R"],["田中","I","C","R","A"],["野村","R","A","I","C"]],"q":"表のRACIチャートにおいて，“設計”アクティビティで説明責任（Accountable）をもつ要員は誰か。","ch":["阿部","伊藤と佐藤","鈴木と田中","野村"],"a":3,"ex":"設計列の A は野村。なお A（説明責任）は1アクティビティにつき1人に限るのが原則。"},
+{"id":"h27-6","src":"H27春 問6","cat":"team","q":"ブルックスの法則が述べていることはどれか。","ch":["エンゲージメントが高まると，メンバは問題に自律的に対応するようになる。","技術が高度化するほど，人を中心としたマネジメントが重要になる。","担当者の業務を可視化しなければ，優秀なPMでも適切な管理はできない。","遅延しているプロジェクトへの要員の追加は，更なる遅れをもたらす。"],"a":3,"ex":"「遅れているプロジェクトに人を追加すると，さらに遅れる」。教育コストとコミュニケーション経路の増加が原因。"},
+{"id":"h27-7","src":"H27春 問7","cat":"sched","q":"クリティカルチェーン法におけるスケジューリングとバッファの設定方法として，適切なものはどれか。","ch":["クリティカルパス上にないタスクのチェーンには，バッファを設定しない。","クリティカルパス上の最後のタスクの終了と納期の間に，プロジェクト全体で使用するバッファを設定する。","クリティカルパス上の全てのタスクに，バッファを設定する。","なるべく前倒しでタスクを開始するように計画し，バッファを少しでも多く確保する。"],"a":1,"ex":"末尾にプロジェクトバッファ，非クリティカルチェーンの合流点に合流（フィーディング）バッファを置く。個々のタスクには余裕を持たせない。"},
+{"id":"h27-8","src":["H27春 問8","H29春 問8"],"cat":"sched","q":"工程管理図表の特徴に関する記述のうち，ガントチャートのものはどれか。","ch":["計画と実績の時間的推移を表現するのに適し，進み具合及びその傾向がよく分かり，プロジェクト全体の費用と進捗の管理に利用される。","作業の順序や作業相互の関係を表現したり，重要作業を把握したりするのに適しており，プロジェクトの作業計画などに利用される。","作業の相互関係の把握には適さないが，作業計画に対する実績を把握するのに適しており，個人やグループの進捗管理に利用される。","マイルストーンを把握するのに適しており，プロジェクト全体の進捗管理に利用される。"],"a":2,"ex":"ガントチャートは横棒で計画と実績を比較できるが，作業間の依存関係は分かりにくい。アはSカーブ（EVM），イはアローダイアグラム，エはマイルストーンチャート。"},
+{"id":"h27-9","src":["H27春 問9","H29春 問9"],"cat":"sched","q":"プロジェクトマネジメントにおけるクラッシングの例として，適切なものはどれか。","ch":["クリティカルパス上で遅れているアクティビティに人員を増強した。","コストを削減するために，これまで承認されていた残業を禁止した。","仕様確定の遅れにより，プロジェクトの完了予定日を延期した。","設計が完了したモジュールから順に並行してプログラム開発を行うよう，スケジュールを変更した。"],"a":0,"ex":"クラッシング＝コストを追加して（資源投入で）期間を短縮。エはファストトラッキング（作業の並行化）。"},
+{"id":"h27-10","src":["H27春 問10","H29春 問12"],"cat":"cost","q":"EVMを採用したプロジェクトで，ある時点のCPIが1.0を下回っている場合の対処として，適切なものはどれか。","ch":["実コストが予算コストを下回っているので，CPIに基づき完成時総コストを下方修正する。","実コストをCPIで割った値を使い，完成時総コストを見積もって予想値とする。","超過コストの原因を明確にし，CPIの改善策に取り組むとともに，CPIの値を監視する。","完成時にはCPIが1.0になることを利用し，CPIが1.0となる完成時期を予測してスケジュールを見直す。"],"a":2,"ex":"CPI＝EV/AC。1未満はコスト超過。原因を特定して是正し，監視を続けるのが正しい対処。EACの典型式は BAC/CPI（ACをCPIで割るのではない）。"},
+{"id":"h27-11","src":["H27春 問11","H29春 問13"],"cat":"cost","q":"ファンクションポイント法の一つであるIFPUG法では，機能をデータファンクションとトランザクションファンクションとに分類する。適切な分類はどれか。（EI：外部入力，EO：外部出力，EQ：外部照会，ILF：内部論理ファイル，EIF：外部インタフェースファイル）","ch":["データ：EI，EO，EQ　／トランザクション：EIF，ILF","データ：EIF，EQ，ILF　／トランザクション：EI，EO","データ：EIF，ILF　／トランザクション：EI，EO，EQ","データ：ILF　／トランザクション：EI，EIF，EO，EQ"],"a":2,"ex":"“ファイル”が付く ILF・EIF がデータファンクション。入出力・照会の EI・EO・EQ がトランザクションファンクション。"},
+{"id":"h27-12","src":"H27春 問12","cat":"risk","q":"定性的リスク分析で使用されるものはどれか。","ch":["感度分析","期待金額価値分析","デシジョンツリー分析","発生確率・影響度マトリックス"],"a":3,"ex":"定性的分析＝発生確率と影響度で優先順位付け（P-Iマトリックス）。感度分析・EMV・デシジョンツリーは定量的分析。"},
+{"id":"h27-13","src":"H27春 問13","cat":"qual","q":"プロジェクトの品質コストを適合コストと不適合コストに分類したとき，適合コストに属するものはどれか。","ch":["クレーム調査費","損害賠償費","品質保証の教育訓練費","プログラム不具合の修正費"],"a":2,"ex":"適合コスト＝予防コスト（教育，計画）＋評価コスト（テスト，検査）。不適合コスト＝内部・外部の失敗コスト（修正，クレーム，賠償）。"},
+{"id":"h27-14","src":"H27春 問14","cat":"qual","q":"品質の定量的評価指標のうち，ソフトウェアの保守性の評価指標になるものはどれか。","ch":["最終成果物に含まれる誤りの件数 ÷ 最終成果物の量","修正時間の合計 ÷ 修正件数","移植時に変更が必要なソースコードの行数 ÷ 移植するソースコードの行数","利用者からの改良要求件数 ÷ 出荷後の経過月数"],"a":1,"ex":"保守性＝修正のしやすさ。1件当たりの平均修正時間が指標になる。アは信頼性（欠陥密度），ウは移植性。"},
+{"id":"h27-15","src":"H27春 問15","cat":"law","q":"ソフトウェア開発を外部委託した。日程は計画どおりに全工程を終えたが，受入れテストで委託範囲の設計不良による欠陥が多数見つかった。〔要点〕委託はソフトウェア方式設計から結合までを一括発注，過去の評価が最も高い供給者を選定，毎月1回進捗確認，成果物は全工程終了時に一括検査。取得者が実施すべき再発防止策として最も適切なものはどれか。","ch":["同じ供給者を選ばないよう，その供給者の開発実績の評点を下げる。","各開発工程の区切りで成果物を提出させて検査し，品質問題があれば原因を特定させて是正させる。","進捗確認で，設計書のページ数，プログラムの行数，テストケース数などの定量的な報告を求める。","進捗確認の頻度を毎月1回から毎週1回に変更する。"],"a":1,"ex":"問題は「最後に一括検査」で品質を途中確認していなかったこと。工程ごとに成果物をレビューすれば早期に設計不良を検出できる。"},
+{"id":"h27-16","src":"H27春 問16","cat":"dev","q":"利用者が誤った操作をしても問題が起きないように，あらかじめ対策しておくという考え方を表す用語はどれか。","ch":["フールプルーフ","フェールセーフ","フェールソフト","フォールトトレラント"],"a":0,"ex":"フールプルーフ＝誤操作を防ぐ。フェールセーフ＝故障時に安全側へ。フェールソフト＝機能を縮退して継続。フォールトトレラント＝冗長化で継続。"},
+{"id":"h27-17","src":"H27春 問17","cat":"dev","q":"リーンソフトウェア開発の説明として，適切なものはどれか。","ch":["経験的プロセス制御の理論を基本としており，スプリントと呼ばれる周期で“検査と適応”を繰り返しながら開発する。","製造業の現場から生まれた考え方を応用したもので，“ムダをなくす”，“品質を作り込む”といった七つの原則を示している。","比較的小規模な開発に適したプログラミング中心の手法であり，五つの価値を定義している。","利用者から見て価値がある機能単位ごとに，設計や構築などの五つのプロセスを繰り返して開発する。"],"a":1,"ex":"リーンはトヨタ生産方式由来。アはスクラム，ウはXP，エはFDD（ユーザ機能駆動開発）。"},
+{"id":"h27-18","src":["H27春 問18","H29春 問17"],"cat":"dev","q":"マッシュアップを利用してWebコンテンツを表示している例として，最も適切なものはどれか。","ch":["Webブラウザにプラグインを組み込み，動画やアニメーションを表示する。","地図上のカーソル移動に伴い，Webページを切り替えずにスクロール表示する。","鉄道経路の探索結果上に，各鉄道会社のWebページへのリンクを表示する。","店舗案内のWebページ上に，他のサイトが提供する地図検索機能を利用して出力された情報を表示する。"],"a":3,"ex":"マッシュアップ＝複数サービスのAPIや機能を組み合わせて新しいコンテンツを作ること。イはAjax，ウは単なるリンク。"},
+{"id":"h27-19","src":"H27春 問19","cat":"svc","q":"ITサービスマネジメントにおける，インシデント及びサービス要求管理の主な活動はどれか。","ch":["インシデントの影響を最小限にするための既知の誤り記録の作成","インシデントの解決とサービスの復旧","インシデントの傾向分析と予防処置","インシデントの未知の根本原因の特定"],"a":1,"ex":"インシデント管理の目的は「サービスをできるだけ早く復旧すること」。根本原因の特定・既知の誤り・傾向分析は問題管理の活動。"},
+{"id":"h27-20","src":"H27春 問20","cat":"svc","tbl":[["費用項目（百万円）","A案","B案","C案","D案"],["ハードウェア導入","30","30","40","40"],["システム開発","30","50","30","40"],["導入教育","5","5","5","5"],["ネットワーク通信/年","20","20","15","15"],["保守/年","6","5","5","5"],["システム運用/年","6","4","6","4"]],"q":"表の4案について，3年間使用した場合のTCO（総所有費用）が最小となる案はどれか。","ch":["A案","B案","C案","D案"],"a":2,"ex":"初期＋年額×3。A：65+32×3＝161，B：85+29×3＝172，C：75+26×3＝153，D：85+24×3＝157。C案が最小。"},
+{"id":"h27-21","src":"H27春 問21","cat":"dev","q":"非機能要件のうち，使用性に該当するものはどれか。","ch":["4時間以内のトレーニングを受けることで，新しい画面を操作できるようになる。","業務量がピークの日でも，8時間以内に夜間バッチ処理を完了できる。","現行システムから新システムへ，72時間以内に移行できる。","大規模災害時でも，144時間以内にシステムを復旧できる。"],"a":0,"ex":"使用性（ユーザビリティ）＝習得のしやすさ・使いやすさ。イは性能効率性，ウは移行性，エは可用性・事業継続。"},
+{"id":"h27-22","src":"H27春 問22","cat":"law","q":"不正競争防止法で保護されるものはどれか。","ch":["特許権を取得した発明","頒布されている独自のシステム開発手順書","秘密として管理している，事業活動用の非公開の顧客名簿","秘密として管理していない，自社システム開発用の重要な設計書"],"a":2,"ex":"営業秘密の3要件：秘密管理性・有用性・非公知性。秘密管理していないもの，公開済みのものは対象外。特許は特許法で保護。"},
+{"id":"h27-23","src":"H27春 問23","cat":"law","q":"広告宣伝のための電子メールを送信する場合，特定電子メール法に照らして適切なものはどれか。","ch":["送信の許諾を通知する手段をメールに表示しておけば，同意を得ていない不特定多数に送信できる。","同意を得ていない不特定多数に送る場合は，件名に未承諾広告であることを明示する。","取引関係などの一定の場合を除き，あらかじめ送信に同意した者だけに送るオプトイン方式をとる。","メールアドレスを自動生成するプログラムで送信する場合は，送信者の氏名と連絡先を明示する。"],"a":2,"ex":"現行法はオプトイン方式。事前同意のない相手への広告メールは原則禁止。「未承諾広告※」表示は旧制度。"},
+{"id":"h27-24","src":"H27春 問24","cat":"sec","q":"米国NISTが制定したAESにおける鍵長の条件はどれか。","ch":["128ビット，192ビット，256ビットから選択する。","256ビット未満で任意に指定する。","暗号化処理単位のブロック長より32ビット長くする。","暗号化処理単位のブロック長より32ビット短くする。"],"a":0,"ex":"AESのブロック長は128ビット固定，鍵長は128/192/256ビットから選ぶ。"},
+{"id":"h27-25","src":"H27春 問25","cat":"sec","q":"テンペスト技術の説明とその対策として，適切なものはどれか。","ch":["ディスプレイなどから放射される電磁波を傍受し，表示内容を盗み見る技術であり，対策として電磁波を遮断する。","通信途中のパケットを横取りし，内容を改ざんする技術であり，対策としてディジタル署名で改ざんを検知する。","マクロウイルスで使われる技術であり，対策としてウイルス対策ソフトを導入し最新の定義ファイルを適用する。","無線LANの信号を傍受し，通信内容を解析する技術であり，対策として通信パケットを暗号化する。"],"a":0,"ex":"テンペスト＝機器が出す微弱な電磁波から情報を盗む攻撃。シールドなどで電磁波を遮断して防ぐ。"},
+{"id":"h28-3","src":"H28春 問3","cat":"int","q":"PMBOKによれば，多くのプロジェクトのライフサイクルに共通する特性はどれか。","ch":["プロジェクト完成時のコストに対してステークホルダが及ぼす影響の度合いは，プロジェクトの終盤が最も高い。","プロジェクトの不確実性の度合いは，プロジェクトの開始時が最も高い。","プロジェクト要員の必要人数は，プロジェクトの終了時が最も多い。","変更やエラー訂正に掛かるコストは，プロジェクトの初期段階が最も高い。"],"a":1,"ex":"不確実性とステークホルダの影響力は開始時が最大。変更コストは終盤ほど高い。要員数は中盤がピーク。"},
+{"id":"h28-4","src":"H28春 問4","cat":"int","q":"プロジェクトの開始を公式に承認する文書の作成を依頼された者の行動として，適切なものはどれか。","ch":["契約書を作成し，プロジェクトマネージャに文書の承認を求めた。","プロジェクト憲章を作成し，プロジェクトスポンサに文書の承認を求めた。","プロジェクト作業範囲記述書を作成し，プロジェクトマネージャに文書の承認を求めた。","プロジェクトマネジメント計画書を作成し，プロジェクトスポンサに文書の承認を求めた。"],"a":1,"ex":"プロジェクトを公式に認可する文書＝プロジェクト憲章。承認するのはスポンサ（立ち上げる側）。"},
+{"id":"h28-5","src":"H28春 問5","cat":"scope","q":"プロジェクトマネジメントにおけるスコープコントロールの活動はどれか。","ch":["開発ツールの新機能の教育が必要と分かったので，開発ツールの教育期間を2日間延長した。","要件定義完了時に再見積りをしたところ，当初見積もった開発費用を超過することが判明したので，追加予算を確保した。","連携する計画であった外部システムのリリースが延期になったので，この外部システムとの連携に関わる作業は別プロジェクトで実施することにした。","割り当てたテスト担当者が期待した成果を出せなかったので，経験豊富なテスト担当者に交代した。"],"a":2,"ex":"作業範囲（スコープ）そのものを変更しているのはウだけ。アはスケジュール，イはコスト，エは資源のコントロール。"},
+{"id":"h28-7","src":"H28春 問7","cat":"sched","q":"PMBOKにおいて，アクティビティの所要期間を見積もる際の資源カレンダーの用途として，適切なものはどれか。","ch":["アクティビティが必要とする資源の種類と量を特定する。","アクティビティが必要とする資源を区分と類型別に階層表示し，必要な資源を明確にする。","アクティビティが必要とする資源を利用できる作業日及びシフトを取得する。","過去のプロジェクトにおいて類似のアクティビティが必要とした資源の種類と量を取得する。"],"a":2,"ex":"資源カレンダー＝その資源がいつ使えるか（稼働日・シフト）。アは資源要求事項，イは資源ブレークダウンストラクチャー。"},
+{"id":"h28-9","src":"H28春 問9","cat":"int","q":"プロジェクト管理で使用する分析技法のうち，傾向分析の説明はどれか。","ch":["個々の選択肢とそれぞれを選択した場合に想定されるシナリオの関係を図に表し，それぞれのシナリオにおける期待値を計算して，最善の策を選択する。","個々のリスクが現実のものとなったときの，プロジェクトの目標に与える影響の度合いを調べる。","時間の経過に伴うプロジェクトのパフォーマンスの変動を分析する。","発生した障害とその要因の関係を，魚の骨のような図にして分析する。"],"a":2,"ex":"傾向（トレンド）分析＝時系列での変化を見て将来を予測。アはデシジョンツリー，イは感度分析，エは特性要因図。"},
+{"id":"h28-12","src":"H28春 問12","cat":"risk","tbl":[["選択肢","費用","効果大(確率60%)","効果小(確率40%)"],["ツールA導入","120万円","X 万円","90万円"],["ツールB導入","60万円","120万円","60万円"]],"q":"表のデシジョンツリーのデータで，EMV（期待金額価値）を用いてツールAとツールBを比較する。ツールAを導入する場合のEMVがツールBを導入する場合のEMVを上回るのは，Xが幾らより大きい場合か。","ch":["120","150","200","240"],"a":2,"ex":"A：0.6X＋0.4×90−120＝0.6X−84。B：0.6×120＋0.4×60−60＝36。0.6X−84＞36 → X＞200。"},
+{"id":"h28-13","src":"H28春 問13","cat":"risk","q":"プロジェクトのリスクを，デルファイ法を利用して抽出しているものはどれか。","ch":["ステークホルダや経験豊富なプロジェクトマネージャといった専門家にインタビューし，回答を収集してリスクとしてまとめる。","複数のお互いに関係がない専門家にアンケートを行い，その結果を要約する。さらに要約結果を用いてアンケートを行い，結果を要約することを繰り返してリスクをまとめる。","プロジェクトチームのメンバにPMOのメンバやステークホルダを加え，一堂に会して会議をし，意見を出し合い，進行役がリスクとしてまとめる。","プロジェクトを強み，弱み，好機，脅威のそれぞれの観点及びその組合せで分析し，リスクをまとめる。"],"a":1,"ex":"デルファイ法＝匿名の専門家アンケートを繰り返し，意見を収束させる。アはインタビュー，ウはブレーンストーミング，エはSWOT分析。"},
+{"id":"h28-14","src":"H28春 問14","cat":"risk","q":"PMBOKによれば，定性的リスク分析で実施することとして，適切なものはどれか。","ch":["感度分析によって，プロジェクトに与える影響が大きいリスクを明確にする。","定量的リスク分析の結果に基づいて，リスクの優先順位付けをする。","リスク対応計画に基づいて，発生するおそれがあるリスクを具体的に特定する。","リスクの発生確率と影響度を査定した結果に基づいて，リスク登録簿を更新する。"],"a":3,"ex":"順番は 特定 → 定性的分析 → 定量的分析 → 対応計画。定性的分析では発生確率・影響度を査定してリスク登録簿を更新する。"},
+{"id":"h28-16","src":"H28春 問16","cat":"dev","q":"JIS X 0160において，“開発者は，ソフトウェア結合のために暫定的なテスト要求事項及びスケジュールを定義し，文書化する。”というタスクを実施するプロセスはどれか。","ch":["ソフトウェア結合","ソフトウェア詳細設計","ソフトウェア適格性確認テスト","ソフトウェア方式設計"],"a":3,"ex":"V字モデルで，方式設計は結合テストと対になる。方式設計の段階で結合テストの要求事項とスケジュールを暫定的に定める。"},
+{"id":"h28-17","src":"H28春 問17","cat":"dev","q":"フェールセーフの考えに基づいて設計したものはどれか。","ch":["乾電池のプラスとマイナスを逆にすると，乾電池が装塡できないようにする。","交通管制システムが故障したときには，信号機に赤色が点灯するようにする。","ネットワークカードのコントローラを二重化しておき，故障したコントローラの方を切り離しても運用できるようにする。","ハードディスクにRAID1を採用して，MTBFで示される信頼性が向上するようにする。"],"a":1,"ex":"故障時に安全側（全赤＝止まれ）に倒すのがフェールセーフ。アはフールプルーフ，ウ・エはフォールトトレランス。"},
+{"id":"h28-18","src":"H28春 問18","cat":"dev","q":"CMMIの目的として，最も適切なものはどれか。","ch":["各種のソフトウェア設計・開発技法を使って開発作業を自動化し，ソフトウェア開発の生産性の向上を図る。","共通の物差しとして用いることによって，国内におけるシステム及びソフトウェア開発とその取引の明確化を可能にする。","組織がプロセスを改善することに役立つ，ベストプラクティスの適用に対する手引を提供する。","特定の購入者と製作者の間で授受されるソフトウェア製品の品質保証を行い，顧客満足度の向上を図る。"],"a":2,"ex":"CMMIはプロセス改善のための成熟度モデル（ベストプラクティス集）。イは共通フレームの説明。"},
+{"id":"h28-20","src":"H28春 問20","cat":"svc","q":"ITILで定義されるサービスのライフサイクルにおけるサービストランジション段階の説明はどれか。","ch":["規定された要件と制約に沿って，サービスを運用に移行し，確実に稼働させることである。","サービスの効率，有効性，費用対効果の観点で運用状況を継続的に測定し，改善していくことである。","サービスの内容を具体的に決めることである。","戦略的資産として，どのようにサービスマネジメントを設計，開発，導入するかについての手引を提供することである。"],"a":0,"ex":"トランジション＝移行。新規・変更サービスを本番運用へ移す段階。イは継続的サービス改善，ウはサービスデザイン，エはサービスストラテジ。"},
+{"id":"h28-21","src":"H28春 問21","cat":"dev","q":"情報システムの設計のうち，フェールソフトの考え方を適用した例はどれか。","ch":["UPSを設置することによって，停電時に手順どおりにシステムを停止できるようにし，データを保全する。","制御プログラムの障害時に，システムの暴走を避け，安全に運転を停止できるようにする。","ハードウェアの障害時に，パフォーマンスは低下するが，構成を縮小して運転を続けられるようにする。","利用者の誤操作や誤入力を未然に防ぐことによって，システムの誤動作を防止できるようにする。"],"a":2,"ex":"フェールソフト＝縮退運転で機能を落としてでも継続。イはフェールセーフ，エはフールプルーフ。"},
+{"id":"h28-22","src":"H28春 問22","cat":"svc","q":"IT投資効果の評価に用いられる手法のうち，ROIによるものはどれか。","ch":["一定期間のキャッシュフローを，割引率を設定して現在価値に換算した上で合計値を求め，その大小で評価する。","初年度の投資によるキャッシュアウトフローが何年後に回収できるかによって評価する。","現在価値に換算されたキャッシュフローの一定期間の合計値がゼロとなるような割引率を求め，その大小で評価する。","投資額を分母に，投資による収益を分子とした比率を算出し，その大小で評価する。"],"a":3,"ex":"ROI＝利益÷投資額。アはNPV（正味現在価値），イは回収期間法，ウはIRR（内部収益率）。"},
+{"id":"h28-23","src":"H28春 問23","cat":"law","q":"労働基準法及び労働契約法が定める，就業規則に係る使用者の義務の記述のうち，適切なものはどれか。","ch":["就業規則の基準に達しない労働条件を労働契約で定める場合には，使用者が労働者から個別に合意を得ることが義務付けられている。","使用者は，就業規則を労働者に周知するために，見やすい場所に掲示したり，書面を交付したりするなどの措置を行うことが義務付けられている。","常時10名以上の労働者を使用する使用者は，就業規則を作成する義務はあるが，行政官庁へ届け出ることは義務付けられていない。","労働組合がない事業場において，使用者が就業規則を作成する場合，労働者の意見を聴くことは義務付けられていない。"],"a":1,"ex":"就業規則は周知義務あり。アは無効（就業規則の基準が優先），ウは届出義務あり，エは過半数代表者の意見聴取が必要。"},
+{"id":"h28-24","src":"H28春 問24","cat":"sec","q":"シャドーITに該当するものはどれか。","ch":["IT製品やITを活用して地球環境への負荷を低減する取組み","IT部門の公式な許可を得ずに，従業員又は部門が業務に利用しているデバイスやクラウドサービス","攻撃対象者のディスプレイやキータイプを物陰から盗み見て，情報を盗み出すこと","ネットワーク上のコンピュータに侵入する準備として，攻撃対象の弱点を探るために個人や組織などの情報を収集すること"],"a":1,"ex":"シャドーIT＝情報システム部門が把握していないIT利用。アはグリーンIT，ウはショルダーハッキング，エはフットプリンティング。"},
+{"id":"h28-25","src":"H28春 問25","cat":"sec","q":"DNSSECの機能はどれか。","ch":["DNSキャッシュサーバの設定によって再帰的な問合せの受付範囲が最大になるようにする。","DNSサーバから受け取るリソースレコードに対するディジタル署名を利用して，リソースレコードの送信者の正当性とデータの完全性を検証する。","ISPなどのセカンダリDNSサーバを利用してDNSコンテンツサーバを二重化することによって，名前解決の可用性を高める。","共通鍵暗号技術とハッシュ関数を利用したセキュアな方法によって，DNS更新要求が許可されているエンドポイントを特定して認証する。"],"a":1,"ex":"DNSSECは応答にディジタル署名を付け，キャッシュポイズニングを防ぐ。エはTSIG。"},
+{"id":"h29-3","src":"H29春 問3","cat":"int","q":"PMBOK（第5版）における変更要求のうち，是正処置に該当するものはどれか。","ch":["品質が目標に届かないおそれがあるので，今後の工程に有識者をレビューに参加させる。","遅延しているタスクのスケジュールを計画に戻すため，要員を追加する。","受入れテストで見つかった不具合を修正する。","法規制の改定に対応するため，WBSに作業を追加する。"],"a":1,"ex":"是正処置＝計画からずれた実績を計画どおりに戻す。アは予防処置，ウは欠陥修正，エはスコープの変更。"},
+{"id":"h29-5","src":"H29春 問5","cat":"scope","q":"WBSにおけるワークパッケージに関する記述として，適切なものはどれか。","ch":["OBSのチームに担当する人員を割り当てたものである。","関連する複数の要素成果物をまとめたものである。","通常，スケジュールアクティビティに分解される。","一つ上位の要素成果物と1対1に対応する。"],"a":2,"ex":"ワークパッケージはWBSの最下位要素で，コストと所要期間を見積もり管理できる単位。スケジュール作成時にアクティビティへ分解する。"},
+{"id":"h29-7","src":"H29春 問7","cat":"team","q":"タックマンモデルによれば，チームの発達段階のうち，メンバの異なる考え方や価値観が明確になり，互いに意見を主張し合う段階はどれか。","ch":["安定期（Norming）","遂行期（Performing）","成立期（Forming）","動乱期（Storming）"],"a":3,"ex":"成立期 → 動乱期 → 安定期 → 遂行期 → 散会期。意見がぶつかり合うのは動乱期。"},
+{"id":"h29-11","src":"H29春 問11","cat":"dev","q":"アジャイル型開発におけるベロシティの説明として，適切なものはどれか。","ch":["ユーザストーリの相対的な規模を見積もるための単位","完了待ちの要求事項を優先度順に並べたリスト","残作業量の推移を示したグラフ","定められた期間内にチームが完了させた成果物の量を示す，チームの生産性の指標"],"a":3,"ex":"ベロシティ＝1イテレーションで完了したストーリーポイントの量。アはストーリーポイント，イはバックログ，ウはバーンダウンチャート。"},
+{"id":"h29-18","src":"H29春 問18","cat":"dev","q":"リファクタリングの説明として，適切なものはどれか。","ch":["外部から見た振る舞いを変えずに，保守性の高いプログラムに書き直す。","ソースコードから設計書を作成する。","既存の部品を組み合わせて開発する。","プログラム修正の影響範囲をテストする。"],"a":0,"ex":"リファクタリングは機能を変えず内部構造を改善すること。イはリバースエンジニアリング，エは回帰テスト。"},
+{"id":"h29-19","src":"H29春 問19","cat":"dev","q":"データベースのフルバックアップの取得間隔を2倍にした（差分のログは取得し続ける）。バックアップや復旧に関する記述として，適切なものはどれか。","ch":["1回当たりのフルバックアップの媒体使用量が約2倍になる。","1回当たりのフルバックアップの媒体使用量が約半分になる。","フルバックアップの平均処理時間が約2倍になる。","ログ情報による復旧の平均処理時間が約2倍になる。"],"a":3,"ex":"フルバックアップ1回の量や時間はDBの大きさで決まり，間隔とは無関係。間隔が2倍になると，障害時に適用するログが平均2倍になり復旧時間が延びる。"},
+{"id":"h29-20","src":"H29春 問20","cat":"dev","q":"データ管理者（DA）とデータベース管理者（DBA）を別々に任命した場合，DAの役割として適切なものはどれか。","ch":["ディスク増設の計画を立てる。","設計工程で，論理データベースの設計やデータ項目の標準化を行う。","テスト工程で，パフォーマンスチューニングを行う。","障害発生時に，データ復旧や整合性チェックを行う。"],"a":1,"ex":"DAは全社的なデータ資源の管理（論理設計・標準化）を担う。物理的な管理（容量・チューニング・復旧）はDBA。"},
+{"id":"h29-22","src":"H29春 問22","cat":"law","q":"いわゆる36協定が根拠とする制度はどれか。","ch":["裁量労働制","1か月単位の変形労働時間制","時間外・休日労働の労使協定を行政官庁に届け出ることで，法定労働時間を超える労働を認める制度","フレックスタイム制"],"a":2,"ex":"労働基準法36条に基づく協定。これがないと法定労働時間を超えて働かせることはできない。"},
+{"id":"h29-23","src":"H29春 問23","cat":"law","q":"労働者派遣法において，派遣先責任者の業務として適切なものはどれか。","ch":["派遣労働者の人事記録を作成し，人事考課を行う。","複数の就業場所があっても，事業所全体で一人を選任する。","全ての業務を統括する管理職から選任する。","派遣労働者に指揮命令する者に対して，関係法規や労働者派遣契約の内容を周知する。"],"a":3,"ex":"派遣先責任者は，指揮命令者への法令・契約内容の周知，苦情処理，派遣元との連絡調整などを行う。人事考課は派遣元の役割。"},
+{"id":"h29-24","src":"H29春 問24","cat":"sec","q":"CSIRTの説明として，適切なものはどれか。","ch":["個人情報保護に関する体制を整備していることを認定する組織","企業などにおいて，情報セキュリティインシデントに対応するための組織","電子政府で利用する暗号技術を選定・評価する組織","内閣官房に設置された，情報セキュリティ政策を調整する組織"],"a":1,"ex":"CSIRT＝インシデント対応チーム。アはプライバシーマーク関連，ウはCRYPTREC，エはNISC。"},
+{"id":"h29-25","src":"H29春 問25","cat":"sec","q":"ペネトレーションテストに該当するものはどれか。","ch":["暗号化で使用している暗号方式と鍵長が，セキュリティポリシで定められた仕様に合っているかを確認する。","システムの入出力が仕様どおりであることを確認する。","ファイアウォールが単位時間当たりに処理できるセッション数を確認する。","ファイアウォールや公開サーバに対して，実際に侵入を試み，不正侵入できないかを確認する。"],"a":3,"ex":"ペネトレーションテスト＝擬似攻撃による侵入テスト。脆弱性が悪用可能かを実際に確かめる。"},
+{"id":"h24-ft","src":"H24春 午前Ⅱ","cat":"sched","q":"工期を短縮させるために，クリティカルパス上の作業に“ファストトラッキング”技法を適用した対策はどれか。","ch":["時間外勤務を実施する。","生産性を高められる開発ツールを導入する。","全体の設計が完了する前に，仕様が固まっているモジュールを開発する。","要員を追加投入する。"],"a":2,"ex":"ファストトラッキング＝本来順番に行う作業を並行して進める（手戻りリスクが増える）。ア・エは資源を追加するクラッシング。"},
+{"id":"h25-1","src":"H25春 午前Ⅱ","cat":"stake","q":"プロジェクトに関わるステークホルダの説明のうち，適切なものはどれか。","ch":["組織の内部に属しており，組織の外部にいることはない。","プロジェクトに直接参加し，間接的な関与に留まることはない。","プロジェクトの成果が，自らの利益になる者と不利益になる者がいる。","プロジェクトマネージャのように，個人として特定できることが必要である。"],"a":2,"ex":"ステークホルダは組織の内外，直接・間接を問わず，プロジェクトに影響を与える／受けるすべての個人・組織。不利益を受ける者も含む。"},
+{"id":"h25-2","src":"H25春 午前Ⅱ","cat":"cost","q":"あるソフトウェア開発部門では，開発工数 E（人月）と開発規模 L（キロ行）との関係が E＝5.2L^0.98 で表される。L＝10 としたときの生産性（キロ行/人月）は，およそ幾らか。","ch":["0.2","0.5","1.9","5.2"],"a":0,"ex":"10^0.98≒9.55 なので E≒5.2×9.55≒49.7人月。生産性＝10÷49.7≒0.2。"},
+{"id":"h23-cr","src":"H23 午前Ⅱ","cat":"sched","q":"“クラッシング”を行う際に，優先的に資源を投入すべきスケジュールアクティビティはどれか。","ch":["業務の難易度が最も高いスケジュールアクティビティ","クリティカルパス上のスケジュールアクティビティ","資源が確保できる時期に開始するスケジュールアクティビティ","所要期間を最も長く必要とするスケジュールアクティビティ"],"a":1,"ex":"全体の期間を決めているのはクリティカルパス。そこを短縮しなければ全体は縮まらない（さらに追加コストが最小のものから）。"},
+{"id":"o-evm1","orig":1,"cat":"cost","q":"BAC（完成時総予算）が500万円のプロジェクトで，現時点の PV＝100万円，EV＝80万円，AC＝100万円である。今後も現在のコスト効率が続くと仮定したとき，EAC（完成時総コスト見積り）は幾らか。","ch":["580万円","625万円","650万円","500万円"],"a":1,"ex":"CPI＝EV/AC＝0.8。現在の効率が続くなら EAC＝BAC/CPI＝500/0.8＝625万円。（今後は計画どおりなら EAC＝AC＋(BAC−EV)＝520万円）"},
+{"id":"o-evm2","orig":1,"cat":"cost","q":"EVMで SV（スケジュール差異）＝−20，CV（コスト差異）＝＋10 となった。この状態の説明として適切なものはどれか。","ch":["進捗もコストも計画より悪化している。","進捗もコストも計画より良好である。","進捗は計画より進んでいるが，コストは超過している。","進捗は計画より遅れているが，コストは予算内に収まっている。"],"a":3,"ex":"SV＝EV−PV（マイナス＝遅れ），CV＝EV−AC（プラス＝予算内）。EVを基準に引き算すると覚えるとよい。"},
+{"id":"o-evm3","orig":1,"cat":"cost","q":"BAC＝1,000，EV＝400，AC＝500 のとき，残作業をBACどおりに完了するために必要なTCPI（残作業効率指数）は幾らか。","ch":["1.2","1.5","0.8","1.0"],"a":0,"ex":"TCPI＝(BAC−EV)/(BAC−AC)＝600/500＝1.2。今より20％高い効率で進める必要がある。"},
+{"id":"o-pert","orig":1,"cat":"sched","q":"三点見積り（PERT）で，ある作業の楽観値4日，最頻値7日，悲観値16日とした。期待所要期間は何日か。","ch":["7","9.5","8","9"],"a":2,"ex":"(楽観＋4×最頻＋悲観)÷6＝(4＋28＋16)÷6＝8日。標準偏差は(悲観−楽観)÷6＝2日。"},
+{"id":"o-cpm1","orig":1,"cat":"sched","tbl":[["作業","所要日数","先行作業"],["A","3","−"],["B","5","−"],["C","4","A，B"],["D","6","B"],["E","2","C，D"]],"q":"表の作業からなるプロジェクトの最短所要日数は何日か。","ch":["15","13","12","11"],"a":1,"ex":"経路：A→C→E＝9，B→C→E＝11，B→D→E＝13。最長の B→D→E がクリティカルパスで13日。"},
+{"id":"o-cpm2","orig":1,"cat":"sched","tbl":[["作業","所要日数","先行作業"],["A","3","−"],["B","5","−"],["C","4","A，B"],["D","6","B"],["E","2","C，D"]],"q":"表のプロジェクトで，作業Aのトータルフロート（全余裕日数）は何日か。","ch":["2","5","4","3"],"a":2,"ex":"全体13日。Eの最遅開始は11日目，Cの最遅開始は11−4＝7日目，Aの最遅開始は7−3＝4日目。Aの最早開始は0なのでフロートは4日。"},
+{"id":"o-ch","orig":1,"cat":"stake","q":"プロジェクトチームが6人から10人に増えた。メンバ間のコミュニケーションチャネル数は幾つ増えるか。","ch":["4","45","30","15"],"a":2,"ex":"チャネル数＝n(n−1)/2。6人：15，10人：45。差は30。人を増やすとコミュニケーションの負荷は急増する。"},
+{"id":"o-dt","orig":1,"cat":"risk","q":"ある障害リスクは，対策をとらないと発生確率30％で損失200万円となる。対策X（費用20万円）を実施すると発生確率は10％に下がる。対策Xを実施した場合の期待損失（対策費用を含む）は幾らか。","ch":["20万円","80万円","40万円","60万円"],"a":2,"ex":"対策X：20＋0.1×200＝40万円。対策なし：0.3×200＝60万円。期待値では対策Xを選ぶべき。"},
+{"id":"o-vel","orig":1,"cat":"dev","q":"直近3スプリントのベロシティが平均25ポイントのスクラムチームで，プロダクトバックログの残りが200ポイントある。残りを完了するのに必要なスプリント数の見込みは幾つか。","ch":["6","8","10","12"],"a":1,"ex":"200÷25＝8スプリント。ベロシティは見積りではなく実績値なので，予測に使える。"},
+{"id":"o-avail","orig":1,"cat":"svc","q":"MTBF が 990 時間，MTTR が 10 時間のシステムの稼働率は幾らか。","ch":["0.98","0.999","0.995","0.99"],"a":3,"ex":"稼働率＝MTBF/(MTBF＋MTTR)＝990/1000＝0.99。"},
+{"id":"o-p7domain","orig":1,"cat":"int","q":"PMBOKガイド第7版で示されるプロジェクト・パフォーマンス領域に含まれないものはどれか。","ch":["開発アプローチとライフサイクル","チーム","調達","ステークホルダー"],"a":2,"ex":"第7版の8つの領域：ステークホルダー，チーム，開発アプローチとライフサイクル，計画，プロジェクト作業，デリバリー，測定，不確かさ。「調達」は第6版までの知識エリア。"},
+{"id":"o-p7prin","orig":1,"cat":"int","q":"PMBOKガイド第7版の“プロジェクトマネジメントの原理・原則”に該当するものはどれか。","ch":["計画の変更を最小限に抑えること","予測型の開発アプローチを標準として採用すること","全てのプロジェクトで詳細なWBSを作成すること","勤勉で，敬意を払い，面倒見のよいスチュワードであること"],"a":3,"ex":"第7版は12の原理・原則（スチュワードシップ，チーム，ステークホルダー，価値，システム思考，リーダーシップ，テーラリング，品質，複雑さ，リスク，適応力と回復力，変革）を示す。手法を固定するものではない。"},
+{"id":"o-tailor","orig":1,"cat":"int","q":"プロジェクトマネジメントにおける“テーラリング（修整）”の説明として，適切なものはどれか。","ch":["組織の標準プロセスを，例外なくそのまま全プロジェクトに適用すること","コスト超過時に，スコープを縮小して予算内に収めること","プロジェクトの環境や特性に合わせて，アプローチ，ガバナンス，プロセスを意図的に適合させること","プロジェクトの終盤に，未完了の作業を別のプロジェクトに移すこと"],"a":2,"ex":"テーラリングは「標準をそのまま使う」ことでも「好き勝手にやる」ことでもなく，プロジェクトの状況に合わせて意図的に調整すること。近年の午後問題でも頻出。"},
+{"id":"o-21500","orig":1,"cat":"int","q":"JIS Q 21500:2018（プロジェクトマネジメントの手引）に示されるプロセス群に含まれないものはどれか。","ch":["計画","立ち上げ","管理","改善"],"a":3,"ex":"JIS Q 21500のプロセス群は 立ち上げ・計画・実行・管理・終結 の5つ。"},
+{"id":"o-wbsdic","orig":1,"cat":"scope","q":"WBS辞書の説明として，適切なものはどれか。","ch":["WBSの作成手順を組織の標準として定めた文書","WBSの各要素について，作業内容，成果物，責任者，マイルストーンなどの詳細を記述した文書","プロジェクトで使用する専門用語の定義を集めた文書","過去のプロジェクトのWBSを分類・蓄積したもの"],"a":1,"ex":"WBS辞書はWBSを補完し，各要素の詳細情報を記述する。スコープベースライン＝スコープ記述書＋WBS＋WBS辞書。"},
+{"id":"o-creep","orig":1,"cat":"scope","q":"“スコープクリープ”の説明として，適切なものはどれか。","ch":["変更管理の手続を経ずに，作業範囲が少しずつ広がっていくこと","承認された変更要求によってスコープが縮小されること","クリティカルパス上の作業が少しずつ遅れていくこと","WBSを段階的に詳細化していくこと"],"a":0,"ex":"正式な変更管理を経ない小さな追加の積み重ねで，コストや納期が圧迫される。統合変更管理で防ぐ。"},
+{"id":"o-rtm","orig":1,"cat":"scope","q":"要求事項トレーサビリティ・マトリックスを用いる目的として，最も適切なものはどれか。","ch":["リスクの発生確率と影響度を可視化する。","作業の依存関係とクリティカルパスを明らかにする。","要員ごとの役割と責任を明確にする。","各要求事項を，その源泉から設計・テストなどの成果物まで追跡し，抜け漏れや不要な実装を防ぐ。"],"a":3,"ex":"要求と成果物を双方向に結びつけ，実装漏れや根拠のない機能（金メッキ）を防ぐ。ウはRAM，イはネットワーク図，アはP-Iマトリックス。"},
+{"id":"o-lag","orig":1,"cat":"sched","q":"作業A（5日）と作業B（4日）が“終了−開始（FS）関係，ラグ2日”で結ばれている。作業Aを1日目に開始したとき，作業Bが完了するのは何日目か（土日なし）。","ch":["12日目","10日目","11日目","9日目"],"a":2,"ex":"Aは1〜5日目，ラグ2日（6・7日目は待ち），Bは8日目開始で8〜11日目。11日目に完了。"},
+{"id":"o-level","orig":1,"cat":"sched","q":"資源平準化（リソース・レベリング）の説明として，適切なものはどれか。","ch":["クリティカルパス上の作業に資源を追加して期間を短縮する。","資源の制約や過剰割当てを解消するために作業の開始・終了日を調整する。その結果，クリティカルパスが変わることがある。","並行作業を増やして期間を短縮する。","フロートの範囲内だけで資源の使用量をならし，クリティカルパスは変えない。"],"a":1,"ex":"平準化は資源制約を優先するため完了日が延びることもある。エは資源円滑化（スムージング），アはクラッシング，ウはファストトラッキング。"},
+{"id":"o-bdc","orig":1,"cat":"dev","q":"スプリントのバーンダウンチャートで，実績線が理想線より常に上側に推移している。この状況の解釈として適切なものはどれか。","ch":["チームのベロシティが向上している。","計画より速いペースで作業が完了している。","残作業が計画より多く，スプリント内に完了できないおそれがある。","スプリントの途中で作業が追加されたことは確実である。"],"a":2,"ex":"バーンダウンは「残作業量」の推移。理想線より上＝残りが多い＝遅れ気味。デイリースクラムで障害を確認する。"},
+{"id":"o-est","orig":1,"cat":"cost","q":"過去の類似プロジェクトの実績値を基に，プロジェクト全体のコストを初期段階で概算する見積り手法はどれか。","ch":["パラメトリック見積り","ボトムアップ見積り","類推見積り","三点見積り"],"a":2,"ex":"類推見積り＝トップダウンで早く安いが精度は低い。パラメトリック＝統計的関係（単価×数量など）。ボトムアップ＝WBSの最下位から積み上げて高精度。"},
+{"id":"o-reserve","orig":1,"cat":"cost","q":"コンティンジェンシー予備とマネジメント予備に関する記述として，適切なものはどれか。","ch":["両者ともコストベースラインに含め，PMの裁量で使用できる。","マネジメント予備は特定済みのリスクに備え，コンティンジェンシー予備は未知のリスクに備える。","両者ともプロジェクト予算に含めず，必要時に経営層が追加予算として承認する。","コンティンジェンシー予備は特定済みのリスクに備えてコストベースラインに含め，マネジメント予備は未知のリスクに備えてコストベースラインに含めない。"],"a":3,"ex":"既知の未知（特定済みリスク）＝コンティンジェンシー予備（ベースライン内）。未知の未知＝マネジメント予備（ベースライン外，使用には承認が必要）。"},
+{"id":"o-ctrl","orig":1,"cat":"qual","q":"管理図において，測定値が管理限界内にあるものの，中心線の片側に7点連続して並んだ。この状況の判断として適切なものはどれか。","ch":["管理限界内なので，プロセスは安定していると判断し何もしない。","管理限界を広げて，今後の判定を緩める。","測定誤差なので，該当データを除外する。","プロセスに何らかの偏りが生じている可能性があるので，原因を調査する。"],"a":3,"ex":"「連（ラン）」と呼ばれる異常パターン。管理限界内でも，片側への連続や上昇・下降傾向は工程の変化のサイン。"},
+{"id":"o-coq","orig":1,"cat":"qual","q":"品質コストのうち“評価コスト”に該当するものはどれか。","ch":["設計レビューやテストの実施費用","出荷前に見つかった欠陥の手直し費用","リリース後の障害対応と顧客への補償費用","品質向上のための要員教育の費用"],"a":0,"ex":"予防コスト＝教育・計画（エ），評価コスト＝レビュー・テスト・検査（ア），内部失敗コスト＝出荷前の手直し（イ），外部失敗コスト＝出荷後の対応（ウ）。"},
+{"id":"o-grow","orig":1,"cat":"qual","q":"テスト工程で，累積テスト時間に対する累積バグ検出数をプロットした信頼度成長曲線（ゴンペルツ曲線など）が飽和に近づいている。この状況から判断できることとして，最も適切なものはどれか。","ch":["残存バグが少なくなり，品質が収束に向かっている可能性が高い。","バグが急増しており，テストを中止すべきである。","テストケースの品質が低いことが確実である。","テストの網羅性が不足していることが確実である。"],"a":0,"ex":"曲線がS字に寝てくる＝新たなバグが見つかりにくくなった。ただしテスト項目の消化状況と合わせて判断することが前提（消化が進んでいないのに飽和なら要注意）。"},
+{"id":"o-fish","orig":1,"cat":"qual","q":"特性要因図の用途として，適切なものはどれか。","ch":["工程が統計的に安定しているかを判断する。","問題（特性）とそれに影響を及ぼす要因を体系的に整理し，原因を洗い出す。","二つの変数の相関関係を把握する。","データの散らばり具合を柱状に表し，分布の形を把握する。"],"a":1,"ex":"いわゆるフィッシュボーン図。エはヒストグラム，ウは散布図，アは管理図。"},
+{"id":"o-sl","orig":1,"cat":"team","q":"SL理論（状況対応型リーダーシップ）において，メンバの能力も意欲も十分に高い場合に適したリーダーシップスタイルはどれか。","ch":["委任型","参加（支援）型","説得（コーチ）型","指示型"],"a":0,"ex":"成熟度が低い順に 指示型 → 説得型 → 参加型 → 委任型。高成熟度なら任せて，リーダーの関与を減らす。"},
+{"id":"o-servant","orig":1,"cat":"team","q":"サーバントリーダーシップの説明として，適切なものはどれか。","ch":["リーダーが全ての意思決定を行い，メンバには指示どおりの実行を求める。","リーダーのカリスマ性によってメンバを強く引っ張る。","報酬と罰を明確にし，取引関係によってメンバを動かす。","リーダーがメンバに奉仕し，障害を取り除き成長を支援することで，チームの成果を引き出す。"],"a":3,"ex":"支援型リーダーシップ。アジャイル（スクラムマスター）や近年の午後問題（自律型チーム）で頻出。アは指示型，ウは交換型。"},
+{"id":"o-psych","orig":1,"cat":"team","q":"チームにおける“心理的安全性”が確保された状態の説明として，最も適切なものはどれか。","ch":["メンバが，対人関係のリスクを恐れずに，自分の考えや懸念，失敗を率直に発言できる状態","リーダーが全ての問題の責任を負い，メンバが責任を問われない状態","メンバが雇用を保障されている状態","メンバ同士の意見の対立が全くない状態"],"a":0,"ex":"心理的安全性は「対立がない」ことではなく「率直に言える」こと。R4午後Ⅰの解答例にも「メンバーの心理的安全性が確保された状況」が登場。"},
+{"id":"o-conflict","orig":1,"cat":"team","q":"コンフリクトの解消方法のうち，多様な視点を取り入れ，関係者全員が納得できる解決策を見いだす，最も根本的な解消につながりやすい方法はどれか。","ch":["強制／指示","撤退／回避","妥協／和解","協力／問題解決（対決）"],"a":3,"ex":"協力・問題解決はWin-Winを目指し根本解決につながる。妥協は双方が一部を譲る，強制は一方的，撤退は先送り。"},
+{"id":"o-herz","orig":1,"cat":"team","q":"ハーズバーグの二要因理論で，“衛生要因”に該当するものはどれか。","ch":["承認","給与や職場環境","達成感","仕事そのものの面白さ"],"a":1,"ex":"衛生要因（不満を防ぐが満足は生まない）：給与，作業環境，会社の方針，対人関係など。動機付け要因：達成，承認，仕事そのもの，責任，成長。"},
+{"id":"o-grid","orig":1,"cat":"stake","q":"権力（影響力）と関心度のグリッドで，“権力は大きいが関心度は低い”ステークホルダへの対応として，適切なものはどれか。","ch":["満足な状態を保つ","監視する（最小限の労力）","注意深く管理する（緊密に連携する）","常に情報を提供する"],"a":0,"ex":"権力大・関心大＝注意深く管理，権力大・関心小＝満足を保つ，権力小・関心大＝情報を提供，権力小・関心小＝監視。"},
+{"id":"o-seam","orig":1,"cat":"stake","q":"ステークホルダー・エンゲージメント評価マトリックスで，ある部長の現在の関与度が“抵抗”，望ましい関与度が“支援”であった。PMの対応として最も適切なものはどれか。","ch":["影響を避けるため，その部長への情報提供を最小限にする。","抵抗の理由を把握し，懸念に対応するコミュニケーションを計画して関与度を高める。","望ましい関与度を“抵抗”に修正する。","スポンサに依頼して，その部長をステークホルダから外してもらう。"],"a":1,"ex":"現在（C）と望ましい（D）のギャップを埋めるのがエンゲージメント計画。R7午後Ⅰ問2（支持していないステークホルダ）とも直結する論点。"},
+{"id":"o-transfer","orig":1,"cat":"risk","q":"マイナスのリスクへの対応戦略のうち，“転嫁”に該当するものはどれか。","ch":["納期遅延による損失に備えて保険に加入する。","テスト工程を追加して，障害の発生確率を下げる。","リスクの高い新技術の採用をやめ，実績のある技術を使う。","リスクが顕在化したら対処することとし，予備費を確保しておく。"],"a":0,"ex":"転嫁＝リスクの影響と責任を第三者に移す（保険，請負契約など）。ウは回避，イは軽減，エは受容（能動的）。"},
+{"id":"o-exploit","orig":1,"cat":"risk","q":"プラスのリスク（好機）への対応戦略で，好機を確実に実現させるために不確実性を取り除く戦略はどれか。","ch":["活用","強化","共有","受容"],"a":0,"ex":"活用（Exploit）＝確実に実現させる，共有（Share）＝能力のある第三者と組む，強化（Enhance）＝発生確率や影響を高める。"},
+{"id":"o-trigger","orig":1,"cat":"risk","q":"リスクマネジメントにおける“トリガー”の説明として，適切なものはどれか。","ch":["リスク対応策を実施した後に残るリスク","リスクが顕在化しつつあることを示す兆候や事象","リスク対応策を実施したことによって新たに発生するリスク","リスクの影響を受ける成果物の一覧"],"a":1,"ex":"トリガー＝兆候（警告サイン）。アは残存リスク，ウは二次リスク。H28午後Ⅱ問2「リスクの兆候への対応」はこの論点の論述版。"},
+{"id":"o-monte","orig":1,"cat":"risk","q":"モンテカルロ・シミュレーションをスケジュール分析に用いる目的として，適切なものはどれか。","ch":["クリティカルパス上の作業に資源を追加する。","各作業の所要期間のばらつきを考慮し，プロジェクト完了日の確率分布を求める。","作業の依存関係を図示する。","各作業の担当者を決定する。"],"a":1,"ex":"乱数で多数回シミュレーションし「〇日以内に終わる確率は△％」を求める。定量的リスク分析の代表的手法。"},
+{"id":"o-po","orig":1,"cat":"dev","q":"スクラムにおいて，プロダクトバックログの項目の並び順（優先順位）に責任をもつのは誰か。","ch":["開発者","ステークホルダー","プロダクトオーナー","スクラムマスター"],"a":2,"ex":"PO＝価値の最大化とバックログ管理。SM＝スクラムの理解と実践を支援するサーバントリーダー。開発者＝スプリントバックログとインクリメントを作る。"},
+{"id":"o-retro","orig":1,"cat":"dev","q":"スクラムのスプリントレトロスペクティブの目的として，適切なものはどれか。","ch":["前日の作業を共有し，当日の計画を立てる。","完成したインクリメントをステークホルダーにデモし，フィードバックを得る。","品質と効果を高める方法を計画するため，人・相互作用・プロセス・ツールなどについて検査する。","次のスプリントで取り組むバックログ項目を選択する。"],"a":2,"ex":"レトロ＝ふりかえり（チーム自身のやり方の改善）。イはスプリントレビュー，エはスプリントプランニング，アはデイリースクラム。"},
+{"id":"o-manifesto","orig":1,"cat":"dev","q":"アジャイルソフトウェア開発宣言で，価値を置くとされているものの組合せとして適切なものはどれか（左記のことがらにより価値を置く）。","ch":["変化への対応よりも計画に従うこと","顧客との協調よりも契約交渉","包括的なドキュメントよりも動くソフトウェア","個人と対話よりもプロセスやツール"],"a":2,"ex":"4つの価値：個人と対話＞プロセスやツール，動くソフトウェア＞包括的なドキュメント，顧客との協調＞契約交渉，変化への対応＞計画に従うこと。"},
+{"id":"o-mvp","orig":1,"cat":"dev","q":"MVP（Minimum Viable Product）の説明として，適切なものはどれか。","ch":["社内向けの技術検証用プロトタイプで，顧客には提供しないもの","顧客に価値を提供でき，仮説を検証して学びを得られる最小限の機能をもつプロダクト","全ての要求を満たした最終製品","最小限のコストで作られた低品質な製品"],"a":1,"ex":"MVPは「学習のための最小の製品」。早く市場に出してフィードバックを得る（リーンスタートアップ）。"},
+{"id":"o-devops","orig":1,"cat":"dev","q":"DevOpsの説明として，最も適切なものはどれか。","ch":["ウォータフォールモデルで，運用テストを開発工程に先行して行う取組み","開発チームと運用チームが協調し，自動化などによってソフトウェアのリリースを迅速かつ継続的に行う取組み","システム運用の手順書を開発工程の最初に作成する取組み","開発と運用を別会社に委託して，責任分界を明確にする取組み"],"a":1,"ex":"CI/CD，インフラのコード化などでデプロイまでの時間を短縮。R4午後Ⅰ問2の解答例にも「デプロイまでの時間を短縮する効果」。"},
+{"id":"o-ukeoi","orig":1,"cat":"law","q":"システム開発における請負契約の特徴として，適切なものはどれか。","ch":["発注者は受注者の要員に対して直接指揮命令できる。","受注者は仕事の完成義務を負わず，善良な管理者の注意をもって事務処理を行う義務を負う。","受注者は仕事の完成義務を負い，成果物が契約内容に適合しない場合は契約不適合責任を負う。","報酬は作業時間に応じて支払われ，成果物の完成は条件とならない。"],"a":2,"ex":"請負＝完成責任＋契約不適合責任。準委任＝善管注意義務（履行割合型・成果完成型がある）。発注者が直接指揮命令できるのは派遣だけ。"},
+{"id":"o-gisou","orig":1,"cat":"law","q":"請負契約で受託した作業において，“偽装請負”とみなされるおそれが最も高い状況はどれか。","ch":["受注者の責任者が，自社の作業者に作業指示を出している。","発注者と受注者の責任者同士で，仕様について打合せをしている。","受注者の作業者が，発注者の事業所内で作業している。","発注者の社員が，受注者の作業者に直接作業の指示を出し，勤怠も管理している。"],"a":3,"ex":"請負では発注者は受注者の作業者に指揮命令できない。直接指示・勤怠管理をすると実態は派遣（偽装請負）となる。発注者側の事業所での作業自体は違法ではない。"},
+{"id":"o-copyright","orig":1,"cat":"law","q":"請負契約で外部企業に開発を委託したプログラムの著作権について，契約に特段の定めがない場合の帰属として，適切なものはどれか。","ch":["開発した受託者（受注企業）に帰属する。","著作権は発生しない。","委託者と受託者の共有となる。","代金を支払った委託者（発注企業）に帰属する。"],"a":0,"ex":"著作権は創作した者に発生する。発注者が権利を得るには，契約で譲渡（著作権法27条・28条の権利を含めて明記）を定める必要がある。"},
+{"id":"o-shitauke","orig":1,"cat":"law","q":"下請法（下請代金支払遅延等防止法）における下請代金の支払期日に関する定めとして，適切なものはどれか。","ch":["親事業者が検査を完了した日から起算して90日以内で定める。","親事業者が顧客から代金を受領した後に支払えばよい。","支払期日は当事者間の合意で自由に定めることができる。","給付を受領した日から起算して60日以内のできる限り短い期間内で定める。"],"a":3,"ex":"受領日から60日以内。検査の有無にかかわらず受領日起算。発注者からの入金を条件にすることもできない。"},
+{"id":"o-haken","orig":1,"cat":"law","q":"労働者派遣において，派遣先が行ってはならない行為はどれか。","ch":["派遣労働者に対して，業務の指揮命令を行う。","派遣労働者を受け入れる前に，事前面接を行って特定の人を選ぶ。","派遣労働者に対して，職場の安全衛生に関する教育を行う。","派遣先責任者を選任する。"],"a":1,"ex":"派遣先による派遣労働者の特定（事前面接，履歴書の送付要求など）は禁止（紹介予定派遣を除く）。指揮命令は派遣先が行う。"},
+{"id":"o-pi","orig":1,"cat":"law","q":"個人情報保護法における“要配慮個人情報”の取得について，適切なものはどれか。","ch":["法令に基づく場合などを除き，あらかじめ本人の同意を得なければならない。","匿名加工しなければ取得できない。","利用目的を公表していれば，本人の同意なく取得できる。","オプトアウトの手続を取れば，本人の同意なく第三者に提供できる。"],"a":0,"ex":"病歴・犯罪歴・信条などの要配慮個人情報は，取得に原則本人同意が必要で，オプトアウトによる第三者提供も禁止されている。"},
+{"id":"o-sla","orig":1,"cat":"svc","q":"SLA（サービスレベル合意書）の説明として，適切なものはどれか。","ch":["サービス提供者と顧客との間で，提供するサービスの内容と目標水準を合意した文書","サービス提供者の内部部門間で，サポート内容を合意した文書","サービス提供者が外部供給者と結ぶ契約","サービスの障害対応手順を記した文書"],"a":0,"ex":"SLA＝提供者と顧客。OLA（運用レベル合意書）＝提供者の内部部門間。UC＝外部供給者との契約（裏付け契約）。"},
+{"id":"o-sqli","orig":1,"cat":"sec","q":"SQLインジェクション攻撃への根本的な対策として，最も適切なものはどれか。","ch":["SQL文の組立てにプレースホルダ（バインド機構）を使用する。","パスワードを定期的に変更する。","Webサーバとブラウザ間の通信をTLSで暗号化する。","ファイアウォールで外部からの通信を全て遮断する。"],"a":0,"ex":"入力値をSQLの構文として解釈させないプレースホルダが根本対策。TLSは盗聴対策でありSQLインジェクションには無効。"},
+{"id":"o-mfa","orig":1,"cat":"sec","q":"多要素認証に該当するものはどれか。","ch":["パスワードを入力した後，秘密の質問の答えを入力する。","パスワードを長く複雑にする。","2種類のパスワードを続けて入力する。","パスワードを入力した後，スマートフォンに届いたワンタイムコードを入力する。"],"a":3,"ex":"多要素＝知識（パスワード），所持（スマホ，ICカード），生体（指紋）のうち異なる要素を組み合わせる。ア・ウはどちらも知識要素だけ（多段階だが多要素ではない）。"},
+{"id":"o-zt","orig":1,"cat":"sec","q":"ゼロトラストの考え方として，適切なものはどれか。","ch":["クラウドサービスの利用を禁止し，オンプレミスで運用する。","社内ネットワークかどうかにかかわらず，全てのアクセスを信頼せず，都度検証する。","社内ネットワークは安全とみなし，境界のファイアウォールで外部からの侵入を防ぐ。","利用者の認証は初回ログイン時の一度だけ行う。"],"a":1,"ex":"「決して信頼せず，常に検証せよ」。クラウド・リモートワーク前提で，境界防御だけに頼らない。ウは従来の境界型防御。"},
+{"id":"o-ransom","orig":1,"cat":"sec","q":"ランサムウェアによる被害に備えたバックアップの運用として，最も適切なものはどれか。","ch":["バックアップを業務サーバと同じネットワーク共有フォルダに常時保管する。","バックアップデータの復元テストは行わない。","バックアップは最新の1世代だけを保持する。","バックアップの一部を，ネットワークから切り離した媒体や変更不可能な領域に保管する。"],"a":3,"ex":"オンラインのバックアップは一緒に暗号化される恐れがある。オフライン・イミュータブル保管，複数世代，定期的な復元テストが基本。"},
+{"id":"o-ux","orig":1,"cat":"svc","q":"UX（顧客体験価値）を重視したシステム開発プロジェクトで，PMが計画に盛り込む活動として最も適切なものはどれか。","ch":["要件定義で全ての画面仕様を確定し，以降は変更を受け付けない。","開発者の判断だけで画面のデザインを決定する。","UXの評価は本番稼働後に行い，開発中は機能要件の実現だけに集中する。","利用者のニーズを複数回にわたり収集し，設計やテストの各段階で利用者参加の検証を繰り返す。"],"a":3,"ex":"R3以降，午後Ⅰで4年連続出題されたテーマ。R6午後Ⅰ問1の出題趣旨も「ニーズを多面的に複数回収集し，各段階で適合性を繰り返し検証する」。"},
+{"id":"o-genai","orig":1,"cat":"dev","q":"生成AIを業務システムに組み込むプロジェクトで，ハルシネーション（もっともらしい誤り）のリスクへの対応として，最も適切なものはどれか。","ch":["プロンプトを長くすれば誤りは発生しないので，対策は不要である。","生成AIの出力は常に正しいものとして，そのまま利用者に提示する。","出力の正確性を評価する基準とテストデータを用意し，人による確認プロセスも設計する。","テストは不要とし，本番稼働後の問合せで誤りを把握する。"],"a":2,"ex":"生成AIの出力は確率的で誤りを含みうる。評価基準・評価データ・人間によるレビュー（Human in the Loop）を計画に組み込む。R7午後Ⅰ問1の題材。"},
+{"id":"o-cf","orig":1,"cat":"dev","q":"共通フレーム（SLCP-JCF）の考え方において，システムの要件定義の主体（責任をもつ者）として適切なものはどれか。","ch":["取得者（発注者・利用部門）","監査人","保守者","供給者（開発ベンダ）"],"a":0,"ex":"要件定義は取得者の責任。ベンダは支援できても，業務要件を決めるのは発注者側。R7午後Ⅰの解答例にも「責任部署が業務部門であると理解してもらう」。"}
+];
+
+// 午後Ⅰ・午後Ⅱ データ
+// PM1_THEMES / PM2_THEMES の t（テーマ）・ab（狙い）は IPA「解答例（出題趣旨）」の内容を本アプリで要約したもの
+// ex は IPA 公表の解答例からの引用（出典：IPA 各年度 プロジェクトマネージャ試験 解答例）
+window.PM1_THEMES = [
+{y:"R7秋",n:1,t:"テスト採点に生成AIを活用するシステムの開発・導入",ab:"SaaS導入との作業の違いを踏まえた計画方針と，生成AI特有のリスクの特定・対応",tag:["生成AI","テーラリング","リスク"],ex:["設問2(1)：作業の違いを踏まえてプロジェクト計画をテーラリングするため","設問2(2)：学習データの正確性を担保するため"]},
+{y:"R7秋",n:2,t:"新しいCRMへの刷新",ab:"支持していないステークホルダの影響度・関与度を把握し，エンゲージメントとコミュニケーションを計画する",tag:["ステークホルダ"],ex:["設問2(4)：トレーニングの開始が遅れないようにするため"]},
+{y:"R7秋",n:3,t:"法改正対応に伴い顧客価値を高めるための計画変更",ab:"スケジュール・コスト・リスク・チームなどのトレードオフを解消する統合マネジメント",tag:["統合","スケジュール"],ex:["設問3(3)：各タスクにバッファはもたせずプロジェクトバッファをもつ。","設問3(4)：規制緩和への対応のリリース時期を延期する。"]},
+{y:"R6秋",n:1,t:"Webサービスの利用者参加型システム開発（UX実現）",ab:"ニーズを多面的・複数回収集し，設計・テストの各段階でUXの適合性を繰り返し検証する計画",tag:["UX","品質"],ex:["設問1(2)：希望に合ったレストランを簡単に探したい利用者","設問4(2)：本番稼働させるにはUXの品質を一定のレベル以上にする必要があるから"]},
+{y:"R6秋",n:2,t:"複数部門のシステムを課が連携して並行開発",ab:"目標や制約を踏まえたマネジメント組織とマネジメント計画の組成",tag:["統合","チーム"],ex:["設問1(2)：不慣れなPMMを適用して生産性が低下する課があるから","設問3(1)：課を横断する課題の早期検知と，対応方針の早期合意"]},
+{y:"R6秋",n:3,t:"サービス開始日厳守のネット専業銀行システム構築",ab:"組織の標準（変更管理・チームのマネジメント）をプロジェクトに合わせて修整（テーラリング）",tag:["テーラリング","チーム"],ex:["設問1(1)：要求事項の取込みに最大限柔軟に対応するため","設問2(1)：支援型リーダーの育成に適さないマネジメントだから"]},
+{y:"R5秋",n:1,t:"過去に経験のない新たな価値の創出を目指すシステム開発",ab:"価値の共創を目指すチーム形成，自律型マネジメント，リーダーシップの修整",tag:["チーム","リーダーシップ"],ex:["設問1(1)：成果を随時確認しながらプロジェクトを進められるから","設問1(4)：メンバーの自発的なチャレンジが重要だから"]},
+{y:"R5秋",n:2,t:"変化の激しい環境で協力会社と新たな関係を築くプロジェクト",ab:"協力会社との対等な共創関係の構築と，変化への適応力・回復力の強化",tag:["調達","適応力"],ex:["設問2：どんなに資源を投入しても，納期に間に合わせることができない状況","設問4(4)：生産性向上のモチベーションを維持する。"]},
+{y:"R5秋",n:3,t:"化学品製造業の障害予兆検知システム開発",ab:"ステークホルダのニーズを把握し，適切な開発フェーズ・開発アプローチを選択する",tag:["開発アプローチ","ステークホルダ"],ex:["設問1：ベテラン技術者の抵抗感を抑えプロジェクトに協力させるため","設問3(2)：中堅技術者がベテラン技術者の交換・修理のノウハウを継承するため"]},
+{y:"R4秋",n:1,t:"コールセンターへのSaaS型AIボット短期導入",ab:"SaaSの特長を生かした導入手順の決定と，時間的制約を踏まえた計画作成",tag:["SaaS","UX"],ex:["設問1：AI ボットの運用開始がクリスマスギフト商戦に遅れるリスク","設問2(4)：パラメータ設定の変更だけで実現できる。"]},
+{y:"R4秋",n:2,t:"アパレルECサイト刷新と仮想店舗構想",ab:"既存の体制・プロセスにとらわれず，顧客要望に迅速に対応できるチームと計画を作る",tag:["アジャイル","DevOps"],ex:["設問1(2)：実店舗同様に試着したり提案を受けたりできること","設問3(1)：デプロイまでの時間を短縮する効果"]},
+{y:"R4秋",n:3,t:"玩具製造会社の新事業実現のためのシステム開発",ab:"意欲あるメンバーの選定，多様性を生かしたチーム形成，支援型リーダーシップ",tag:["チーム","リーダーシップ"],ex:["設問1(2)：DX の推進に意欲をもった社員を集めること","設問3(1)：メンバーの心理的安全性が確保された状況"]},
+{y:"R3秋",n:1,t:"生命保険会社の子会社設立に伴う新事業のシステム開発",ab:"不確実性の高い新事業で，前例にとらわれない計画とリスクマネジメント",tag:["リスク","不確実性"],ex:["設問1(1)：システム開発に伴う初期投資を抑えるため","設問3(2)：組織横断的に事業部とシステム部のメンバを参加させる。"]},
+{y:"R3秋",n:2,t:"顧客満足度向上活動の一環としてのシステム開発",ab:"事業部門と目標を共有し，マネジメントプロセスを修整する計画策定",tag:["テーラリング","UX"],ex:["設問2(2)：予算の範囲内に収まっていること","設問3(2)：現状の正確性と処理性能が維持されていること"]},
+{y:"R3秋",n:3,t:"マルチベンダのシステム開発",ab:"過去の教訓から問題と原因を掘り下げ，ステークホルダ・作業・変更の管理で再発を防ぐ",tag:["調達","教訓"],ex:["設問2(1)：両社の実装の各工程の開始・終了を同日とする。","設問3(2)：マネジメント予備費の確保"]},
+{y:"R2秋",n:1,t:"化学製品製造業の工場DX推進（プロジェクトの立上げ）",ab:"プロジェクト憲章の作成とチーム編成による立上げ",tag:["立上げ","チーム"],ex:["設問1(1)：プロジェクトの承認を全社に伝え協力体制を確立するため","設問2(1)：全社からプロジェクトへ参加できる体制とするため"]},
+{y:"R2秋",n:2,t:"リリース間隔短縮とチームの持続的成長",ab:"チームの状況を掌握し，メンバの能力獲得・成長を促す活動の計画",tag:["チーム","アジャイル"],ex:["設問1(2)：PM の考えに引きずられないメンバの真の考え","設問3(4)：自律的な判断と行動を尊重して，学びの機会を与える"]},
+{y:"R2秋",n:3,t:"SaaSを利用した人材管理システムの導入",ab:"要求事項の収集，将来リスクの考慮，全体調整による一貫性のある計画",tag:["SaaS","計画"],ex:["設問1(2)：拡張，改善される標準機能を利用し続けるため","設問3(2)：討議結果の根拠となる意見の記載があるから"]},
+{y:"H31春",n:1,t:"コンタクトセンタのサービス移行",ab:"移行計画の立案と，新機能導入時のリスクへの対応",tag:["移行","リスク"],ex:["設問1：リスクを特定し，今後の対応を計画するため","設問2(2)：全てのオペレータが担当業務の全てについて操作できること"]},
+{y:"H31春",n:2,t:"IoTを活用したシステム開発（海外工事を含む）",ab:"WBS作成とリスクマネジメント，多様なステークホルダの統率",tag:["WBS","リスク"],ex:["設問1：プロジェクトの要素に抜けがないことを確認するため","設問2(1)：X 国新工事の完了が納期に間に合わず損害賠償金を請求されること"]},
+{y:"H31春",n:3,t:"請負契約での定量的なスケジュール管理",ab:"品質やリスクも含めた定量的なスケジュール管理の標準化",tag:["EVM","スケジュール"],ex:["設問2(1)：担当者自身に，具体的な裏付けのあるリカバリ策を提案してもらう。","設問3(3)：クリティカルパス上の活動群の SPI"]},
+{y:"H30春",n:1,t:"SaaSを利用した営業支援システムの導入",ab:"SaaSを前提としたシステム化方針・選定・要件定義・データ移行",tag:["SaaS"],ex:["設問1(1)：システムの保守費用の最小化","設問3(3)：過度な費用負担にならないようにしたいから"]},
+{y:"H30春",n:2,t:"設計工程での品質確保",ab:"品質管理計画の策定・実践と，実績の分析評価",tag:["品質"],ex:["設問1(1)：設計限界品質に近づける活動","設問3(2)：対処のコストが，予防のコスト以下であったケース"]},
+{y:"H30春",n:3,t:"子会社の業務範囲拡大を含むシステム刷新",ab:"ステークホルダの特定と特性に応じたコミュニケーション計画",tag:["ステークホルダ"],ex:["設問3(3)：顧客と A 社とのレビューに Y 主任も同席してもらうこと"]},
+{y:"H29春",n:1,t:"多数のステークホルダが関わる製造系プロジェクトの計画",ab:"スコープ・リスク・スケジュールのトレードオフを把握した合意形成",tag:["統合","ステークホルダ"],ex:["設問1：GMP の認証に要するスケジュールリスクを軽減できるから","設問2：現状の製造プロセスが MES で正しく運用できることを確認する必要があるから"]},
+{y:"H29春",n:2,t:"請負契約によるサプライヤへの委託",ab:"契約形態を踏まえた委託条件の交渉とサプライヤ管理",tag:["調達","契約"],ex:["設問1：X 社の完成責任の負荷が軽減されること","設問4(2)：合意したプロセスにのっとるようにマネジメントされていないこと"]},
+{y:"H29春",n:3,t:"システム改修の単体テストとバグ分析",ab:"テスト結果の分析による品質評価と向上策の立案",tag:["品質","テスト"],ex:["設問1(2)：後続のテストが実行できないバグ","設問2(1)：手戻りが増え，テストの効率が下がるから"]},
+{y:"H28春",n:1,t:"タブレット端末の日常点検システムへの機能追加",ab:"機能追加に伴うリスクを把握し，対応策を計画に組み込む",tag:["リスク"],ex:["設問1：新たな業務プロセスを早期に検証してもらうこと","設問2(4)：タブレット端末の紛失や盗難による情報漏えい"]},
+{y:"H28春",n:2,t:"ステークホルダとのコミュニケーション改善",ab:"情報共有とプロジェクト内部のコミュニケーション計画の立案・運営",tag:["コミュニケーション"],ex:["設問1(2)：要求事項一覧を定義するのは，A 社システム部の責任であること","設問3(2)：ミーティングで発言しないメンバの意見も含めて，全員に認識してもらう。"]},
+{y:"H28春",n:3,t:"人事給与システムの外部設計における進捗管理",ab:"作業ごとの進捗把握とボトルネック特定，遅延対策と品質リスク対応",tag:["EVM","スケジュール"],ex:["設問1：人事外部設計チームは 4 週間経過時も EV が回復していないから","設問2(5)：機能 4 の外部設計作業がクリティカルパスとなる状況"]}
+];
+
+window.PM2_THEMES = [
+{y:"R7秋",n:1,t:"人間的側面に着目したチームの育成計画",ab:"技術面だけでなく動機付け・チームワークなど人間的側面に着目し，チームを健全な状態に導く育成計画とその実行の工夫",
+s:["あなたが携わったプロジェクトの概要と，チームを不健全にしかねなかった背景や事象について，800字以内で述べよ。","設問アで述べた背景や事象を踏まえ，人間的側面に着目してどのような育成計画を作成し，実行の過程でどのような工夫をしたか，800字以上1,600字以内で具体的に述べよ。","設問イで述べた育成計画の実施結果と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R7秋",n:2,t:"稼働開始リスクのマネジメント",ab:"円滑な稼働開始を危うくするリスクについて，制約を考慮した対策と実行状況に応じた対応",
+s:["あなたが携わったプロジェクトの概要と，円滑な稼働開始を危うくすると考えたリスク，及び考慮すべき制約について，800字以内で述べよ。","設問アで述べたリスクに対して計画段階で立案した対策と，実行段階で対策の実施状況に応じて行った対応について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた対策と対応の評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R6秋",n:1,t:"不確かさに対応するためのコストマネジメント",ab:"予測を妨げる不確かさがある予測型プロジェクトで，対応コストの見積りと，影響を踏まえたコスト管理",
+s:["あなたが携わった予測型プロジェクトの概要と，正確な予測を妨げると考えた不確かさについて，800字以内で述べよ。","設問アの不確かさに対応するためのコストをどのように見積もり，実行段階で不確かさの影響をどう把握してコストをマネジメントしたか，800字以上1,600字以内で具体的に述べよ。","設問イで述べたコストマネジメントの評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R6秋",n:2,t:"外部環境の変化に対するチームの状態改善とリーダーシップ",ab:"外部環境の変化でチームの状態が悪化したとき，メンバーの状況を把握して選択したリーダーシップと行動",
+s:["あなたが携わったプロジェクトの概要と，外部環境の変化によって悪化したチームの状態について，800字以内で述べよ。","設問アの状態を改善するため，個々のメンバーの状況をどのように把握し，どのようなリーダーシップを選択してどう行動したか，800字以上1,600字以内で具体的に述べよ。","設問イで述べた行動の結果と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R5秋",n:1,t:"プロジェクトマネジメント計画の修整（テーラリング）",ab:"組織の標準や過去事例を参考に，プロジェクト固有の条件に合わせてマネジメントを修整し，その有効性をモニタリングする",
+s:["あなたが携わったプロジェクトの概要と，マネジメントの修整が必要と判断した特徴について，800字以内で述べよ。","設問アの特徴を踏まえ，何をどのように修整したか，また修整が有効に機能しているかをどうモニタリングし，結果にどう対応したか，800字以上1,600字以内で具体的に述べよ。","設問イで述べた修整の評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R5秋",n:2,t:"目標未達成プロジェクトの根本原因究明と再発防止",ab:"重要目標の一部を達成できずに終結したプロジェクトの根本原因の究明と，再発防止策の組織への定着",
+s:["あなたが携わったプロジェクトの概要と，達成できなかった目標及びその影響について，800字以内で述べよ。","根本原因をどのような体制・方法で究明したか，第三者や組織内外の知見をどう活用したか，800字以上1,600字以内で具体的に述べよ。","設問イで特定した根本原因に対する再発防止策と，それを組織に定着させるための工夫について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R4秋",n:1,t:"外部ステークホルダの要求による計画変更",ab:"外部ステークホルダから要求された計画変更を機会として生かす策と脅威を抑える策の立案と評価",
+s:["あなたが携わったプロジェクトの概要と，プロジェクト実行中に外部ステークホルダから受けた計画変更の要求について，800字以内で述べよ。","変更を機会として生かすための対応策と，脅威を抑えるための対応策，それらを反映した計画変更の内容について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた計画変更の実施状況と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R4秋",n:2,t:"ステークホルダの期待のマネジメントと認識の食い違いの解消",ab:"計画段階での期待のマネジメントと，実行段階での認識の齟齬・誤解を解消するコミュニケーション",
+s:["あなたが携わったプロジェクトの概要と，主要なステークホルダ及びその期待について，800字以内で述べよ。","計画段階で期待をマネジメントするために行ったコミュニケーションと，実行段階で生じた認識の食い違いを解消するために行ったことを，800字以上1,600字以内で具体的に述べよ。","設問イで述べた活動の評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R3秋",n:1,t:"チーム内の対立の解消と行動原則",ab:"作業方法の意見の相違が対立に発展するのを防ぐ行動原則の策定，発生した対立の解消，行動原則の改善",
+s:["あなたが携わったプロジェクトの概要と，チームの特徴，及び定めた行動原則について，800字以内で述べよ。","プロジェクト実行中に生じた対立とその解消方法，及び行動原則の改善と遵守の徹底について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた取組みの評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R3秋",n:2,t:"スケジュールの遅延の把握とばん回策",ab:"進捗の差異が完了期日の遅延につながると判断した根拠，原因への対応策，ばん回策",
+s:["あなたが携わったプロジェクトの概要と，採用したスケジュール管理の仕組みについて，800字以内で述べよ。","完了期日の遅延につながると判断した進捗の差異と判断の根拠，差異の発生原因への対応策，及び遅延をばん回するための施策について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた施策の実施結果と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R2秋",n:1,t:"未経験の技術・サービスを利用するプロジェクトの検証",ab:"検証フェーズでシステム要件を実現できることを確認し，結果を後続フェーズの計画更新に生かす",
+s:["あなたが携わったプロジェクトの概要と，利用した未経験の技術やサービス，及び検証フェーズの目的について，800字以内で述べよ。","検証フェーズでシステム要件を実現できることをどう確認したか，得られた情報を後続の開発フェーズの計画にどう反映したかを，800字以上1,600字以内で具体的に述べよ。","検証結果の評価についてステークホルダの理解を得るために行ったことと，今後の改善点を，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"R2秋",n:2,t:"外部ステークホルダに起因するリスクへの対応",ab:"チーム外部のステークホルダが原因となるリスクの特定・評価，対応策，顕在化の監視",
+s:["あなたが携わったプロジェクトの概要と，外部ステークホルダ及びその特徴について，800字以内で述べよ。","計画時に特定・評価した外部ステークホルダに起因するリスクと，その対応策について，800字以上1,600字以内で具体的に述べよ。","リスクの顕在化をどのように監視したか，その結果と評価及び今後の改善点を，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H31春",n:1,t:"コスト超過の兆候への対応",ab:"コスト超過が予測される前の兆候を察知し，原因を分析して超過を防ぐ対策",
+s:["あなたが携わったプロジェクトの概要と，採用したコスト管理の方法について，800字以内で述べよ。","コスト超過につながると懸念した兆候と，それを察知した経緯，原因及び超過を防ぐために講じた対策について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた対策の実施結果と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H31春",n:2,t:"有識者や他プロジェクトの知見を活用した問題解決",ab:"プロジェクト内だけでは解決が難しい問題に対し，有識者の助言や他プロジェクトの教訓を活用",
+s:["あなたが携わったプロジェクトの概要と，プロジェクト内だけでは迅速な解決が難しかった問題について，800字以内で述べよ。","助言や知見を得る対象をどのように選び，得た助言・知見をどう分析して問題解決に活用したかを，800字以上1,600字以内で具体的に述べよ。","設問イで述べた取組みの評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H30春",n:1,t:"非機能要件に関する関係部門との連携",ab:"非機能要件についてWBSのタスクと関係部門を定め，役割を明確にして連携を図る",
+s:["あなたが携わったプロジェクトの概要と，非機能要件の内容及び関係部門について，800字以内で述べよ。","非機能要件に関するWBSのタスクと関係部門の役割をどのように定め，関係部門と十分な連携を図るためにどのような取組みを行ったか，800字以上1,600字以内で具体的に述べよ。","設問イで述べた取組みの評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H30春",n:2,t:"本稼働間近で発見された問題への対応（暫定稼働）",ab:"稼働日の延期が困難な状況で，関係部門と調整・合意しながら暫定稼働に向けた当面の対応策",
+s:["あなたが携わったプロジェクトの概要と，稼働日の延期が困難だった理由及び本稼働間近に発見された問題について，800字以内で述べよ。","稼働日に向けて関係部門と調整し，合意を得ながら立案・実施した当面の対応策について，800字以上1,600字以内で具体的に述べよ。","設問イの対応策の評価と，恒久対策を含む今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H29春",n:1,t:"ステークホルダとの信頼関係の構築・維持",ab:"信頼関係を構築・維持するための取組みと，信頼関係が問題解決に役立った事例",
+s:["あなたが携わったプロジェクトの概要と，信頼関係を構築すべきと考えたステークホルダについて，800字以内で述べよ。","信頼関係の構築・維持のための取組みと，その信頼関係が問題解決に役立った事例について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた取組みの評価と，今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H29春",n:2,t:"品質管理計画の策定と実施",ab:"プロジェクトの特徴に応じた多角的で実効性の高い品質管理計画の策定と実施",
+s:["あなたが携わったプロジェクトの概要と，品質面での特徴について，800字以内で述べよ。","品質管理基準の設定，定性面を含む品質評価の仕組み，体制に照らした実現性の検証について，800字以上1,600字以内で具体的に述べよ。","品質管理計画の実施状況と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H28春",n:1,t:"他の情報システムの成果物の再利用",ab:"成果物の再利用を阻む課題を見極め，状況分析と再利用方針を計画に組み込む",
+s:["あなたが携わったプロジェクトの概要と，再利用した成果物について，800字以内で述べよ。","成果物の状況をどのように分析し，有効活用を阻む課題に対してどのような再利用の方針と対策を計画したか，800字以上1,600字以内で具体的に述べよ。","設問イで述べた方針・対策の実施結果と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]},
+{y:"H28春",n:2,t:"プロジェクト実行中のリスクの兆候への対応",ab:"目標達成を阻害するリスクの兆候を早期に察知し，予防処置と対応計画を立てて実施",
+s:["あなたが携わったプロジェクトの概要と，プロジェクト実行中に察知したリスクの兆候について，800字以内で述べよ。","兆候を放置した場合に顕在化すると考えたリスクとその理由，実施した予防処置，及び策定した対応計画について，800字以上1,600字以内で具体的に述べよ。","設問イで述べた予防処置の実施状況と評価，及び今後の改善点について，600字以上1,200字以内で具体的に述べよ。"]}
+];
+
+// 午後Ⅰ 記述トレーニング（オリジナル事例）
+// kw: キーワードグループ。各グループのどれか1語が含まれていればヒット
+window.PM1_CASES = [
+{id:"c1",title:"SaaS型経費精算システムの導入",tag:"SaaS",
+text:"A社は，紙とExcelで行っている経費精算をSaaSに切り替えることにした。PMのB氏は，業務をSaaSの標準機能に合わせ，カスタマイズは原則行わない方針とした。経理部からは「現行の承認ルートを全て再現してほしい」との要望が出ている。また，SaaSは年4回のバージョンアップが予定されている。B氏は，経理部の主要メンバーに参加してもらい，SaaSの試用環境で実際の精算業務を操作してもらう「フィット＆ギャップ・ワークショップ」を要件定義の前に実施することにした。",
+qs:[
+{q:"B氏がカスタマイズを原則行わない方針とした狙いを，SaaSの特徴を踏まえて30字以内で述べよ。",lim:30,
+ans:"バージョンアップで拡張される標準機能を使い続けるため",kw:[["バージョンアップ","機能拡張","拡張"],["標準機能","標準"],["使い続け","利用し続け","享受"]],
+ex:"SaaS問題の定番。カスタマイズするとバージョンアップのたびに影響確認や改修が必要になり，標準機能の改善の恩恵を受けにくくなる（R2午後Ⅰ問3の解答例も同じ構造）。"},
+{q:"B氏が要件定義の前にワークショップを実施した狙いを，35字以内で述べよ。",lim:35,
+ans:"実際に操作して標準機能で業務が行えることを理解してもらうため",kw:[["操作","試用","体験","実際"],["標準機能","標準"],["理解","納得","確認"]],
+ex:"「現行ルートを全て再現」という要望は，標準機能を知らないことから来ている。体験してもらうことで，業務をSaaSに合わせる合意形成をしやすくする。"}
+]},
+{id:"c2",title:"利用者参加でUXを作り込むアプリ開発",tag:"UX",
+text:"C社は，会員向けスマートフォンアプリを刷新する。PMのD氏は，利用者の満足度を高めることがプロジェクトの目標であると考えた。そこで，年齢や利用頻度が異なる会員を選んでインタビューを行い，設計段階ではプロトタイプを会員に操作してもらう評価会を2回実施する計画とした。ただし，評価会の結果を全て反映するとスケジュールに影響するため，D氏は反映の判断基準をあらかじめ定めておくことにした。",
+qs:[
+{q:"D氏が年齢や利用頻度が異なる会員を選んだ狙いを，30字以内で述べよ。",lim:30,
+ans:"多様な利用者のニーズを偏りなく把握するため",kw:[["多様","様々","さまざま","多面","偏り"],["ニーズ","要望","期待"],["把握","収集","得る"]],
+ex:"UX問題では「ニーズを多面的に」「偏りなく」が頻出キーワード。"},
+{q:"D氏が評価会を2回実施する計画とした理由を，30字以内で述べよ。",lim:30,
+ans:"改善内容がUXの向上につながったかを再確認するため",kw:[["改善","反映","修正"],["確認","検証","評価"],["UX","満足","体験"]],
+ex:"1回目の指摘を反映した結果を2回目で検証する。「繰り返し検証する」はR6午後Ⅰ問1の出題趣旨そのもの。"},
+{q:"反映の判断基準をあらかじめ定めておく狙いを，35字以内で述べよ。",lim:35,
+ans:"UX向上とスケジュール遵守のバランスを迷わず判断するため",kw:[["スケジュール","納期","期限"],["判断","優先","取捨"],["UX","満足","価値"]],
+ex:"トレードオフの判断基準を事前に合意しておくと，場当たり的な判断や手戻りを防げる。"}
+]},
+{id:"c3",title:"抵抗するステークホルダへの対応",tag:"ステークホルダ",
+text:"E社は，営業部門の顧客管理をCRMに刷新する。営業部のF部長は，現行の独自ツールに愛着があり，刷新に否定的である。F部長は部内での影響力が大きく，営業担当者の多くがF部長の意向をうかがっている。PMのG氏は，F部長の懸念を個別にヒアリングするとともに，F部長が信頼する若手のH主任にプロジェクトのキーユーザーとして参加してもらうことにした。",
+qs:[
+{q:"G氏がF部長の懸念を個別にヒアリングした狙いを，30字以内で述べよ。",lim:30,
+ans:"否定的な理由を把握し，懸念に対応して支持を得るため",kw:[["理由","懸念","不安","原因"],["把握","理解","聞"],["支持","協力","賛同","関与"]],
+ex:"抵抗の背後にある懸念を把握して対応するのがエンゲージメントの基本。"},
+{q:"G氏がH主任をキーユーザーとした狙いを，35字以内で述べよ。",lim:35,
+ans:"F部長が信頼する人を通じて新システムの良さを伝えてもらうため",kw:[["信頼"],["伝え","説明","理解"],["F部長","部長"]],
+ex:"本文の「F部長が信頼する」がヒント。問題文中の修飾語は解答の根拠になることが多い。"}
+]},
+{id:"c4",title:"EVMで見る進捗遅延",tag:"EVM",
+text:"I社のシステム開発プロジェクトは，設計チームと開発チームの2チームで進めている。8週目の時点で，設計チームは PV=200, EV=180, AC=190，開発チームは PV=150, EV=150, AC=170 であった（単位：万円）。開発チームでは，経験の浅いメンバーが多く，レビュー指摘による手戻りが増えている。PMのJ氏は，開発チームのリーダーに，具体的な根拠のあるリカバリ策を提案してもらうことにした。",
+qs:[
+{q:"開発チームについて，J氏が懸念している状況を30字以内で述べよ。",lim:30,
+ans:"手戻りの増加でコストが超過しCPIが悪化していること",kw:[["コスト","CPI","超過"],["手戻り","レビュー","指摘"]],
+ex:"開発チームは SPI=1.0（進捗は計画どおり）だが CPI=150/170≒0.88 でコスト超過。原因は本文の「手戻り」。"},
+{q:"J氏がリカバリ策をリーダー自身に提案してもらう狙いを，35字以内で述べよ。",lim:35,
+ans:"現場の実態を踏まえ，実行可能で当事者意識のある策にするため",kw:[["実行可能","実現","現実","根拠"],["当事者","主体","自律","納得"]],
+ex:"H31午後Ⅰ問3の解答例「担当者自身に，具体的な裏付けのあるリカバリ策を提案してもらう」と同じ考え方。"}
+]},
+{id:"c5",title:"自律的なチームづくり",tag:"チーム",
+text:"K社は新規事業のサービス開発を，社内公募で集めたメンバーで行う。PMのL氏は，メンバーが自ら考えて行動するチームを目指し，指示型のマネジメントは控えることにした。チーム発足直後，L氏はメンバー全員で「このサービスで顧客に届けたい価値」を話し合う場を設けた。また，会議では役職に関係なく誰もが発言できるよう，L氏自身は最後に発言するようにした。",
+qs:[
+{q:"L氏が届けたい価値を全員で話し合う場を設けた狙いを，30字以内で述べよ。",lim:30,
+ans:"目指す価値についてメンバーの思いを統一し共有するため",kw:[["価値","目的","目標"],["共有","統一","一致","共通"]],
+ex:"R5午後Ⅰ問1の解答例「提供する体験価値に対するメンバーの思いを統一し共有するため」と同型。"},
+{q:"L氏が会議で最後に発言するようにした狙いを，35字以内で述べよ。",lim:35,
+ans:"PMの考えに引きずられないメンバーの率直な意見を引き出すため",kw:[["引きずられ","影響","左右","忖度"],["率直","本音","真の","自由"],["意見","考え","発言"]],
+ex:"R2午後Ⅰ問2の解答例「PMの考えに引きずられないメンバの真の考え」と同じ発想。心理的安全性の確保。"}
+]},
+{id:"c6",title:"マルチベンダでのリスク",tag:"リスク",
+text:"M社の基幹システム刷新は，X社とY社の2社に分割発注している。前回の類似プロジェクトでは，両社のインタフェース仕様の認識違いが結合テストで発覚し，大幅な手戻りが発生した。PMのN氏は，今回はインタフェース仕様を両社とM社の3者で共同レビューすることにし，さらに両社の実装工程の開始・終了日をそろえる計画とした。",
+qs:[
+{q:"N氏が3者で共同レビューすることにした狙いを，30字以内で述べよ。",lim:30,
+ans:"インタフェース仕様の認識違いを早期に解消するため",kw:[["認識","解釈","齟齬","違い"],["早期","前","設計段階","上流"]],
+ex:"過去の教訓（結合テストで発覚）を，上流での検出に変える。教訓→対策の対応関係を答えるのが午後Ⅰの基本。"},
+{q:"両社の実装工程の開始・終了日をそろえた狙いを，35字以内で述べよ。",lim:35,
+ans:"一方の遅れを早く検知し，結合テストを予定どおり開始するため",kw:[["遅れ","遅延","進捗"],["結合","連携"],["検知","把握","そろ","同時"]],
+ex:"R3午後Ⅰ問3の解答例「両社の実装の各工程の開始・終了を同日とする」。足並みをそろえることで進捗差による待ちを防ぐ。"}
+]},
+{id:"c7",title:"テスト工程の品質分析",tag:"品質",
+text:"O社の改修プロジェクトの結合テストで，機能Pだけバグ検出数が計画値を大きく下回った。テスト消化率は計画どおりである。PMのQ氏は，「品質が良い」とは判断せず，機能Pのテストケースの内容をレビューすることにした。レビューの結果，異常系のテストケースが少ないことが分かった。",
+qs:[
+{q:"Q氏が「品質が良い」と判断しなかった理由を，35字以内で述べよ。",lim:35,
+ans:"テストケースが不十分でバグを検出できていない可能性があるから",kw:[["テストケース","テスト項目","網羅"],["不十分","不足","漏れ","甘い"],["可能性","おそれ"]],
+ex:"バグが少ない＝品質が良い とは限らない。テスト自体の不備を疑うのが定石（H29午後Ⅰ問3）。"},
+{q:"Q氏が今後とるべき対策を，30字以内で述べよ。",lim:30,
+ans:"異常系のテストケースを追加してテストを実施する。",kw:[["異常系"],["追加","補強","充実"]],
+ex:"本文の事実（異常系が少ない）に直接対応させる。「〜する。」で終わる対策の型。"}
+]},
+{id:"c8",title:"請負契約とサプライヤ管理",tag:"契約",
+text:"R社は，システム開発の製造・単体テスト工程をS社に請負契約で委託した。R社のPMのT氏は，S社の作業者が忙しそうにしていたので，S社のリーダーを通さずに直接作業の優先順位を指示した。後日，R社の法務部門から指摘を受けた。",
+qs:[
+{q:"法務部門がT氏の行為を問題とした理由を，30字以内で述べよ。",lim:30,
+ans:"請負契約で受注者の作業者に直接指揮命令したから",kw:[["指揮命令","指示"],["直接"],["請負","偽装"]],
+ex:"請負では発注者は受注者の作業者に指揮命令できない（偽装請負）。指示は受注者の責任者を通す。"},
+{q:"T氏が今後とるべき行動を，30字以内で述べよ。",lim:30,
+ans:"要望はS社のリーダーを通じて伝える。",kw:[["リーダー","責任者","窓口"],["通じ","通して","経由"]],
+ex:"契約形態に応じたコミュニケーションルートを守る。"}
+]}
+];
+
+// 記述の型ドリル（午後Ⅰの解答の書き方）
+window.PM1_FORM = [
+{q:"設問「〜した狙いは何か」に対する解答の語尾として最も適切なものはどれか。",ch:["〜するため","〜だから","〜すること","〜という状況"],a:0,ex:"狙い・目的は「〜するため」で結ぶ。"},
+{q:"設問「〜と考えた理由は何か」に対する解答の語尾として最も適切なものはどれか。",ch:["〜だから","〜するため","〜すること","〜である。"],a:0,ex:"理由は「〜だから」「〜ので」で結ぶ。"},
+{q:"設問「〜とは，どのような状況か」に対する解答の語尾として最も適切なものはどれか。",ch:["〜という状況","〜するため","〜だから","〜する。"],a:0,ex:"問われた名詞で結ぶ（体言止め）。「どのようなリスクか」なら「〜するリスク」。"},
+{q:"設問「PMが行うべき対策は何か」に対する解答の書き方として最も適切なものはどれか。",ch:["〜する。（具体的な行動を書く）","〜するため（目的を書く）","〜だから（理由を書く）","〜という状況（状況を書く）"],a:0,ex:"対策・行動は「〜する。」と具体的な行動で答える。"},
+{q:"午後Ⅰの記述で，最も重視すべき解答の根拠はどれか。",ch:["問題文に書かれている事実や状況","自分の実務経験に基づく一般論","PMBOKの用語の定義","他の受験者が書きそうな内容"],a:0,ex:"午後Ⅰは読解問題。根拠は本文にある。一般論だけの解答は得点になりにくい。"},
+{q:"「〜について，30字以内で述べよ」で，最も適切な解答の分量の目安はどれか。",ch:["字数の8割〜ほぼ上限まで","字数の3割程度","字数を超えてもよいので詳しく","1〜2語のキーワードのみ"],a:0,ex:"8割以上を目安に。短すぎると要素不足，超過は不可。"},
+{q:"問題文の“〜を懸念した”という記述に関する設問への解答として，一般に適切な書き方はどれか。",ch:["懸念の内容を「〜すること」「〜するおそれ」として具体的に書く","懸念は書かず対策だけ書く","懸念したPMの気持ちを書く","PMBOKの用語だけを書く"],a:0,ex:"懸念・リスクは「何が起きるか」を具体的に。"},
+{q:"同じ設問で解答例が2つ（・で並記）示されることがある。これが意味することとして適切なものはどれか。",ch:["いずれか一つを書けば正解とされる","両方を書かないと得点にならない","2つ目は不正解の例である","採点では考慮されない"],a:0,ex:"IPA解答例の並記は「いずれかでよい」という意味。"}
+];
+</script>
+<script>
+"use strict";
+/* ================= 基本 ================= */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const KANA=["ア","イ","ウ","エ"];
+const CATS=[
+ {k:"int",n:"統合・標準",i:"🧭",c:"#5b4cf5",d:"#4234d6"},
+ {k:"scope",n:"スコープ",i:"🎯",c:"#ff6b6b",d:"#d94848"},
+ {k:"sched",n:"スケジュール",i:"📅",c:"#1cb0f6",d:"#1693cf"},
+ {k:"cost",n:"コスト・見積り",i:"💰",c:"#ffb21e",d:"#e08f00"},
+ {k:"qual",n:"品質",i:"💎",c:"#ce82ff",d:"#a95fdb"},
+ {k:"team",n:"チーム・資源",i:"🤝",c:"#21c16b",d:"#159a52"},
+ {k:"stake",n:"ステークホルダ",i:"📣",c:"#ff8a3d",d:"#dc6a20"},
+ {k:"risk",n:"リスク",i:"⚡",c:"#ff4d8d",d:"#d6306d"},
+ {k:"dev",n:"開発技術・アジャイル",i:"🛠️",c:"#14b8a6",d:"#0f8f81"},
+ {k:"svc",n:"サービス・戦略",i:"📈",c:"#3b82f6",d:"#2563c9"},
+ {k:"law",n:"法務・契約",i:"⚖️",c:"#8b5cf6",d:"#6d3fd6"},
+ {k:"sec",n:"セキュリティ",i:"🛡️",c:"#64748b",d:"#475569"}];
+const CAT=Object.fromEntries(CATS.map(c=>[c.k,c]));
+const Q=window.AM2, QID=Object.fromEntries(Q.map(q=>[q.id,q]));
+const LESSON_SIZE=5;
+const UNITS=CATS.map(c=>{const qs=Q.filter(q=>q.cat===c.k);const ls=[];for(let i=0;i<qs.length;i+=LESSON_SIZE)ls.push({id:c.k+"-"+(i/LESSON_SIZE),qs:qs.slice(i,i+LESSON_SIZE).map(q=>q.id)});return{...c,lessons:ls,total:qs.length}}).filter(u=>u.total);
+const srcs=q=>[].concat(q.src||[]);
+const TITLES=["見習いメンバー","メンバー","サブリーダー","チームリーダー","プロジェクトリーダー","プロジェクトマネージャ","シニアPM","PMO長","プログラムマネージャ","ポートフォリオマネージャ","伝説のPM"];
+const lvXP=n=>50*n*(n+1); // レベルnに必要な累計XP
+const levelOf=xp=>{let n=0;while(xp>=lvXP(n+1))n++;return n};
+const titleOf=lv=>TITLES[Math.min(TITLES.length-1,Math.floor(lv/2))];
+const HEART_MAX=5, HEART_MS=20*60*1000;
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const dayDiff=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+
+/* ================= ストア ================= */
+const KEY="pmquest.v1";
+const DEF={xp:0,goal:50,days:{},streak:0,best:0,last:null,shield:0,hearts:HEART_MAX,hTs:0,q:{},lessons:{},badges:{},pm1:{},pm2:{},mock:[],sound:true,combo:0,maxCombo:0,totalOk:0,totalAns:0,onboard:false};
+let S;
+function load(){try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){S={...DEF}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+load();
+function regenHearts(){if(S.hearts>=HEART_MAX){S.hTs=0;return}const n=Math.floor((Date.now()-S.hTs)/HEART_MS);if(n>0){S.hearts=Math.min(HEART_MAX,S.hearts+n);S.hTs=S.hearts>=HEART_MAX?0:S.hTs+n*HEART_MS;save()}}
+function checkStreakDecay(){const t=today();if(!S.last)return;const d=dayDiff(S.last,t);if(d>1){if(S.shield>0&&d===2){S.shield--;S.last=new Date(Date.now()-864e5).toISOString().slice(0,10);toast("🛡️ ストリークシールドで連続記録を守りました！")}else{S.streak=0}save()}}
+function todayXP(){return S.days[today()]||0}
+
+/* ================= サウンド（桜井流：アタック強め・残響ほどほど・影響度で優先順位） ================= */
+// 優先度（大→小）：レベルアップ ＞ レッスン完了/宝箱 ＞ コンボ ＞ 正解 ＞ 不正解 ＞ 選択 ＞ UIタップ
+let AC,MG,NZ;
+function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();const comp=AC.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=5;comp.attack.value=.002;comp.release.value=.12;MG=AC.createGain();MG.gain.value=.95;MG.connect(comp).connect(AC.destination);const len=AC.sampleRate*.6|0,b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;NZ=b}if(AC.state==="suspended")AC.resume();return AC}
+function osc(f,dur,st=0,type="sine",v=.2,f2){const a=ac(),t=a.currentTime+st,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(MG);o.start(t);o.stop(t+dur+.02)}
+function noise(dur,st=0,v=.2,hp=2000,lp=12000){const a=ac(),t=a.currentTime+st,s=a.createBufferSource(),g=a.createGain(),h=a.createBiquadFilter(),l=a.createBiquadFilter();s.buffer=NZ;h.type="highpass";h.frequency.value=hp;l.type="lowpass";l.frequency.value=lp;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(h).connect(l).connect(g).connect(MG);s.start(t);s.stop(t+dur+.02)}
+const play=fn=>{if(!S.sound)return;try{fn()}catch(e){}};
+const semi=n=>Math.pow(2,n/12);
+const SFX={
+ tap:()=>play(()=>{noise(.02,0,.08,3500);osc(1000,.035,0,"triangle",.05)}),
+ sel:()=>play(()=>{noise(.018,0,.12,4500);osc(1320,.045,0,"square",.035)}),
+ // 正解：コンボごとに半音ずつ上がる（最大1オクターブ）。出だしにノイズのアタック
+ ok:(c=1)=>play(()=>{const k=semi(Math.min(c-1,12));noise(.035,0,.24,1800);osc(784*k,.07,0,"square",.07);osc(1046*k,.2,.045,"triangle",.22);osc(2093*k,.18,.045,"sine",.05)}),
+ ng:()=>play(()=>{noise(.06,0,.2,150,900);osc(196,.14,0,"square",.07,110);osc(131,.18,.05,"triangle",.12,92)}),
+ combo:c=>play(()=>{const k=semi(Math.min(c,16)/2);[0,4,7,12].forEach((n,i)=>osc(659*k*semi(n),.11,i*.045,"square",.06));osc(659*k*2,.35,.18,"triangle",.12);noise(.12,.16,.07,6000)}),
+ tick:(i=0)=>play(()=>osc(1400+Math.min(i,40)*22,.028,0,"square",.028)),
+ quick:()=>play(()=>{osc(1568,.05,0,"square",.05);osc(2349,.1,.045,"square",.045)}),
+ heart:()=>play(()=>{osc(330,.12,0,"sine",.15,165);noise(.05,0,.1,300,1500)}),
+ fin:p=>play(()=>{noise(.08,0,.22,700);const s=p?[0,4,7,12,16,19,24]:[0,4,7,12];s.forEach((n,i)=>osc(523*semi(n),.16,i*.065,"triangle",.17));const L=s.length*.065;osc(523*semi(s[s.length-1]),.55,L,"sine",.12);osc(523*semi(s[s.length-1]-5),.55,L,"sine",.07)}),
+ lv:()=>play(()=>{[[0,0],[4,.09],[7,.18],[12,.27]].forEach(([n,t])=>{osc(523*semi(n),.1,t,"square",.07);osc(523*semi(n+7),.1,t,"square",.035)});[0,4,7].forEach(n=>osc(1046*semi(n),.8,.38,"triangle",.13));noise(.5,.38,.06,6500)}),
+ shake:i=>play(()=>{noise(.07,0,.14+i*.06,140,900);osc(110+i*35,.1,0,"triangle",.16,70)}),
+ open:r=>play(()=>{noise(.35,0,.26,900);osc(392,.07,0,"square",.08);[0,4,7,11,12,16,19].slice(0,3+r).forEach((n,i)=>osc(784*semi(n),.22,.05+i*.055,"triangle",.15));osc(1568*semi(r*2),.9,.42,"sine",.09)}),
+ badge:()=>play(()=>{[0,7,12,16].forEach((n,i)=>osc(659*semi(n),.18,i*.08,"triangle",.16));noise(.3,.3,.05,7000)}),
+ quest:()=>play(()=>{osc(988,.07,0,"square",.06);osc(1319,.22,.06,"triangle",.17);noise(.04,0,.1,3000)}),
+ streak:()=>play(()=>{noise(.25,0,.12,400,4000);[0,7,12].forEach((n,i)=>osc(440*semi(n),.2,.08+i*.07,"sawtooth",.05));osc(880*semi(7),.5,.3,"triangle",.12)})};
+/* ===== 疑似ハプティクス =====
+ Android：Vibration API ／ iPhone（iOS 18以降のSafari）：非表示のスイッチ型チェックボックスを切り替えたときに鳴る端末の触覚を利用 */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const CANVIB=!!navigator.vibrate&&!IOS;let HSW;
+function iosTick(){try{if(!HSW){HSW=document.createElement("label");HSW.setAttribute("aria-hidden","true");HSW.style.cssText="position:fixed;left:-200px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden";HSW.innerHTML='<input type="checkbox" switch tabindex="-1">';document.body.appendChild(HSW)}HSW.click()}catch(e){}}
+const HP={light:8,select:6,medium:16,heavy:28,success:[12,50,22],error:[28,40,28],combo:[10,30,10,30,24],big:[24,40,24,40,60]};
+function buzz(p){if(S.noHaptic)return;try{if(CANVIB){navigator.vibrate(p)}else if(IOS){const n=Array.isArray(p)?Math.ceil(p.length/2):1;iosTick();for(let i=1;i<n;i++)setTimeout(iosTick,i*70)}}catch(e){}}
+const haptic=k=>buzz(HP[k]||HP.light);
+function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,#askY"))return"heavy";if(el.matches(".btn,.qa,.node,.li"))return"medium";if(el.matches(".ch"))return"select";return"light"}
+const HSEL="button,a.btn,.li,.node,.qa,.chip,label.check,summary,select";
+// Android は押した瞬間（pointerdown）、iPhone は確定時（click）に発火
+document.addEventListener("pointerdown",e=>{if(!CANVIB)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{passive:true,capture:true});
+document.addEventListener("click",e=>{if(!IOS||!e.isTrusted)return;const el=e.target.closest(HSEL);if(el&&!el.disabled&&!el.closest("label[aria-hidden]"))haptic(hapticFor(el))},{capture:true});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ================= エフェクト（ヒットマーク・振動・フラッシュ・紙吹雪） ================= */
+const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=0;
+function sizeCv(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}sizeCv();addEventListener("resize",sizeCv);
+const COLS=["#5b4cf5","#21c16b","#ffb21e","#ff4d8d","#1cb0f6","#ff7a1a","#ce82ff"];
+function confetti(n=140,y=.35){if(RM)n=Math.min(n,30);for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*innerWidth*.3,y:innerHeight*y,vx:(Math.random()-.5)*15,vy:-Math.random()*15-4,g:.32,w:6+Math.random()*7,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:COLS[i%COLS.length],life:150+Math.random()*60,sh:Math.random()<.3?"c":"r"});run()}
+function burst(x,y,c="#21c16b",n=14){for(let i=0;i<n;i++){const a=Math.PI*2*i/n,s=3+Math.random()*4;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,g:.12,w:5,h:5,r:0,vr:0,c,life:34,sh:"c"})}run()}
+// ヒットマーク：衝撃波リング＋火花。暗い縁取りで明るい背景でも見える。短く消す
+function hitmark(x,y,c,pw=1){parts.push({t:"ring",x,y,rad:10,vr:7*pw,life:15,max:15,c,lw:5*pw});const n=8;for(let i=0;i<n;i++){const a=Math.PI*2*i/n+Math.random()*.35,s=(6+Math.random()*4)*pw;parts.push({t:"spark",x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,a,len:(16+Math.random()*8)*pw,life:13,max:13,c})}parts.push({t:"star",x,y,s:26*pw,life:10,max:10,c:"#fff"});run()}
+function drawP(p){const k=p.life/p.max;
+ if(p.t==="ring"){p.rad+=p.vr;p.vr*=.82;cx.globalAlpha=k;cx.lineWidth=p.lw+3;cx.strokeStyle="rgba(20,18,40,.35)";cx.beginPath();cx.arc(p.x,p.y,p.rad,0,7);cx.stroke();cx.lineWidth=p.lw;cx.strokeStyle=p.c;cx.stroke();return}
+ if(p.t==="spark"){p.x+=p.vx;p.y+=p.vy;p.vx*=.8;p.vy*=.8;p.len*=.88;const ex=p.x+Math.cos(p.a)*p.len,ey=p.y+Math.sin(p.a)*p.len;cx.globalAlpha=Math.min(1,k*1.5);cx.lineCap="round";cx.lineWidth=7;cx.strokeStyle="rgba(20,18,40,.35)";cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(ex,ey);cx.stroke();cx.lineWidth=4;cx.strokeStyle=p.c;cx.stroke();return}
+ if(p.t==="star"){const s=p.s*(1.3-k*.3);cx.globalAlpha=k;cx.save();cx.translate(p.x,p.y);cx.rotate((1-k)*.6);cx.beginPath();for(let i=0;i<8;i++){const r=i%2?s*.32:s,a=i*Math.PI/4;cx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}cx.closePath();cx.fillStyle=p.c;cx.strokeStyle="rgba(20,18,40,.3)";cx.lineWidth=2;cx.fill();cx.stroke();cx.restore();return}
+ p.vy+=p.g;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.globalAlpha=Math.min(1,p.life/30);cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;if(p.sh==="c"){cx.beginPath();cx.arc(0,0,p.w/2,0,7);cx.fill()}else cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()}
+function run(){if(raf)return;const step=()=>{cx.clearRect(0,0,innerWidth,innerHeight);parts=parts.filter(p=>p.life-->0&&p.y<innerHeight+40);for(const p of parts){cx.save();drawP(p);cx.restore()}if(parts.length)raf=requestAnimationFrame(step);else{raf=0;cx.clearRect(0,0,innerWidth,innerHeight)}};raf=requestAnimationFrame(step)}
+// 振動：最初に強く→収束、少しランダム。大中小で揺れ方のパターン自体を変える
+function jolt(el,amp,ms,mode="xy"){if(!el||!el.animate||RM)return;const n=Math.max(4,Math.round(ms/28)),kf=[];for(let i=0;i<=n;i++){const a=amp*Math.pow(1-i/n,1.4),sx=i%2?1:-1;kf.push({transform:`translate(${mode!=="y"?sx*a*(.6+Math.random()*.4):0}px,${mode!=="x"?(Math.random()*2-1)*a:0}px)`})}kf.push({transform:"none"});el.animate(kf,{duration:ms,easing:"linear"})}
+function shakeScreen(size){if(S.noShake)return;const el=$("#lesson")||$("#app");({s:()=>jolt(el,3,170,"y"),m:()=>jolt(el,6,260),l:()=>jolt(el,10,420)})[size]()}
+// フラッシュ：明暗を交互に（白一色の加算にしない）・一瞬
+function flash(c){if(RM||S.noShake)return;const f=document.createElement("div");f.style.cssText="position:fixed;inset:0;z-index:95;pointer-events:none";document.body.appendChild(f);f.animate([{background:"#fff",opacity:.45},{background:"#140f30",opacity:.18},{background:c,opacity:.28},{background:c,opacity:0}],{duration:230,easing:"linear"}).onfinish=()=>f.remove()}
+function floatXP(x,y,t,cls=""){const e=document.createElement("div");e.className="xpf "+cls;e.textContent=t;e.style.left=Math.min(innerWidth-110,Math.max(8,x))+"px";e.style.top=y+"px";document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
+function comboPop(t,c){const e=document.createElement("div");e.className="combo";e.textContent=t;if(c)e.style.color=c;document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
+function toast(t,ms=2400){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),ms)}
+
+/* ================= マスコット「ミツ」（オリジナル：必勝ハチマキの働きバチ） ================= */
+function poco(mood="happy",cls=""){
+ const E="#2a2140";
+ const eyes=mood==="sad"?`<circle cx="47" cy="66" r="4.5" fill="${E}"/><circle cx="73" cy="66" r="4.5" fill="${E}"/><path d="M39 59l12-4M81 59l-12-4" stroke="${E}" stroke-width="3.5" stroke-linecap="round"/>`:mood==="wow"?`<circle cx="47" cy="64" r="7.5" fill="#fff"/><circle cx="73" cy="64" r="7.5" fill="#fff"/><circle cx="48" cy="65" r="4.5" fill="${E}"/><circle cx="74" cy="65" r="4.5" fill="${E}"/><circle cx="50" cy="62.5" r="1.6" fill="#fff"/><circle cx="76" cy="62.5" r="1.6" fill="#fff"/>`:`<path d="M40 66q7-9 14 0M66 66q7-9 14 0" stroke="${E}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+ const mouth=mood==="sad"?`<path d="M53 84q7-6 14 0" stroke="${E}" stroke-width="4" fill="none" stroke-linecap="round"/>`:mood==="wow"?`<ellipse cx="60" cy="83" rx="5.5" ry="6.5" fill="${E}"/>`:`<path d="M49 77q11 13 22 0z" fill="${E}"/><path d="M54 82q6 4 12 0" fill="#ff7a8a"/>`;
+ const id="b"+(Math.random()*1e6|0);
+ return `<svg class="mascot ${cls}" viewBox="0 0 120 120" aria-hidden="true"><defs><clipPath id="${id}"><ellipse cx="60" cy="72" rx="38" ry="36"/></clipPath></defs><ellipse cx="60" cy="114" rx="30" ry="4.5" fill="rgba(0,0,0,.12)"/>
+ <g class="wg"><ellipse cx="30" cy="38" rx="17" ry="11" transform="rotate(-30 30 38)" fill="#e9f7ff" stroke="#b9ddf3" stroke-width="2.5" opacity=".95"/><ellipse cx="90" cy="38" rx="17" ry="11" transform="rotate(30 90 38)" fill="#e9f7ff" stroke="#b9ddf3" stroke-width="2.5" opacity=".95"/></g>
+ <path d="M48 38q-6-16-14-20" stroke="${E}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M72 38q6-16 14-20" stroke="${E}" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="34" cy="17" r="5" fill="${E}"/><circle cx="86" cy="17" r="5" fill="${E}"/>
+ <ellipse cx="60" cy="72" rx="38" ry="36" fill="#ffc928"/>
+ <g clip-path="url(#${id})"><rect x="10" y="92" width="100" height="9" fill="${E}"/><rect x="10" y="106" width="100" height="9" fill="${E}"/><ellipse cx="48" cy="52" rx="20" ry="11" fill="#fff" opacity=".28"/>
+ <rect x="10" y="40" width="100" height="11" fill="#fff"/><rect x="10" y="49" width="100" height="2.5" fill="#e8e3f0"/></g>
+ <circle cx="60" cy="45.5" r="5" fill="#ff3b4f"/>
+ <path d="M96 42l14-7-3 9 5 6-15-3z" fill="#fff" stroke="#e8e3f0" stroke-width="1.5"/>
+ <ellipse cx="36" cy="76" rx="6.5" ry="4" fill="#ff9f8f" opacity=".75"/><ellipse cx="84" cy="76" rx="6.5" ry="4" fill="#ff9f8f" opacity=".75"/>${eyes}${mouth}</svg>`}
+
+/* ================= ゲーミフィケーション中核 ================= */
+function addXP(n){const before=levelOf(S.xp);S.xp+=n;const t=today();S.days[t]=(S.days[t]||0)+n;
+ if(S.last!==t){if(S.last&&dayDiff(S.last,t)===1)S.streak++;else S.streak=1;S.last=t;S.best=Math.max(S.best,S.streak);S._streakUp=Date.now();if(S.streak%7===0&&S.shield<2){S.shield++;setTimeout(()=>toast("🛡️ 7日連続ボーナス：ストリークシールド獲得！"),1200)}}
+ save();renderTop();qprog("xp",n);const after=levelOf(S.xp);if(after>before)setTimeout(()=>levelUp(after),L?1900:700);checkBadges()}
+function levelUp(lv){SFX.lv();flash("#ffb21e");shakeScreen("l");confetti(200);buzz([30,40,30,40,60]);modal(`<div class="rays"><div class="big lvpop">🎖️</div></div><h2 style="margin:10px 0 4px">レベル ${lv+1} に到達！</h2><p>称号：<b>${titleOf(lv)}</b></p><p class="muted">次のレベルまで ${lvXP(lv+1)-S.xp} XP</p><button class="btn gold" onclick="closeModal()">やったね！</button>`)}
+/* ===== デイリークエスト（目的を目の前に吊るす） ===== */
+const QPOOL=[{k:"ok",n:"10問正解する",g:10,i:"✅"},{k:"c5",n:"5連続正解を出す",g:1,i:"🔥"},{k:"ls",n:"レッスンを2回クリア",g:2,i:"⭐"},{k:"pf",n:"パーフェクトを1回",g:1,i:"👑"},{k:"pm1",n:"記述問題に1問挑戦",g:1,i:"✍️"},{k:"xp",n:"80XP獲得する",g:80,i:"🍯"},{k:"qk",n:"10秒以内の正解を5回",g:5,i:"⚡"},{k:"wk",n:"苦手復習をクリア",g:1,i:"🧠"}];
+function dq(){const t=today();if(!S.dq||S.dq.d!==t){let h=7;for(const c of t)h=(h*31+c.charCodeAt(0))>>>0;const pool=[...QPOOL],pick=[];for(let i=0;i<3;i++){h=(Math.imul(h,1103515245)+12345)>>>0;pick.push(pool.splice(h%pool.length,1)[0].k)}S.dq={d:t,ks:pick,p:{},done:{},bonus:false};save()}return S.dq}
+function qprog(k,n=1){const d=dq();if(!d.ks.includes(k)||d.done[k])return;const q=QPOOL.find(x=>x.k===k);d.p[k]=Math.min(q.g,(d.p[k]||0)+n);save();
+ if(d.p[k]>=q.g){d.done[k]=true;save();setTimeout(()=>{SFX.quest();haptic("success");toast(`🎯 クエスト達成「${q.n}」 +20XP`);addXP(20);if(d.ks.every(x=>d.done[x])&&!d.bonus){d.bonus=true;save();setTimeout(()=>openChest("デイリークエスト全達成！",2),1500)}},L?400:200)}}
+function questHTML(){const d=dq();const all=d.ks.every(x=>d.done[x]);return `<div class="card" style="margin-top:14px"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🎯 今日のクエスト</h3><span class="muted">${all?"全達成！🍯":"全達成でハニーポット"}</span></div>${d.ks.map(k=>{const q=QPOOL.find(x=>x.k===k),p=d.p[k]||0,dn=d.done[k];return `<div class="qrow ${dn?"dn":""}"><span class="qi">${dn?"✅":q.i}</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">${q.n}</div><div class="gauge"><i style="width:${p/q.g*100}%;background:${dn?"var(--ok)":"var(--gold)"}"></i></div></div><span class="muted" style="font-weight:800">${p}/${q.g}</span></div>`}).join("")}</div>`}
+/* ===== 宝箱（ランダム報酬：ギュッと溜めてパッと開く） ===== */
+const RAR=[{n:"ノーマル",c:"#8b8aa8"},{n:"レア",c:"#1cb0f6"},{n:"スーパーレア",c:"#ce82ff"},{n:"ウルトラレア",c:"#ffb21e"}];
+function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"🛡️",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12)return{r:2,i:"❤️",t:"ハート全回復＋30XP",f:()=>{S.hearts=HEART_MAX;S.hTs=0;addXP(30)}};if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"💎",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"🍯",t:`+${x} XP`,f:()=>addXP(x)}}
+function openChest(title="ハニーポットゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
+ modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" style="margin:0 0 8px">タップして開けよう！</p><button id="chest" class="chest" aria-label="ハニーポット">🍯</button><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
+ const c=$("#chest");c.onclick=()=>{if(taps>=3)return;taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);buzz(15*taps);jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
+  if(taps===3){setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);buzz([30,30,60]);rw.f();save();renderTop();
+   c.textContent=rw.i;c.classList.add("opened");c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:800;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}}})}
+const BADGES=[
+ {k:"first",i:"🌱",n:"はじめの一歩",t:s=>Object.keys(s.lessons).length>=1},
+ {k:"s3",i:"🔥",n:"3日連続",t:s=>s.best>=3},{k:"s7",i:"🌋",n:"7日連続",t:s=>s.best>=7},{k:"s30",i:"☀️",n:"30日連続",t:s=>s.best>=30},
+ {k:"c10",i:"⚡",n:"10コンボ",t:s=>s.maxCombo>=10},{k:"c25",i:"🌪️",n:"25コンボ",t:s=>s.maxCombo>=25},
+ {k:"perfect",i:"💯",n:"パーフェクト",t:s=>Object.values(s.lessons).some(l=>l.perfect)},
+ {k:"ok100",i:"🎯",n:"100問正解",t:s=>s.totalOk>=100},{k:"ok500",i:"🏹",n:"500問正解",t:s=>s.totalOk>=500},
+ {k:"mock",i:"🏅",n:"模試合格",t:s=>s.mock.some(m=>m.score>=15)},{k:"mock25",i:"👑",n:"模試満点",t:s=>s.mock.some(m=>m.score>=25)},
+ {k:"all",i:"🗺️",n:"全ユニット制覇",t:s=>UNITS.every(u=>u.lessons.every(l=>s.lessons[l.id]))},
+ {k:"pm1",i:"✍️",n:"記述デビュー",t:s=>Object.keys(s.pm1).length>=1},{k:"pm1all",i:"📝",n:"記述マスター",t:s=>PM1_CASES.every(c=>c.qs.every((_,i)=>s.pm1[c.id+"-"+i]))},
+ {k:"pm2",i:"📜",n:"論文完走",t:s=>Object.values(s.pm2).some(p=>p.done)},{k:"pm2x3",i:"🏛️",n:"論文3本",t:s=>Object.values(s.pm2).filter(p=>p.done).length>=3},
+ {k:"night",i:"🦉",n:"夜ふかし学習",t:()=>new Date().getHours()>=23||new Date().getHours()<4},{k:"morning",i:"🌅",n:"朝活",t:()=>{const h=new Date().getHours();return h>=5&&h<7}},
+ {k:"lv5",i:"🐝",n:"PMに昇格",t:s=>levelOf(s.xp)>=10},{k:"xp1k",i:"🍯",n:"1000XP",t:s=>s.xp>=1000}];
+function checkBadges(){for(const b of BADGES){if(!S.badges[b.k]&&b.t(S)){S.badges[b.k]=Date.now();save();setTimeout(()=>{SFX.badge();flash("#ffb21e");confetti(90);modal(`<div class="rays"><div class="big lvpop">${b.i}</div></div><h2 style="margin:12px 0 4px">バッジ獲得！</h2><p style="font-weight:800">${b.n}</p><button class="btn gold" onclick="closeModal()">OK</button>`)},1400);break}}}
+function qstat(id){return S.q[id]||(S.q[id]={c:0,w:0,box:0,due:0})}
+function record(id,ok){const s=qstat(id);if(ok){s.c++;s.box=Math.min(5,s.box+1)}else{s.w++;s.box=0}s.due=Date.now()+[0,1,3,7,14,30][s.box]*864e5*(ok?1:0)+(ok?0:6e4);S.totalAns++;if(ok)S.totalOk++;save()}
+function weakIds(){return Q.filter(q=>{const s=S.q[q.id];return s&&s.w>0&&(s.box<3||s.due<=Date.now())}).sort((a,b)=>(S.q[a.id].box-S.q[b.id].box)||(S.q[b.id].w-S.q[a.id].w)).map(q=>q.id)}
+function dueIds(){return Q.filter(q=>{const s=S.q[q.id];return s&&s.due&&s.due<=Date.now()}).map(q=>q.id)}
+
+/* ================= 画面共通 ================= */
+let TAB="home";
+function renderTop(){regenHearts();
+ $("#brand").innerHTML=`${poco("happy","logo")}PM試験<b>クエスト</b>`;
+ $("#stats").innerHTML=`<span class="stat fire ${S.last===today()?"":"dim"}" title="連続学習日数">🔥${S.streak}</span><span class="stat gem" title="XP（ハチミツ）">🍯${S.xp}</span><span class="stat heart" title="ハート">❤️${S.hearts}</span>`}
+function go(t){TAB=t;$$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));const m=$("#main");m.innerHTML="";m.className="fade-in";void m.offsetWidth;({home:vHome,pm1:vPM1,pm2:vPM2,me:vMe})[t]();scrollTo(0,0)}
+$("#nav").addEventListener("click",e=>{const b=e.target.closest("button");if(b){SFX.tap();go(b.dataset.t)}});
+const MQ=[];
+function modal(html,onClose,onShow){if($(".ov")){MQ.push([html,onClose,onShow]);return}const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="modal">${html}</div>`;o.addEventListener("click",e=>{if(e.target===o)closeModal()});document.body.appendChild(o);o._close=onClose;onShow&&onShow()}
+function closeModal(){const o=$$(".ov").pop();if(o){o.remove();o._close&&o._close()}if(!$(".ov")&&MQ.length){const m=MQ.shift();setTimeout(()=>modal(...m),180)}}
+window.closeModal=closeModal;
+function fmtSrc(q){return q.orig?'<span class="pill gold">オリジナル</span>':srcs(q).map(s=>`<span class="pill">${esc(s)}</span>`).join(" ")+(srcs(q).length>1?' <span class="pill ng">頻出</span>':"")}
+function lifecycleSVG(){return `<svg viewBox="0 0 300 150" style="width:100%;max-width:340px;margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:12px"><line x1="40" y1="120" x2="285" y2="120" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="120" x2="40" y2="12" stroke="currentColor" stroke-width="1.5"/><text x="8" y="22" font-size="11" fill="currentColor">大</text><text x="8" y="118" font-size="11" fill="currentColor">小</text><text x="200" y="140" font-size="11" fill="currentColor">経過時間 →</text><path d="M45 24C120 30 180 90 280 108" stroke="#5b4cf5" stroke-width="3" fill="none"/><path d="M45 110C140 104 200 70 280 22" stroke="#ff4d5e" stroke-width="3" fill="none" stroke-dasharray="6 4"/><text x="70" y="22" font-size="13" font-weight="700" fill="#5b4cf5">a</text><text x="262" y="20" font-size="13" font-weight="700" fill="#ff4d5e">b</text></svg>`}
+function tblHTML(t){return `<div style="overflow-x:auto"><table class="t">${t.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table></div>`}
+
+/* ================= ホーム（午前Ⅱ） ================= */
+function vHome(){renderTop();
+ const tx=todayXP(),p=Math.min(100,Math.round(tx/S.goal*100)),weak=weakIds().length,lv=levelOf(S.xp),nx=lvXP(lv+1),pv=lvXP(lv);
+ const greet=["今日も1問から。","コツコツが合格への近道。","昨日の自分を超えよう！","ストリークを伸ばそう🔥"][new Date().getDate()%4];
+ let h=`<div class="card hero"><div class="ring" id="ring" data-p="${p}" style="--p:0"><div>${tx}<br><span class="muted" style="font-size:10px">/${S.goal}XP</span></div></div><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">${p>=100?"🎉 今日の目標達成！":greet}</div><div class="muted">Lv.${lv+1} ${titleOf(lv)}</div><div class="gauge" style="margin-top:8px"><i style="width:${(S.xp-pv)/(nx-pv)*100}%;background:var(--pri)"></i></div><div class="muted" style="font-size:11px;margin-top:2px">次のレベルまで ${nx-S.xp} XP</div></div></div>
+${questHTML()}
+ <div class="quick">
+  <button class="qa a" onclick="startDaily()"><span class="e">⚡</span>今日の5問<small>全分野からランダム</small></button>
+  <button class="qa b" onclick="startWeak()"><span class="e">🧠</span>苦手を復習<small>間違えた問題を集中特訓</small>${weak?`<span class="badge">${weak}</span>`:""}</button>
+  <button class="qa c" onclick="mockIntro()"><span class="e">⏱️</span>本番模試<small>25問・40分</small></button>
+  <button class="qa d" onclick="yearPick()"><span class="e">📚</span>年度別・全問<small>出典つき一覧</small></button>
+ </div>`;
+ let curFound=false;
+ for(const u of UNITS){const done=u.lessons.filter(l=>S.lessons[l.id]).length;
+  h+=`<div class="unit" style="background:${u.c}"><div>${u.i} ${u.n}<small>${u.total}問・${done}/${u.lessons.length} レッスン完了</small></div><div style="font-size:22px">${done===u.lessons.length?"👑":""}</div></div><div class="path">`;
+  u.lessons.forEach((l,i)=>{const st=S.lessons[l.id];const isCur=!st&&!curFound;if(isCur)curFound=true;const off=[0,44,64,44,0,-44,-64,-44][i%8];
+   h+=`<button class="node ${st?"":"todo"} ${isCur?"cur":""}" style="--c:${u.c};--cd:${u.d};transform:translateX(${off}px)" onclick="startLesson('${l.id}')" aria-label="${u.n} レッスン${i+1}">${isCur?`<span class="bubble">START</span>`:""}<span class="disc"></span><span class="ico">${st?(st.perfect?"👑":"⭐"):u.i}</span>${st?`<span class="stars">${"★".repeat(st.perfect?3:st.best>=4?2:1)}</span>`:""}</button>`});
+  h+=`</div>`}
+ h+=`<div class="foot">出典：IPA 独立行政法人情報処理推進機構「プロジェクトマネージャ試験」過去問題（平成23〜29年度 午前Ⅱ，平成28〜令和7年度 解答例・出題趣旨）。過去問の正解はIPA公表の解答例と照合済み。解説・オリジナル問題・午後の設問例は本アプリ独自のもので，IPAとは関係ありません。最新の試験制度（CBT化等）は<a href="https://www.ipa.go.jp/shiken/kubun/pm.html" target="_blank" rel="noopener">IPA公式サイト</a>で確認してください。</div>`;
+ $("#main").innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#ring");if(r)r.style.setProperty("--p",r.dataset.p)}));
+ if(!S.onboard)onboard()}
+function onboard(){S.onboard=true;save();modal(`${poco("happy","jump")}<h2 style="margin:6px 0">ようこそ PM試験クエストへ！</h2><p style="font-size:14px;text-align:left">ぼくは必勝ハチマキの働きバチ<b>ミツ</b>。プロマネ試験の合格まで一緒に飛ぶよ！<br>・登録不要。記録はこの端末に保存<br>・正解でXP，連続正解でコンボ<br>・毎日続けて🔥ストリークを伸ばそう</p><p class="muted" style="margin-top:0">1日の目標を選んでね</p><div class="grid2" style="grid-template-columns:repeat(3,1fr)">${[[20,"ゆるっと"],[50,"ふつう"],[100,"本気"]].map(([g,n])=>`<button class="btn ${g===50?"":"ghost"} sm" style="width:100%" onclick="S.goal=${g};save();closeModal();go('home')">${n}<br>${g}XP</button>`).join("")}</div>`)}
+
+/* ================= レッスンエンジン ================= */
+let L=null;
+function startDaily(){const pool=[...Q].sort(()=>Math.random()-.5);const ids=[...dueIds().slice(0,2),...pool.map(q=>q.id)];startRun([...new Set(ids)].slice(0,5),{title:"今日の5問",kind:"daily"})}
+function startWeak(){const w=weakIds();if(!w.length){modal(`${poco("wow")}<h3>苦手な問題はまだないよ！</h3><p class="muted">間違えた問題がここにたまっていきます。</p><button class="btn" onclick="closeModal()">OK</button>`);return}startRun(w.slice(0,8),{title:"苦手を復習",kind:"weak"})}
+function startLesson(lid){const u=UNITS.find(u=>u.lessons.some(l=>l.id===lid));const l=u.lessons.find(l=>l.id===lid);startRun([...l.qs],{title:u.n,kind:"lesson",lid,color:u.c})}
+function startRun(ids,opt){regenHearts();
+ if(S.hearts<=0&&opt.kind!=="mock"&&opt.kind!=="refill"){noHearts();return}
+ L={ids:[...ids],queue:[...ids],idx:0,ok:0,ng:0,xp:0,combo:0,firstTry:{},opt,t0:Date.now(),sel:-1,answered:false,results:[]};
+ const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";drawQ()}
+function noHearts(){const m=HEART_MS-((Date.now()-S.hTs)%HEART_MS);modal(`${poco("sad")}<h2 style="margin:6px 0">ハートが切れちゃった…</h2><p class="muted">あと約${Math.ceil(m/6e4)}分で1つ回復します。<br>復習チャレンジ（3問全問正解）ですぐに全回復できるよ！</p><button class="btn ng" onclick="closeModal();refill()">❤️ 復習チャレンジ</button><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">あとで</button>`)}
+function refill(){const pool=(weakIds().length>=3?weakIds():Q.map(q=>q.id)).sort(()=>Math.random()-.5).slice(0,3);startRun(pool,{title:"ハート回復チャレンジ",kind:"refill"})}
+const PRAISE=c=>c>=10?"止まらない！":c>=5?"絶好調！":c>=3?"ノッてきた！":["すばらしい！","正解！","その調子！","ナイス判断！","いいね！"][Math.random()*5|0];
+function drawQ(){const el=$("#lesson");const id=L.queue[L.idx];const q=QID[id];const mock=L.opt.kind==="mock";
+ const prog=mock?L.idx/L.queue.length:L.ok/(L.ids.length);
+ el.innerHTML=`<div class="lhead"><button class="x" onclick="quitRun()" aria-label="やめる">✕</button><div class="bar ${L.combo>=3?"fire":""}"><i style="width:${Math.max(3,prog*100)}%"></i></div>${mock?`<span class="timer" id="tm"></span>`:`<span class="cmb ${L.combo>=2?"on":""}" id="cmb">🔥${L.combo}</span><span class="stat heart" id="lh" style="font-weight:800">❤️${S.hearts}</span>`}</div>
+ <div class="lbody" id="lb"><div class="qmeta"><span class="pill" style="background:${CAT[q.cat].c};color:#fff">${CAT[q.cat].i} ${CAT[q.cat].n}</span>${fmtSrc(q)}${L.firstTry[id]===false?'<span class="pill ng">リトライ</span>':""}${mock?`<span class="pill">${L.idx+1}/${L.queue.length}</span>`:""}</div>
+ <div class="qtext">${esc(q.q)}</div>${q.fig==="lifecycle"?lifecycleSVG():""}${q.tbl?tblHTML(q.tbl):""}
+ <div class="choices">${q.ch.map((c,i)=>`<button class="ch" data-i="${i}" style="--d:${i*45}ms"><span class="k">${KANA[i]}</span><span>${esc(c)}</span></button>`).join("")}</div></div>
+ <div class="lfoot" id="lf"><div class="verdict" id="vd"></div><button class="btn" id="go" disabled>${mock?"回答する":"チェック"}</button></div>`;
+ L.sel=-1;L.answered=false;L.qt0=Date.now();
+ $$(".ch",el).forEach(b=>b.onclick=()=>{if(L.answered)return;SFX.sel();buzz(6);$$(".ch",el).forEach(x=>x.classList.remove("sel"));b.classList.add("sel");b.animate([{transform:"scale(.95)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:160,easing:"ease-out"});L.sel=+b.dataset.i;$("#go").disabled=false});
+ $("#go").onclick=()=>{if(L.busy)return;L.answered?next():check()};
+ if(!mock&&L.queue.length-L.idx===1&&L.ids.length>2)setTimeout(()=>comboPop("ラスト1問！","#1cb0f6"),120);
+ if(mock)tick()}
+document.addEventListener("keydown",e=>{if(!L||!$("#lesson"))return;const k={"1":0,"2":1,"3":2,"4":3,"a":0,"b":1,"c":2,"d":3}[e.key];if(k!=null&&!L.answered){$$(".ch")[k]?.click()}if(e.key==="Enter"&&!$("#go").disabled)$("#go").click()});
+async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.opt.kind==="mock";L.answered=true;
+ const bs=$$(".ch");bs.forEach(b=>b.classList.add("lock"));
+ if(L.firstTry[id]===undefined){L.firstTry[id]=ok;record(id,ok)}
+ L.results.push({id,ok,sel:L.sel});
+ if(mock){if(ok)L.ok++;else L.ng++;SFX.tap();next();return}
+ L.busy=true;$("#go").disabled=true;
+ const lf=$("#lf"),vd=$("#vd"),sb=bs[L.sel],r=sb.getBoundingClientRect(),x0=r.left+r.width/2,y0=r.top+r.height/2,dt=Date.now()-L.qt0;
+ if(ok){L.ok++;L.combo++;S.maxCombo=Math.max(S.maxCombo,L.combo);const pw=Math.min(1.9,1+L.combo*.09);
+  sb.classList.add("right");SFX.ok(L.combo);haptic(L.combo>=5?"heavy":"medium");hitmark(x0,y0,"#21c16b",pw);jolt(sb,2+Math.min(6,L.combo*.5),110);
+  await sleep(RM?0:60+Math.min(90,L.combo*10)); // ヒットストップ：コンボが伸びるほど長く
+  sb.animate([{transform:"scale(1)"},{transform:"scale(1.05,.94)"},{transform:"scale(.98,1.04)"},{transform:"none"}],{duration:280,easing:"ease-out"});burst(x0,y0,"#21c16b",12);
+  const quick=dt<10000;let g=10+(L.combo>=3?Math.min(10,(L.combo-2)*2):0)+(quick?3:0);L.xp+=g;
+  floatXP(r.right-90,r.top-6,"+"+g+"XP");qprog("ok");if(L.combo===5)qprog("c5");
+  if(quick){qprog("qk");setTimeout(()=>{SFX.quick();floatXP(r.left+12,r.top-6,"⚡QUICK!","q")},130)}
+  const cm=$("#cmb");if(cm){cm.textContent="🔥"+L.combo;cm.classList.toggle("on",L.combo>=2);cm.animate([{transform:"scale(1.6) rotate(-8deg)"},{transform:"none"}],{duration:300,easing:"cubic-bezier(.3,1.6,.5,1)"})}
+  if([3,5,8,10,15,20,25,30].includes(L.combo))setTimeout(()=>{SFX.combo(L.combo);comboPop(`🔥 ${L.combo}連続正解！`);shakeScreen("m");flash("#ff8a00");haptic("combo")},230);
+  lf.className="lfoot ok";vd.innerHTML=`<div class="t">${poco("happy","xs jump")}${PRAISE(L.combo)}</div><div class="ex">${esc(q.ex)}</div>`;$("#go").className="btn ok";$("#go").textContent="つづける"}
+ else{L.ng++;const lost=L.combo;L.combo=0;sb.classList.add("wrong");SFX.ng();haptic("error");jolt(sb,12,360,"x");shakeScreen("s");flash("#ff4d5e");
+  await sleep(RM?0:110);bs[q.a].classList.add("right");bs[q.a].animate([{transform:"scale(.97)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:300});
+  if(L.opt.kind!=="refill"){S.hearts=Math.max(0,S.hearts-1);if(!S.hTs)S.hTs=Date.now();save();renderTop();const lh=$("#lh");if(lh){lh.textContent="❤️"+S.hearts;jolt(lh,6,300);lh.animate([{transform:"scale(1.5)",filter:"grayscale(1)"},{transform:"none"}],{duration:400});setTimeout(SFX.heart,120)}}
+  const cm=$("#cmb");if(cm)cm.classList.remove("on");
+  if(!L.queue.slice(L.idx+1).includes(id))L.queue.push(id);
+  lf.className="lfoot ng";vd.innerHTML=`<div class="t">${poco("sad","xs")}正解は「${KANA[q.a]}」</div><div class="ex">${esc(q.ex)}</div><div class="muted" style="margin-top:6px">${lost>=3?`🔥${lost}コンボが途切れた…でも`:""}この問題はあとでもう一度出ます</div>`;$("#go").className="btn ng";$("#go").textContent="わかった"}
+ S.combo=L.combo;save();
+ $(".bar").classList.toggle("fire",L.combo>=3);$(".bar i").style.width=Math.max(3,L.ok/L.ids.length*100)+"%";
+ L.busy=false;$("#go").disabled=false;
+ if(L.opt.kind==="refill"&&!ok){$("#go").textContent="終了";$("#go").onclick=()=>{endRun(true);toast("惜しい！また挑戦してね")}}
+ if(!ok&&S.hearts<=0&&L.opt.kind!=="refill"){$("#go").textContent="ハートがなくなった…";$("#go").onclick=()=>{endRun(true);noHearts()}}}
+function next(){L.idx++;if(L.idx>=L.queue.length){finish();return}drawQ();$("#lb").classList.add("slide-in")}
+function ask(msg,yes,onYes){modal(`${poco("sad","s")}<h3 style="margin:8px 0 14px">${msg}</h3><button class="btn ng" id="askY">${yes}</button><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">つづける</button>`,null,()=>{$("#askY").onclick=()=>{closeModal();onYes()}})}
+function quitRun(){if(L.opt.kind==="mock")ask("模試を中断しますか？<br><span class='muted'>結果は保存されません</span>","中断する",()=>endRun(true));else if(L.ok>0)ask("本当にやめる？<br><span class='muted'>このレッスンの進捗は保存されません</span>","やめる",()=>endRun(true));else endRun(true)}
+function endRun(){clearInterval(L&&L.tm);clearTimeout(L&&L.seq);$("#lesson")?.remove();document.body.style.overflow="";L=null;go(TAB)}
+function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
+ const firstOk=L.ids.filter(id=>L.firstTry[id]).length,acc=Math.round(firstOk/L.ids.length*100),perfect=firstOk===L.ids.length;
+ const bonus=10+(perfect?10:0);
+ if(L.opt.kind==="refill"){S.hearts=HEART_MAX;S.hTs=0;save()}
+ if(L.opt.lid){const o=S.lessons[L.opt.lid]||{best:0};S.lessons[L.opt.lid]={best:Math.max(o.best,firstOk),perfect:o.perfect||perfect,at:Date.now()};qprog("ls")}
+ if(perfect&&L.opt.kind!=="refill")qprog("pf");if(L.opt.kind==="weak")qprog("wk");
+ const total=L.xp+bonus,sec=Math.round((Date.now()-L.t0)/1000),beforeToday=todayXP(),xpB=S.xp,lvB=levelOf(S.xp),stB=S.last===today()?S.streak:null;
+ addXP(total);const lv=levelOf(S.xp),pv=lvXP(lv),nx=lvXP(lv+1),fromP=lv>lvB?0:(xpB-pv)/(nx-pv)*100,toP=(S.xp-pv)/(nx-pv)*100;
+ const goalHit=beforeToday<S.goal&&todayXP()>=S.goal,streakUp=stB===null;
+ // 閃光→爆発→紙吹雪→収束
+ flash(perfect?"#ffb21e":"#21c16b");shakeScreen("l");SFX.fin(perfect);haptic("big");setTimeout(()=>confetti(perfect?240:140),70);
+ const el=$("#lesson"),chest=L.opt.kind!=="refill";
+ el.innerHTML=`<div class="lbody" id="rb"><div class="res">${poco(perfect?"wow":"happy","jump")}<h2 class="pre" style="margin:0;font-size:28px;color:${perfect?"var(--gold-d)":"var(--pri-t)"}">${L.opt.kind==="refill"?"❤️ ハート全回復！":perfect?"パーフェクト！":"レッスン完了！"}</h2><div class="muted">${esc(L.opt.title)}</div>
+ <div class="tiles"><div class="tile pre" style="--c:var(--gold)"><b>獲得XP</b><span id="cnt">+0</span></div><div class="tile pre" style="--c:var(--ok)"><b>正答率</b><span>${acc}%</span></div><div class="tile pre" style="--c:var(--sky)"><b>タイム</b><span>${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}</span></div></div>
+ <div class="card pre" style="width:100%;text-align:left;padding:12px 14px"><div class="row" style="justify-content:space-between;font-weight:800"><span>Lv.${lv+1} ${titleOf(lv)}</span><span class="muted">あと <b style="color:var(--pri-t)">${nx-S.xp}</b> XP</span></div><div class="gauge" style="height:12px"><i id="lvg" style="width:${fromP}%;background:linear-gradient(90deg,#ffd24a,#ffb300);transition:width .9s cubic-bezier(.3,1.3,.5,1)"></i></div></div>
+ ${goalHit?`<div class="say pre">🎯 今日の目標 ${S.goal}XP 達成！</div>`:""}
+ <div class="say pre ${streakUp?"stk":""}">🔥 連続 <b id="stn">${streakUp&&S.streak>1?S.streak-1:S.streak}</b> 日 ${S.streak>=S.best&&S.streak>1?"・自己ベスト！":""}</div>
+ ${chest?`<button class="chestbtn pre" id="cb">🍯 <span>ハニーポットをあける</span></button>`:""}
+ <div style="width:100%;text-align:left" class="pre">${L.ids.map(id=>{const q=QID[id];return `<div class="check"><span>${L.firstTry[id]?"✅":"🔁"}</span><span style="font-size:13px">${esc(q.q.slice(0,46))}…</span></div>`}).join("")}</div></div></div>
+ <div class="lfoot"><button class="btn" onclick="endRun()">つづける</button><div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・🔥${S.streak}日連続')">結果をシェア</button></div>`;
+ if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");b.disabled=true;b.classList.add("used");b.querySelector("span").textContent="開封済み";openChest(perfect?"パーフェクト・ハニーポット！":"ハニーポットゲット！",perfect?1:0)};
+ // 段階的に見せる（タップでスキップ可）
+ const items=$$("#rb .pre");let i=0,n=0,done=false;const cnt=$("#cnt");
+ const countUp=()=>{const step=Math.max(1,Math.ceil(total/24));const iv=setInterval(()=>{n=Math.min(total,n+step);cnt.textContent="+"+n;SFX.tick(n/step|0);if(n>=total){clearInterval(iv);cnt.parentNode.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:250})}},28)};
+ const bumpStreak=()=>{if(!streakUp||S.streak<2)return;setTimeout(()=>{const s=$("#stn");if(!s)return;SFX.streak();s.textContent=S.streak;s.parentNode.animate([{transform:"scale(1.25)"},{transform:"none"}],{duration:420,easing:"cubic-bezier(.3,1.6,.5,1)"})},250)};
+ const stepF=()=>{if(done||!items[i])return finishAll();const it=items[i++];it.classList.add("in");SFX.tick(i*3);if(it.contains(cnt)&&n===0)countUp();if(it.contains($("#lvg")))setTimeout(()=>$("#lvg").style.width=toP+"%",120);if(it.classList.contains("stk"))bumpStreak();L.seq=setTimeout(stepF,170)};
+ const finishAll=()=>{if(done)return;done=true;items.forEach(x=>x.classList.add("in"));if(n<total){n=total;cnt.textContent="+"+total}$("#lvg").style.width=toP+"%"};
+ $("#rb").addEventListener("click",finishAll,{once:true});L.seq=setTimeout(stepF,260)}
+
+function share(text){const full=text+"\n#PM試験クエスト #プロジェクトマネージャ試験";
+ modal(`<div class="big">📣</div><h2 style="margin:6px 0">シェアしよう</h2><textarea class="wa" id="shT" style="min-height:90px;font-size:14px">${esc(full)}</textarea><p class="muted" style="margin:6px 0 12px">このページのリンクを添えて投稿してね</p><button class="btn" id="shC">テキストをコピー</button><div style="height:10px"></div><a class="btn sky" style="text-decoration:none" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(full)}">𝕏 でポスト</a><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`,null,()=>{$("#shC").onclick=()=>{const v=$("#shT").value;try{navigator.clipboard.writeText(v).then(()=>toast("コピーしました"),()=>{$("#shT").select();toast("選択した文字をコピーしてね")})}catch(e){$("#shT").select()}}})}
+
+/* ================= 模試 ================= */
+const MOCK_SEC=40*60;
+function mockIntro(){modal(`<div class="big">⏱️</div><h2 style="margin:8px 0">本番模試（午前Ⅱ）</h2><p style="font-size:14px;text-align:left">・25問／40分（本番と同じ）<br>・途中で正誤は表示されません<br>・60%（15問）以上で合格ライン<br>・ハートは減りません</p><button class="btn sky" onclick="closeModal();startMock()">スタート</button>`)}
+function startMock(){const w={int:3,scope:1,sched:3,cost:3,qual:2,team:2,stake:1,risk:2,dev:3,svc:2,law:2,sec:1};let ids=[];for(const[k,n]of Object.entries(w)){ids.push(...Q.filter(q=>q.cat===k).sort(()=>Math.random()-.5).slice(0,n).map(q=>q.id))}
+ const rest=Q.filter(q=>!ids.includes(q.id)).sort(()=>Math.random()-.5);while(ids.length<25)ids.push(rest.pop().id);ids=ids.slice(0,25).sort(()=>Math.random()-.5);
+ startRun(ids,{title:"本番模試",kind:"mock"});L.end=Date.now()+MOCK_SEC*1000;L.tm=setInterval(tick,1000)}
+function tick(){if(!L||!L.end)return;const r=Math.max(0,Math.round((L.end-Date.now())/1000));const t=$("#tm");if(t){t.textContent=`${Math.floor(r/60)}:${String(r%60).padStart(2,"0")}`;t.classList.toggle("warn",r<300)}if(r<=0){clearInterval(L.tm);toast("⏰ 時間切れ！");while(L.results.length<L.queue.length){const id=L.queue[L.results.length];L.results.push({id,ok:false,sel:-1});record(id,false)}mockResult()}}
+function mockResult(){clearInterval(L.tm);const score=L.results.filter(r=>r.ok).length,pass=score>=15,sec=Math.round((Date.now()-L.t0)/1000);
+ S.mock.push({at:Date.now(),score,sec});save();addXP(score*3+(pass?50:0));
+ if(pass){SFX.fin(true);flash("#21c16b");shakeScreen("l");setTimeout(()=>confetti(260),70)}else SFX.ng();
+ const byCat={};L.results.forEach(r=>{const c=QID[r.id].cat;byCat[c]=byCat[c]||[0,0];byCat[c][1]++;if(r.ok)byCat[c][0]++});
+ $("#lesson").innerHTML=`<div class="lbody"><div class="res">${poco(pass?"wow":"sad","jump")}<h2 style="margin:0;font-size:28px;color:${pass?"var(--ok-d)":"var(--ng-d)"}">${pass?"合格ライン突破！":score>=11?"あと少し！":"まずは基礎固め！"}</h2>
+ <div class="tiles"><div class="tile" style="--c:${pass?"var(--ok)":"var(--ng)"}"><b>得点</b><span>${score}/25</span></div><div class="tile" style="--c:var(--gold)"><b>獲得XP</b><span>+${score*3+(pass?50:0)}</span></div><div class="tile" style="--c:var(--sky)"><b>タイム</b><span>${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}</span></div></div>
+ <div class="card" style="width:100%;text-align:left"><h3>分野別</h3>${Object.entries(byCat).map(([c,[o,n]])=>`<div class="catbar"><span class="n">${CAT[c].i} ${CAT[c].n}</span><span class="b"><i style="width:${o/n*100}%;background:${CAT[c].c}"></i></span><span>${o}/${n}</span></div>`).join("")}</div>
+ <div style="width:100%;text-align:left"><h3>見直し</h3>${L.results.map((r,i)=>{const q=QID[r.id];return `<details class="card" style="margin-bottom:8px;padding:12px"><summary style="font-weight:700;font-size:14px;cursor:pointer">${r.ok?"✅":"❌"} 問${i+1} ${esc(q.q.slice(0,34))}…</summary><div style="font-size:14px;margin-top:8px;white-space:pre-wrap">${esc(q.q)}</div>${q.tbl?tblHTML(q.tbl):""}${q.ch.map((c,j)=>`<div style="font-size:13px;margin:4px 0;${j===q.a?"color:var(--ok-d);font-weight:800":j===r.sel?"color:var(--ng-d);text-decoration:line-through":""}">${KANA[j]}　${esc(c)}</div>`).join("")}<div class="muted" style="margin-top:6px">💡 ${esc(q.ex)}</div><div style="margin-top:6px">${fmtSrc(q)}</div></details>`}).join("")}</div></div></div>
+ <div class="lfoot"><button class="btn" onclick="endRun()">ホームへ</button><div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストの午前Ⅱ模試で${score}/25点！${pass?"合格ライン突破🎉":"リベンジするぞ"}')">結果をシェア</button></div>`;L.end=0}
+
+/* ================= 年度別 ================= */
+function yearPick(){const ys={};Q.forEach(q=>{const k=q.orig?"オリジナル":srcs(q)[0].replace(/ .*/,"");(ys[k]=ys[k]||[]).push(q.id)});
+ const order=Object.keys(ys).sort((a,b)=>a==="オリジナル"?1:b==="オリジナル"?-1:b.localeCompare(a));
+ modal(`<h2 style="margin:0 0 10px">年度別に解く</h2><div style="text-align:left">${order.map(k=>{const ids=ys[k],c=ids.filter(id=>S.q[id]&&S.q[id].c).length;return `<button class="li" onclick="closeModal();startRun(${esc(JSON.stringify(ids))},{title:'${k}',kind:'year'})"><span class="e">${k==="オリジナル"?"✨":"📘"}</span><span class="m"><b>${k==="オリジナル"?"オリジナル（頻出論点・最新シラバス）":k+"　午前Ⅱ"}</b><span class="muted">${ids.length}問・正解済み ${c}</span></span><span>›</span></button>`}).join("")}</div><p class="muted" style="text-align:left">※図やグラフが必須の問題は収録していません。複数年度で出題された問題は最初の年度に収録。</p><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
+
+/* ================= 午後Ⅰ ================= */
+let PM1F="all";
+function vPM1(){renderTop();const tags=["all",...new Set(PM1_THEMES.flatMap(t=>t.tag))];
+ const doneN=PM1_CASES.reduce((a,c)=>a+c.qs.filter((_,i)=>S.pm1[c.id+"-"+i]).length,0),allN=PM1_CASES.reduce((a,c)=>a+c.qs.length,0);
+ let h=`<div class="card hero">${poco("happy","s")}<div><h3 style="margin:0">午後Ⅰ：記述式</h3><div class="muted">事例を読み，PMとしての判断を字数内で書く力を鍛えよう。本文に根拠あり！</div></div></div>
+ <h2>✍️ 記述トレーニング <span class="pill">${doneN}/${allN}</span></h2>
+ <button class="li" onclick="formDrill()"><span class="e">🧩</span><span class="m"><b>解答の“型”ドリル</b><span class="muted">「狙い」「理由」の書き分けを8問でマスター</span></span><span>›</span></button>
+ ${PM1_CASES.map(c=>{const d=c.qs.filter((_,i)=>S.pm1[c.id+"-"+i]).length;return `<button class="li" onclick="openCase('${c.id}',0)"><span class="e">${d===c.qs.length?"✅":"📝"}</span><span class="m"><b>${esc(c.title)}</b><span class="muted">${c.qs.length}設問・${esc(c.tag)}　</span><span class="pill ${d===c.qs.length?"ok":""}">${d}/${c.qs.length}</span></span><span>›</span></button>`}).join("")}
+ <h2>📖 過去10年の出題テーマ</h2><div class="chips">${tags.map(t=>`<button class="chip ${PM1F===t?"on":""}" onclick="PM1F='${t}';go('pm1')">${t==="all"?"すべて":t}</button>`).join("")}</div>
+ ${PM1_THEMES.filter(t=>PM1F==="all"||t.tag.includes(PM1F)).map(t=>`<details class="card" style="margin-bottom:10px"><summary style="cursor:pointer;list-style:none"><div class="row" style="align-items:flex-start"><span class="pill" style="flex:none">${t.y} 問${t.n}</span><b style="font-size:15px;line-height:1.5">${esc(t.t)}</b></div></summary><div style="font-size:14px;margin-top:10px"><div class="muted">問われた力</div>${esc(t.ab)}<div class="muted" style="margin-top:8px">IPA解答例より（答え方の参考）</div>${t.ex.map(e=>`<div style="margin:4px 0;padding:8px 10px;background:var(--pri-l);border-radius:10px;font-size:13px">${esc(e)}</div>`).join("")}<div style="margin-top:6px">${t.tag.map(g=>`<span class="pill gold">${esc(g)}</span>`).join(" ")}</div></div></details>`).join("")}
+ <div class="foot">テーマ・問われた力はIPA公表の「解答例（出題趣旨）」を本アプリで要約したもの。解答例の引用元：IPA 各年度 プロジェクトマネージャ試験 午後Ⅰ 解答例。問題本文はIPAサイトの問題冊子で確認してください。記述トレーニングの事例は本アプリのオリジナルです。</div>`;
+ $("#main").innerHTML=h}
+function formDrill(){const ids=PM1_FORM.map((f,i)=>{const id="f"+i;QID[id]={id,cat:"int",q:f.q,ch:f.ch,a:f.a,ex:f.ex,orig:1};return id});
+ // 選択肢をシャッフル
+ ids.forEach(id=>{const q=QID[id];if(q._s)return;const ord=[0,1,2,3].sort(()=>Math.random()-.5);q.ch=ord.map(i=>PM1_FORM[+id.slice(1)].ch[i]);q.a=ord.indexOf(PM1_FORM[+id.slice(1)].a);q._s=1});
+ startRun(ids,{title:"解答の型ドリル",kind:"form"})}
+function openCase(cid,qi){const c=PM1_CASES.find(x=>x.id===cid),q=c.qs[qi],key=c.id+"-"+qi,prev=S.pm1[key];
+ const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";
+ el.innerHTML=`<div class="lhead"><button class="x" onclick="closeCase()">✕</button><div class="bar"><i style="width:${(qi)/c.qs.length*100+3}%"></i></div><span class="muted" style="font-weight:800">${qi+1}/${c.qs.length}</span></div>
+ <div class="lbody"><div class="qmeta"><span class="pill">${esc(c.tag)}</span><span class="pill gold">オリジナル事例</span>${prev?`<span class="pill ok">前回 ${["×","○","◎"][prev.g]}</span>`:""}</div><h3>${esc(c.title)}</h3><div class="scen">${esc(c.text)}</div>
+ <div class="qtext" style="margin-top:16px">設問${qi+1}　${esc(q.q)}</div>
+ <textarea class="wa" id="ans" placeholder="ここに解答を入力（${q.lim}字以内）">${esc(prev?.a||"")}</textarea>
+ <div class="cnt"><span id="cc">0 / ${q.lim}字</span><span class="muted">目安：${Math.round(q.lim*.8)}字以上</span></div><div class="gauge"><i id="cg"></i><span class="mk" style="left:80%"></span></div>
+ <div id="fb"></div></div><div class="lfoot" id="lf"><button class="btn" id="go">答え合わせ</button></div>`;
+ const ta=$("#ans"),upd=()=>{const n=[...ta.value.replace(/\s/g,"")].length;$("#cc").textContent=`${n} / ${q.lim}字`;$("#cc").style.color=n>q.lim?"var(--ng)":n>=q.lim*.8?"var(--ok-d)":"";const g=$("#cg");g.style.width=Math.min(100,n/q.lim*100)+"%";g.style.background=n>q.lim?"var(--ng)":n>=q.lim*.8?"var(--ok)":"var(--gold)"};ta.oninput=upd;upd();
+ $("#go").onclick=()=>{const a=ta.value.trim();if(!a){toast("まずは書いてみよう！");return}
+  const hit=q.kw.map(g=>g.find(w=>a.includes(w)));const nh=hit.filter(Boolean).length;let hl=esc(a);hit.filter(Boolean).forEach(w=>{hl=hl.split(esc(w)).join(`<mark>${esc(w)}</mark>`)});
+  const n=[...a.replace(/\s/g,"")].length,over=n>q.lim;
+  $("#fb").innerHTML=`<div class="card fade-in" style="margin-top:14px"><div class="muted">あなたの解答（キーワードをハイライト）</div><div style="margin:6px 0 10px">${hl}</div>
+  <div class="row" style="flex-wrap:wrap;gap:6px">${q.kw.map((g,i)=>`<span class="pill ${hit[i]?"ok":"ng"}">${hit[i]?"✓":"・"} ${esc(g[0])}</span>`).join("")}</div>
+  <div style="margin-top:6px;font-weight:800">キーワード一致 ${nh}/${q.kw.length}${over?'　<span style="color:var(--ng)">⚠ 字数オーバー</span>':""}</div>
+  <div class="muted" style="margin-top:12px">模範解答（例）</div><div style="padding:10px;border-radius:12px;background:var(--ok-l);font-weight:700">${esc(q.ans)}</div>
+  <div class="muted" style="margin-top:10px">解説</div><div style="font-size:14px">${esc(q.ex)}</div></div>
+  <h3 style="margin-top:16px">自己採点しよう</h3><div class="grid2" style="grid-template-columns:repeat(3,1fr)"><button class="btn ok sm" style="width:100%" data-g="2">◎ 書けた</button><button class="btn gold sm" style="width:100%" data-g="1">○ 惜しい</button><button class="btn ng sm" style="width:100%" data-g="0">× まだ</button></div>`;
+  $("#lf").style.display="none";SFX.tap();
+  $$("[data-g]").forEach(b=>b.onclick=()=>{const g=+b.dataset.g;S.pm1[key]={a,g,at:Date.now()};save();qprog("pm1");const xp=[3,10,20][g];addXP(xp);if(g===2){SFX.ok(3);flash("#21c16b");const rr=b.getBoundingClientRect();hitmark(rr.left+rr.width/2,rr.top+rr.height/2,"#21c16b",1.3);confetti(70)}else if(g===1)SFX.ok(1);else SFX.tap();
+   const r=b.getBoundingClientRect();floatXP(r.left+20,r.top,"+"+xp+"XP");
+   setTimeout(()=>{closeCase(true);if(qi+1<c.qs.length)openCase(cid,qi+1);else{SFX.fin(true);flash("#ffb21e");confetti(150);modal(`${poco("wow","jump")}<h2 style="margin:6px 0">事例クリア！</h2><p class="muted">「${esc(c.title)}」の全設問に取り組みました</p><button class="btn" onclick="closeModal()">OK</button>`);go("pm1")}},650)})}}
+function closeCase(silent){$("#lesson")?.remove();document.body.style.overflow="";if(!silent)go("pm1")}
+
+/* ================= 午後Ⅱ ================= */
+const PM2_LIM=[[0,800],[800,1600],[600,1200]];
+function vPM2(){renderTop();const done=Object.values(S.pm2).filter(p=>p.done).length;
+ let h=`<div class="card hero">${poco("happy","s")}<div><h3 style="margin:0">午後Ⅱ：論文</h3><div class="muted">2時間で設問ア・イ・ウを書き切る。本番形式のトレーナーで“完走力”をつけよう。</div></div></div>
+ <div class="quick"><button class="qa b" onclick="openEssay(randTheme())"><span class="e">🎲</span>ランダムお題<small>本番さながらに挑戦</small></button><button class="qa d" onclick="tips()"><span class="e">🧭</span>論文の型<small>構成・時間配分のコツ</small></button></div>
+ <h2>📜 過去10年の論文テーマ <span class="pill">完走 ${done}</span></h2>
+ ${PM2_THEMES.map((t,i)=>{const p=S.pm2[i];const n=p?p.txt.reduce((a,s)=>a+[...s.replace(/\s/g,"")].length,0):0;return `<button class="li" onclick="openEssay(${i})"><span class="e">${p&&p.done?"🏛️":n?"✏️":"📄"}</span><span class="m"><span class="pill">${t.y} 問${t.n}</span><b style="margin-top:4px">${esc(t.t)}</b><span class="muted">${p&&p.done?"完走済み":n?`下書き ${n}字`:"未着手"}</span></span><span>›</span></button>`}).join("")}
+ <div class="foot">テーマと狙いはIPA公表の「出題趣旨」（平成28〜令和7年度）を本アプリで要約したもの。設問ア・イ・ウの文面は出題趣旨をもとに本アプリで作成した練習用で，本番の設問文とは異なります（本番の設問はIPAの問題冊子で確認してください）。</div>`;
+ $("#main").innerHTML=h}
+function randTheme(){return Math.random()*PM2_THEMES.length|0}
+function tips(){modal(`<h2 style="margin:0 0 8px">論文の型 🧭</h2><div style="text-align:left;font-size:14px;line-height:1.8">
+<b>⏱️ 時間配分（120分）</b><br>設問の読解・骨子づくり 15分 → ア 20分 → イ 45分 → ウ 30分 → 見直し 10分<br><br>
+<b>📐 字数</b><br>ア：800字以内（目安600〜800）<br>イ：800〜1,600字（目安1,200以上）<br>ウ：600〜1,200字（目安800以上）<br><br>
+<b>🧱 構成の型</b><br>ア＝プロジェクトの概要（目的・規模・期間・体制・自分の立場）＋設問の論点につながる“特徴”<br>イ＝「〜という状況だった。そこで私は〜と考え，〜した。」を繰り返す。<u>状況→考え→行動</u>をセットで書く<br>ウ＝結果の評価（定量的に）＋残った課題と今後の改善<br><br>
+<b>✅ 採点講評でよく指摘される点</b><br>・一般論で終わり，経験が感じられない<br>・プロジェクト概要と本文が整合しない<br>・PMとしての判断や工夫が書かれていない<br>・設問で問われていることに答えていない</div><button class="btn" onclick="closeModal()">OK</button>`)}
+let ES=null;
+function openEssay(i){const t=PM2_THEMES[i];const p=S.pm2[i]||(S.pm2[i]={txt:["","",""],plan:["","",""],used:0,done:false});ES={i,tab:0,run:false,t0:0};
+ const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";
+ el.innerHTML=`<div class="lhead"><button class="x" onclick="closeEssay()">✕</button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(t.t)}</div><div class="muted" style="font-size:11px">${t.y} 午後Ⅱ 問${t.n}</div></div><button class="btn sm sky" id="tbtn">▶ 120:00</button></div>
+ <div class="lbody"><details class="card" style="padding:12px"><summary style="font-weight:800;cursor:pointer">📌 出題の狙い・設問</summary><div style="font-size:14px;margin-top:8px">${esc(t.ab)}</div>${t.s.map((s,j)=>`<div style="font-size:13px;margin-top:8px"><b>設問${"アイウ"[j]}</b>　${esc(s)}</div>`).join("")}</details>
+ <div class="tabs">${["ア","イ","ウ","骨子"].map((n,j)=>`<button data-tab="${j}" class="${j===0?"on":""}">${j<3?"設問"+n:"🦴 "+n}</button>`).join("")}</div><div id="ed"></div></div>
+ <div class="lfoot"><div class="row"><button class="btn ghost sm" style="flex:1" onclick="dlEssay()">📋 全文コピー</button><button class="btn ok sm" style="flex:2" onclick="submitEssay()">🏁 書き終えた！</button></div></div>`;
+ $$(".tabs button",el).forEach(b=>b.onclick=()=>{ES.tab=+b.dataset.tab;$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));drawEd()});
+ $("#tbtn").onclick=()=>{ES.run=!ES.run;if(ES.run){ES.t0=Date.now()-p.used*1000;ES.iv=setInterval(updT,500)}else{clearInterval(ES.iv);p.used=Math.round((Date.now()-ES.t0)/1000);save()}updT()};updT();drawEd()}
+function updT(){const p=S.pm2[ES.i];if(ES.run)p.used=Math.round((Date.now()-ES.t0)/1000);const r=7200-p.used,b=$("#tbtn");if(!b)return;const a=Math.abs(r);b.textContent=(ES.run?"⏸ ":"▶ ")+(r<0?"-":"")+Math.floor(a/60)+":"+String(a%60).padStart(2,"0");b.className="btn sm "+(r<0?"ng":r<1200?"gold":"sky");if(ES.run&&p.used%15===0)save()}
+function drawEd(){const p=S.pm2[ES.i],t=PM2_THEMES[ES.i],j=ES.tab,ed=$("#ed");
+ if(j===3){ed.innerHTML=`<p class="muted">書き始める前に，各設問で書く要素を箇条書きで決めよう（ここは字数に含まれません）。</p>${["ア：概要と特徴","イ：状況→考え→行動","ウ：評価と改善"].map((n,k)=>`<div style="font-weight:800;margin:12px 0 4px">${n}</div><textarea class="wa" data-k="${k}" placeholder="・\n・\n・">${esc(p.plan[k])}</textarea>`).join("")}`;$$("textarea",ed).forEach(a=>a.oninput=()=>{p.plan[+a.dataset.k]=a.value;save()});return}
+ const [mn,mx]=PM2_LIM[j];ed.innerHTML=`<div class="muted" style="font-size:13px">${esc(t.s[j])}</div><textarea class="wa tall" id="et" placeholder="ここに論述を入力…（自動保存されます）">${esc(p.txt[j])}</textarea><div class="cnt"><span id="ec"></span><span class="muted">${mn?mn+"字以上 ":""}${mx}字以内</span></div><div class="gauge"><i id="eg"></i>${mn?`<span class="mk" style="left:${mn/mx*100}%"></span>`:""}</div>`;
+ const a=$("#et"),u=()=>{p.txt[j]=a.value;const n=[...a.value.replace(/\s/g,"")].length;const okz=n>=mn&&n<=mx&&(mn||n>=600);$("#ec").textContent=n+"字";$("#ec").style.color=n>mx?"var(--ng)":okz?"var(--ok-d)":"";const g=$("#eg");g.style.width=Math.min(100,n/mx*100)+"%";g.style.background=n>mx?"var(--ng)":okz?"var(--ok)":"var(--gold)";save()};a.oninput=u;u()}
+function closeEssay(){clearInterval(ES&&ES.iv);if(ES&&ES.run){S.pm2[ES.i].used=Math.round((Date.now()-ES.t0)/1000);save()}$("#lesson")?.remove();document.body.style.overflow="";ES=null;go("pm2")}
+function dlEssay(){const p=S.pm2[ES.i],t=PM2_THEMES[ES.i];const s=`【${t.y} 午後Ⅱ 問${t.n}】${t.t}\n\n`+["ア","イ","ウ"].map((n,j)=>`■設問${n}\n${p.txt[j]}\n`).join("\n");try{navigator.clipboard.writeText(s).then(()=>toast("論文全文をコピーしました（メモ帳などに貼り付けて保存できます）"),()=>toast("コピーできませんでした"))}catch(e){toast("コピーできませんでした")}}
+function submitEssay(){const p=S.pm2[ES.i];const ns=p.txt.map(s=>[...s.replace(/\s/g,"")].length);
+ const ok=[ns[0]>=400&&ns[0]<=800,ns[1]>=800&&ns[1]<=1600,ns[2]>=600&&ns[2]<=1200];
+ const CK=["設問で問われていることに，設問の順に答えている","プロジェクトの特徴（ア）とイ・ウの内容が整合している","「状況→考え→行動」がセットで書けている","PMとしての判断・工夫が具体的に書けている（一般論で終わっていない）","数値（期間・規模・工数・効果など）を使っている","ウで結果を評価し，今後の改善点を書いている","本番と同じく時間内（120分）に書けた"];
+ modal(`<h2 style="margin:0 0 6px">セルフチェック 📝</h2><div style="text-align:left">${["ア","イ","ウ"].map((n,j)=>`<div class="check"><span>${ok[j]?"✅":"⚠️"}</span><span>設問${n}：${ns[j]}字 <span class="muted">（${PM2_LIM[j][0]||"目安400"}〜${PM2_LIM[j][1]}字）</span></span></div>`).join("")}${CK.map((c,k)=>`<label class="check"><input type="checkbox" class="ck" ${k===6&&p.used<=7200&&p.used>0?"checked":""}><span>${c}</span></label>`).join("")}</div><div style="height:12px"></div><button class="btn ok" id="fin">提出する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">書き直す</button>`,null,()=>{$("#fin").onclick=()=>{const c=$$(".ck").filter(x=>x.checked).length;const total=ns.reduce((a,b)=>a+b,0);const xp=Math.min(60,Math.round(total/50))+c*5+(ok.every(Boolean)?30:0);const first=!p.done;p.done=true;p.score=c;save();closeModal();addXP(xp);SFX.fin(true);flash("#ffb21e");shakeScreen("l");confetti(240);buzz([30,40,30]);
+  modal(`${poco("wow","jump")}<h2 style="margin:6px 0">論文 完走！</h2><p>合計 <b>${total}</b> 字・チェック ${c}/${CK.length}</p><div class="say" style="margin-bottom:12px">+${xp} XP 獲得！${first?"":"（再提出）"}</div><button class="btn" onclick="closeModal();closeEssay()">OK</button>`)}})}
+
+/* ================= 記録 ================= */
+function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.round(S.totalOk/S.totalAns*100):0;
+ // heat
+ const cells=[];const now=new Date();for(let i=83;i>=0;i--){const d=new Date(now-i*864e5);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");const x=S.days[k]||0;cells.push(`<div class="${x?x>=100?"l4":x>=50?"l3":x>=20?"l2":"l1":""}" title="${k}: ${x}XP"></div>`)}
+ const wk=[];for(let i=6;i>=0;i--){const d=new Date(now-i*864e5);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");wk.push([("日月火水木金土")[d.getDay()],S.days[k]||0,i===0])}const mx=Math.max(S.goal,...wk.map(w=>w[1]));
+ let h=`<div class="card" style="text-align:center">${poco("happy")}<h2 style="margin:4px 0 0">Lv.${lv+1} ${titleOf(lv)}</h2><div class="muted">累計 ${S.xp} XP</div></div>
+ <div class="tiles" style="margin-top:12px"><div class="tile" style="--c:var(--fire)"><b>連続日数</b><span>🔥${S.streak}</span></div><div class="tile" style="--c:var(--ok)"><b>正答率</b><span>${acc}%</span></div><div class="tile" style="--c:var(--sky)"><b>ベスト連続</b><span>${S.best}日</span></div></div>
+ <div class="muted" style="margin-top:6px;text-align:center">🛡️ ストリークシールド ×${S.shield}（7日連続ごとに獲得。1日休んでも記録を守ります）</div>
+ <h2>今週のXP</h2><div class="card"><div class="bars">${wk.map(([d,x,t])=>`<div class="${t?"today":""}"><span style="font-weight:700;color:var(--ink)">${x||""}</span><i style="height:${x/mx*80}%"></i>${d}</div>`).join("")}</div></div>
+ <h2>学習カレンダー（12週）</h2><div class="card"><div class="heat">${cells.join("")}</div></div>
+ <h2>分野別の習熟度</h2><div class="card">${UNITS.map(u=>{const qs=Q.filter(q=>q.cat===u.k);const m=qs.filter(q=>S.q[q.id]&&S.q[q.id].box>=2).length;return `<div class="catbar"><span class="n">${u.i} ${u.n}</span><span class="b"><i style="width:${m/qs.length*100}%;background:${u.c}"></i></span><span style="font-size:12px">${m}/${qs.length}</span></div>`}).join("")}<div class="muted" style="font-size:11px">※2回以上連続で正解した問題を「習熟」としてカウント</div></div>
+ ${S.mock.length?`<h2>模試の履歴</h2><div class="card">${S.mock.slice(-8).reverse().map(m=>`<div class="check"><span>${m.score>=15?"🏅":"📄"}</span><span style="flex:1">${new Date(m.at).toLocaleDateString("ja-JP")}</span><b>${m.score}/25</b></div>`).join("")}</div>`:""}
+ <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${b.i}</span>${b.n}</div>`).join("")}</div></div>
+ <h2>設定</h2><div class="card">
+  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
+  <div class="row" style="padding:8px 4px"><span style="flex:1;font-size:14px">1日の目標</span><select id="gl" style="padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)">${[20,50,100,150].map(g=>`<option ${S.goal===g?"selected":""} value="${g}">${g} XP</option>`).join("")}</select></div>
+  <div class="grid2" style="margin-top:8px"><button class="btn ghost sm" style="width:100%" onclick="exportData()">📤 引き継ぎコード発行</button><button class="btn ghost sm" style="width:100%" onclick="importData()">📥 コードで復元</button></div>
+  <div class="muted" style="margin-top:8px">登録不要のため，記録はこの端末のブラウザに保存されます。機種変更や別の端末へは「引き継ぎコード」で移せます。</div>
+  <button class="btn ghost sm" style="width:100%;margin-top:12px;color:var(--ng)" onclick="ask('すべての記録を消去しますか？','消去する',()=>{try{localStorage.removeItem(KEY)}catch(e){}load();go('home')})">記録をリセット</button></div>
+ <button class="btn sky" style="margin-top:18px" onclick="share('プロマネ試験の対策アプリ「PM試験クエスト」で勉強中🐝 🔥'+S.streak+'日連続・Lv.'+(levelOf(S.xp)+1))">🔗 友だちにシェア</button>
+ <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。</div>`;
+ $("#main").innerHTML=h;
+ $("#snd").onchange=e=>{S.sound=e.target.checked;save();SFX.tap()};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
+function exportData(){const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));modal(`<h2 style="margin:0 0 8px">引き継ぎコード</h2><p class="muted">全文をコピーして，新しい端末の「コードで復元」に貼り付けてください。</p><textarea class="wa" readonly style="font-size:11px;min-height:140px">${code}</textarea><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>toast('コピーしました'))">コピー</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
+function importData(){modal(`<h2 style="margin:0 0 8px">コードで復元</h2><textarea class="wa" id="imp" placeholder="引き継ぎコードを貼り付け"></textarea><button class="btn" onclick="try{const d=JSON.parse(decodeURIComponent(escape(atob($('#imp').value.trim()))));S=Object.assign({},DEF,d);save();closeModal();toast('復元しました！');go('home')}catch(e){toast('コードが正しくありません')}">復元する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">キャンセル</button>`)}
+
+/* ================= 起動 ================= */
+checkStreakDecay();regenHearts();go("home");
+setInterval(()=>{if(!L&&!ES)renderTop()},30000);
+</script>
+</body>
+</html>
