@@ -232,6 +232,8 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .say.stk{border-color:var(--fire)}
 .chip,.tabs button,.nav button,.x,.cmb,summary{transition:transform .08s}
 .chip:active,.tabs button:active,.nav button:active,.x:active{transform:scale(.92)}
+.hov{position:fixed;z-index:9999;display:none;opacity:0;margin:0;padding:0;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.hov input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -655,7 +657,24 @@ function hapticFor(el){if(el.matches(".btn.ng,.chestbtn,.chest,#askY,#hpTest"))r
 const HSEL="button,a.btn,.li,.node,.qa,.chip,label.check,summary,select";
 // Android：押した瞬間（pointerdown）。iPhone：タップ確定（click）＝ユーザー操作の中で必ず呼ぶ
 document.addEventListener("pointerdown",e=>{if(!CANVIB)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{passive:true,capture:true});
-document.addEventListener("click",e=>{if(!IOS||!e.isTrusted)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{capture:true});
+document.addEventListener("click",e=>{if(!IOS||!e.isTrusted||HOV)return;const el=e.target.closest(HSEL);if(el&&!el.disabled)haptic(hapticFor(el))},{capture:true});
+/* iOS 26.5以降対策：指が触れた瞬間、ボタンの上に透明な本物のスイッチ（label＋switch）を重ね、
+   指で実際にスイッチを切り替えさせて端末の触覚を鳴らす。切り替え後、元のボタンへクリックを転送する */
+const HOV_SKIP="input,textarea,select,label.check,.wa,a[href]:not(.btn)";
+let HOV=null,HOVt=null,HOVxy=null;
+function hovHide(){if(HOV){HOV.style.display="none"}HOVt=null}
+if(IOS){
+ HOV=document.createElement("label");HOV.className="hov";HOV.setAttribute("aria-hidden","true");HOV.innerHTML='<input type="checkbox" switch tabindex="-1">';
+ document.addEventListener("DOMContentLoaded",()=>document.body.appendChild(HOV));if(document.body)document.body.appendChild(HOV);
+ const inp=HOV.querySelector("input");
+ inp.addEventListener("click",e=>{e.stopPropagation();const t=HOVt;hovHide();if(t&&t.isConnected&&!t.disabled)setTimeout(()=>t.click(),0)});
+ HOV.addEventListener("click",e=>{if(e.target===HOV)e.stopPropagation()});
+ document.addEventListener("touchstart",e=>{if(S.noHaptic||e.touches.length>1){hovHide();return}const el=e.target.closest(HSEL);if(!el||el.disabled||el.matches(HOV_SKIP)||el.closest(".hov")){hovHide();return}
+  const r=el.getBoundingClientRect(),t=e.touches[0];HOVt=el;HOVxy=[t.clientX,t.clientY];Object.assign(HOV.style,{display:"block",left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"})},{passive:true,capture:true});
+ document.addEventListener("touchmove",e=>{if(!HOVt||!HOVxy)return;const t=e.touches[0];if(Math.hypot(t.clientX-HOVxy[0],t.clientY-HOVxy[1])>10)hovHide()},{passive:true,capture:true});
+ document.addEventListener("touchcancel",hovHide,{capture:true});
+ addEventListener("scroll",hovHide,{passive:true,capture:true});
+}
 function hapticEnv(){if(IOS)return{m:"iPhone方式（iOS 18以降のSafariのスイッチ触覚）",ok:true};if(CANVIB)return{m:"Android方式（Vibration API）",ok:true};return{m:"この端末・ブラウザは振動に未対応です",ok:false}}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -976,7 +995,7 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
  ${S.mock.length?`<h2>模試の履歴</h2><div class="card">${S.mock.slice(-8).reverse().map(m=>`<div class="check"><span>${m.score>=15?"🏅":"📄"}</span><span style="flex:1">${new Date(m.at).toLocaleDateString("ja-JP")}</span><b>${m.score}/25</b></div>`).join("")}</div>`:""}
  <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${b.i}</span>${b.n}</div>`).join("")}</div></div>
  <h2>設定</h2><div class="card">
-  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><div class="card" style="margin:4px 0 8px;padding:12px;box-shadow:none"><div style="font-size:13px"><b>振動の方式：</b>${hapticEnv().m}</div>${EMBED?`<div style="font-size:12px;color:var(--ng-d);margin-top:4px">⚠ いまはClaudeなど別サイトの中（埋め込み表示）で開いています。ブラウザの制限で振動しないことがあります。公開ページをSafari／Chromeで直接開くと確実です。</div>`:""}${IOS?`<div class="muted" style="font-size:12px;margin-top:4px">iPhoneは「設定 → サウンドと触覚 → システムの触覚」がオンのとき、Safariで振動します。</div>`:""}<button class="btn gold sm" id="hpTest" style="width:100%;margin-top:8px">📳 振動テスト</button></div><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
+  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><div class="card" style="margin:4px 0 8px;padding:12px;box-shadow:none"><div style="font-size:13px"><b>振動の方式：</b>${hapticEnv().m}</div>${EMBED?`<div style="font-size:12px;color:var(--ng-d);margin-top:4px">⚠ いまはClaudeなど別サイトの中（埋め込み表示）で開いています。ブラウザの制限で振動しないことがあります。公開ページをSafari／Chromeで直接開くと確実です。</div>`:""}${IOS?`<div class="muted" style="font-size:12px;margin-top:4px">iPhoneは「設定 → サウンドと触覚 → システムの触覚」がオンのとき、Safariで振動します。</div>`:""}${IOS?`<label class="row" style="margin-top:8px;font-size:13px;gap:10px"><input type="checkbox" switch style="width:44px;height:26px;flex:none"> <span>①このスイッチを指で切り替えて、ブルッとするか確認</span></label>`:""}<button class="btn gold sm" id="hpTest" style="width:100%;margin-top:8px">📳 振動テスト</button></div><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
   <div class="row" style="padding:8px 4px"><span style="flex:1;font-size:14px">1日の目標</span><select id="gl" style="padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)">${[20,50,100,150].map(g=>`<option ${S.goal===g?"selected":""} value="${g}">${g} XP</option>`).join("")}</select></div>
   <div class="grid2" style="margin-top:8px"><button class="btn ghost sm" style="width:100%" onclick="exportData()">📤 引き継ぎコード発行</button><button class="btn ghost sm" style="width:100%" onclick="importData()">📥 コードで復元</button></div>
   <div class="muted" style="margin-top:8px">登録不要のため，記録はこの端末のブラウザに保存されます。機種変更や別の端末へは「引き継ぎコード」で移せます。</div>
