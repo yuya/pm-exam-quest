@@ -642,7 +642,7 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const KANA=["ア","イ","ウ","エ"];
 const ICP={"account_balance":983040,"ads_click":983041,"alarm":983042,"architecture":983043,"arrow_forward_ios":983044,"article":983045,"auto_awesome":983046,"auto_stories":983047,"balance":983048,"bedtime":983049,"bolt":983050,"calculate":983111,"calendar_month":983051,"campaign":983052,"cancel":983053,"casino":983054,"celebration":983055,"check":983056,"check_circle":983057,"checklist":983058,"close":983059,"construction":983060,"content_copy":983061,"crown":983062,"cyclone":983063,"description":983064,"diamond":983065,"download":983066,"eco":983067,"edit":983068,"edit_note":983069,"explore":983070,"extension":983071,"favorite":983072,"handshake":983073,"history_edu":983074,"home":983075,"library_books":983076,"lightbulb":983077,"local_fire_department":983078,"map":983079,"menu_book":983080,"military_tech":983081,"pause":983082,"payments":983083,"play_arrow":983084,"psychology":983085,"push_pin":983086,"redeem":983087,"replay":983088,"school":983089,"share":983090,"shield":983091,"skip_next":983110,"sports_score":983092,"star":983093,"stars":983094,"target":983095,"timer":983096,"trending_up":983097,"trophy":983098,"tune":983109,"upload":983099,"vibration":983100,"view_agenda":983101,"volcano":983102,"volume_off":983103,"volume_up":983104,"warning":983105,"wb_sunny":983106,"wb_twilight":983107,"workspace_premium":983108};
-const E=(n,c="")=>`<img class="emo ${c}" src="assets/emoji/${n}.svg" alt="" aria-hidden="true" draggable="false">`;
+const E=(n,c="")=>`<img class="emo ${c}" src="assets/emoji/${n}.webp" alt="" aria-hidden="true" draggable="false">`;
 const I=(n,c="")=>`<i class="ms ${c}" aria-hidden="true">${ICP[n]?String.fromCodePoint(ICP[n]):""}</i>`;
 const CATS=[
  {k:"int",n:"統合・標準",i:"explore",c:"#5b4cf5",d:"#4234d6"},
@@ -1111,7 +1111,7 @@ function fadeUpd(el){const sc=el.scrollHeight-el.clientHeight>4,t=sc&&el.scrollT
 document.addEventListener("scroll",e=>{const el=e.target;if(el.matches&&el.matches(FADE))fadeUpd(el)},{capture:true,passive:true});
 let fadeRaf=0;const fadeAll=()=>{cancelAnimationFrame(fadeRaf);fadeRaf=requestAnimationFrame(()=>$$(FADE).forEach(fadeUpd))};
 new MutationObserver(fadeAll).observe(document.body,{childList:true,subtree:true});addEventListener("resize",fadeAll);
-["wrapped_gift","coin","gem_stone","shield","military_medal","star","crown"].forEach(n=>{const i=new Image();i.src="assets/emoji/"+n+".svg"});
+["wrapped_gift","coin","gem_stone","shield","military_medal","star","crown"].forEach(n=>{const i=new Image();i.src="assets/emoji/"+n+".webp"});
 /* ================= 起動 ================= */
 checkStreakDecay();regenHearts();go("home");
 setInterval(()=>{if(!L&&!ES)renderTop()},30000);
