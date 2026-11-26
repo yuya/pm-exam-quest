@@ -155,16 +155,16 @@ table.t td,table.t th{border:1.5px solid var(--line);padding:5px 7px;text-align:
 table.t tr:first-child td{background:var(--pri-l);font-weight:700}
 .combo{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:60;font-weight:700;font-size:22px;color:var(--fire);text-shadow:0 2px 0 #fff;pointer-events:none;animation:pop .9s forwards}
 @keyframes pop{0%{transform:translate(-50%,10px) scale(.6);opacity:0}25%{transform:translate(-50%,0) scale(1.15);opacity:1}100%{transform:translate(-50%,-30px) scale(1);opacity:0}}
-.xpf{position:fixed;z-index:61;font-weight:700;color:var(--gold-d);pointer-events:none;animation:xpf 1s forwards;font-size:18px}
-@keyframes xpf{to{transform:translateY(-60px);opacity:0}}
+.xpf{position:fixed;z-index:61;font-weight:700;color:var(--gold-d);pointer-events:none;animation:xpf 1s var(--e-out) forwards;font-size:18px}
+@keyframes xpf{0%{transform:translate(0,6px) scale(.5);opacity:0}16%{transform:translate(3px,-12px) scale(1.22);opacity:1}32%{transform:translate(7px,-22px) scale(1)}100%{transform:translate(24px,-64px) scale(.9);opacity:0}}
 .timer{font-weight:700;font-variant-numeric:tabular-nums;color:var(--sub);min-width:60px;text-align:right}
 .timer.warn{color:var(--ng);animation:blink 1s infinite}
 @keyframes blink{50%{opacity:.4}}
 /* overlay / modal */
 .ov{position:fixed;inset:0;z-index:80;background:rgba(15,12,40,.5);display:grid;place-items:center;padding:20px;animation:fade .2s}
 @keyframes fade{from{opacity:0}}
-.modal{background:var(--card);border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;text-align:center;animation:zoom .35s cubic-bezier(.3,1.5,.5,1);max-height:88vh;overflow:auto}
-@keyframes zoom{from{transform:scale(.7);opacity:0}}
+.modal{background:var(--card);border-radius:24px;padding:24px 20px 20px;width:100%;max-width:400px;text-align:center;animation:zoom .36s var(--e-pop);max-height:88vh;overflow:auto}
+@keyframes zoom{from{transform:scale(.82) translateY(14px);opacity:0}60%{opacity:1}}
 .big{font-size:56px;line-height:1.1}
 .rays{position:relative}
 .rays::before{content:"";position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;background:repeating-conic-gradient(from 0deg,rgba(255,178,30,.25) 0 10deg,transparent 10deg 20deg);border-radius:50%;animation:spin 8s linear infinite;z-index:-1}
@@ -294,6 +294,35 @@ mark{background:color-mix(in srgb,var(--gold) 45%,transparent);color:inherit;bor
 .chip:active,.tabs button:active,.nav button:active,.x:active{transform:scale(.92)}
 .hov{position:fixed;z-index:9999;display:none;opacity:0;margin:0;padding:0;-webkit-tap-highlight-color:transparent;cursor:pointer}
 .hov input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
+/* ===== モーション設計（ディズニー12原則ベース） =====
+   入場=ease-out/ポップ、退場=ease-in で入場より速く。主役以外は引いて見せる（ステージング） */
+:root{--e-out:cubic-bezier(.22,1,.36,1);--e-in:cubic-bezier(.55,0,1,.45);--e-pop:cubic-bezier(.34,1.56,.64,1);--e-spring:cubic-bezier(.3,1.6,.5,1)}
+.ov.out{animation:ovOut .16s var(--e-in) forwards;pointer-events:none}
+.ov.out .modal{animation:mOut .16s var(--e-in) forwards}
+@keyframes ovOut{to{opacity:0}}
+@keyframes mOut{to{transform:scale(.92) translateY(8px);opacity:0}}
+.toast.out{animation:tOut .18s var(--e-in) forwards}
+@keyframes tOut{to{transform:translate(-50%,10px);opacity:0}}
+.choices.done .ch:not(.right):not(.wrong){opacity:.42;transform:scale(.98);transition:opacity .25s var(--e-out),transform .25s var(--e-out)}
+.lfoot.ok .verdict,.lfoot.ng .verdict{animation:up .22s var(--e-out)}
+.lfoot.ok .verdict .t,.lfoot.ng .verdict .t{animation:vT .34s var(--e-pop) both}
+.lfoot.ok .verdict .ex,.lfoot.ng .verdict .ex,.lfoot.ng .verdict .muted{animation:up .3s var(--e-out) .09s both}
+@keyframes vT{from{transform:scale(.7) translateY(6px);opacity:0}}
+.bar.gain i::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.75) 50%,transparent 70%);background-size:250% 100%;animation:shine .65s var(--e-out) both}
+@keyframes shine{from{background-position:160% 0}to{background-position:-60% 0}}
+.bar.gain{animation:barBump .38s var(--e-spring)}
+@keyframes barBump{35%{scale:1 1.3}70%{scale:1 .92}}
+.node .stars .emo.earn{animation:starEarn .52s var(--e-spring) both}
+@keyframes starEarn{0%{transform:scale(0) rotate(-45deg)}60%{transform:scale(1.6) rotate(12deg)}100%{transform:none}}
+.node.land{animation:land .45s var(--e-spring)}
+@keyframes land{30%{scale:1.1 .9}65%{scale:.96 1.05}}
+.node.flip .disc{animation:flip .55s var(--e-out)}
+@keyframes flip{50%{transform:rotateY(90deg) scale(1.08)}}
+#main.from-r{animation:fromR .24s var(--e-out)}#main.from-l{animation:fromL .24s var(--e-out)}
+@keyframes fromR{from{opacity:0;transform:translateX(20px)}}@keyframes fromL{from{opacity:0;transform:translateX(-20px)}}
+.nav button.on .ic{animation:navPop .38s var(--e-spring)}
+@keyframes navPop{0%{transform:scale(.8) translateY(3px)}55%{transform:scale(1.18) translateY(-2px)}}
+.btn:not([disabled]):active,.chestbtn:active{scale:1.02 .96}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -766,7 +795,7 @@ function shakeScreen(size){if(S.noShake)return;const el=$("#lesson")||$("#app");
 function flash(c){if(RM||S.noShake)return;const f=document.createElement("div");f.style.cssText="position:fixed;inset:0;z-index:95;pointer-events:none";document.body.appendChild(f);f.animate([{background:"#fff",opacity:.45},{background:"#140f30",opacity:.18},{background:c,opacity:.28},{background:c,opacity:0}],{duration:230,easing:"linear"}).onfinish=()=>f.remove()}
 function floatXP(x,y,t,cls=""){const e=document.createElement("div");e.className="xpf "+cls;e.innerHTML=t;e.style.left=Math.min(innerWidth-110,Math.max(8,x))+"px";e.style.top=y+"px";document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
 function comboPop(t,c){const e=document.createElement("div");e.className="combo";e.innerHTML=t;if(c)e.style.color=c;document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
-function toast(t,ms=2400){const e=document.createElement("div");e.className="toast";e.innerHTML=t;document.body.appendChild(e);setTimeout(()=>e.remove(),ms)}
+function toast(t,ms=2400){const e=document.createElement("div");e.className="toast";e.innerHTML=t;document.body.appendChild(e);setTimeout(()=>{e.classList.add("out");setTimeout(()=>e.remove(),200)},ms)}
 
 /* ================= マスコット「ポコ」（オリジナル：紫の体＋黄色いヘルメット） ================= */
 const POCO={body:"#7b6bff",shade:"#6656ee",cheek:"#ff9fb0",ink:"#1d1b33",hat:"#ffc531",brim:"#ffb000",ridge:"#ffd866",txt:"#a86800"};
@@ -793,7 +822,7 @@ const RAR=[{n:"ノーマル",c:"#8b8aa8"},{n:"レア",c:"#1cb0f6"},{n:"スーパ
 function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"shield",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12){const x=50+(Math.random()*21|0);return{r:2,i:"gem_stone",t:`+${x} XP`,f:()=>addXP(x)}}if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"gem_stone",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"coin",t:`+${x} XP`,f:()=>addXP(x)}}
 function openChest(title="宝箱ゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
  modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">画面のどこでもタップして開けよう！</p><div id="chest" class="chest" aria-label="宝箱">${E("wrapped_gift")}</div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
- const c=$("#chest"),ov=$$(".ov").pop();ov.classList.add("chesting");
+ const c=$("#chest"),ov=$$(".ov:not(.out)").pop();ov.classList.add("chesting");
  const tap=e=>{if(taps>=3)return;e.preventDefault();e.stopImmediatePropagation();taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);haptic(taps<3?"medium":"heavy");jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
   const x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;burst(x,y,"#ffb300",8+taps*3);
   if(taps===3){ov.classList.remove("chesting");$("#chint").textContent="";setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);rw.f();save();renderTop();
@@ -826,11 +855,12 @@ function renderTop(){regenHearts();
  $("#brand").innerHTML=`${poco("happy","logo")}<span>PM試験<b>クエスト</b></span>`;
  $("#stats").innerHTML=`<span class="stat fire ${S.last===today()?"":"dim"}" title="連続学習日数"><i class=ms aria-hidden=true>&#xF0026;</i>${S.streak}</span><span class="stat gem" title="XP"><i class=ms aria-hidden=true>&#xF0019;</i>${S.xp}</span><button class="stat mute" id="muteBtn" title="効果音のオン／オフ" aria-label="効果音のオン／オフ" onclick="toggleMute()">${I(S.sound?"volume_up":"volume_off")}</button>`}
 function toggleMute(){S.sound=!S.sound;save();$$(".mute").forEach(b=>b.innerHTML=I(S.sound?"volume_up":"volume_off"));if(S.sound)SFX.ok(1);toast(S.sound?I("volume_up")+" 効果音オン":I("volume_off")+" 効果音オフ",1400);const sn=$("#snd");if(sn)sn.checked=S.sound}
-function go(t){TAB=t;$$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));const m=$("#main");m.innerHTML="";m.className="fade-in";void m.offsetWidth;({home:vHome,pm1:vPM1,pm2:vPM2,me:vMe})[t]();scrollTo(0,0)}
+const TABS=["home","pm1","pm2","me"];
+function go(t){const pi=TABS.indexOf(TAB),ni=TABS.indexOf(t);TAB=t;$$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));const m=$("#main");m.innerHTML="";m.className=pi===ni||pi<0?"fade-in":ni>pi?"from-r":"from-l";void m.offsetWidth;({home:vHome,pm1:vPM1,pm2:vPM2,me:vMe})[t]();scrollTo(0,0)}
 $("#nav").addEventListener("click",e=>{const b=e.target.closest("button");if(b){SFX.tap();go(b.dataset.t)}});
 const MQ=[];
-function modal(html,onClose,onShow){if($(".ov")){MQ.push([html,onClose,onShow]);return}const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="modal">${html}</div>`;o.addEventListener("click",e=>{if(e.target===o)closeModal()});document.body.appendChild(o);o._close=onClose;onShow&&onShow()}
-function closeModal(){const o=$$(".ov").pop();if(o){o.remove();o._close&&o._close()}if(!$(".ov")&&MQ.length){const m=MQ.shift();setTimeout(()=>modal(...m),180)}}
+function modal(html,onClose,onShow){if($(".ov:not(.out)")){MQ.push([html,onClose,onShow]);return}const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="modal">${html}</div>`;o.addEventListener("click",e=>{if(e.target===o)closeModal()});document.body.appendChild(o);o._close=onClose;onShow&&onShow()}
+function closeModal(){const o=$$(".ov:not(.out)").pop();if(o){if(RM)o.remove();else{o.classList.add("out");setTimeout(()=>o.remove(),170)}o._close&&o._close()}if(!$(".ov:not(.out)")&&MQ.length){const m=MQ.shift();setTimeout(()=>modal(...m),180)}}
 window.closeModal=closeModal;
 function fmtSrc(q){return q.orig?'<span class="pill gold">オリジナル</span>':srcs(q).map(s=>`<span class="pill">${esc(s)}</span>`).join(" ")+(srcs(q).length>1?' <span class="pill ng">頻出</span>':"")}
 function lifecycleSVG(){return `<svg viewBox="0 0 300 150" style="width:100%;max-width:340px;margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:12px"><line x1="40" y1="120" x2="285" y2="120" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="120" x2="40" y2="12" stroke="currentColor" stroke-width="1.5"/><text x="8" y="22" font-size="11" fill="currentColor">大</text><text x="8" y="118" font-size="11" fill="currentColor">小</text><text x="200" y="140" font-size="11" fill="currentColor">経過時間 →</text><path d="M45 24C120 30 180 90 280 108" stroke="#5b4cf5" stroke-width="3" fill="none"/><path d="M45 110C140 104 200 70 280 22" stroke="#ff4d5e" stroke-width="3" fill="none" stroke-dasharray="6 4"/><text x="70" y="22" font-size="13" font-weight="700" fill="#5b4cf5">a</text><text x="262" y="20" font-size="13" font-weight="700" fill="#ff4d5e">b</text></svg>`}
@@ -852,12 +882,21 @@ ${questHTML()}
  for(const u of UNITS){const done=u.lessons.filter(l=>S.lessons[l.id]).length;
   h+=`<div class="unit" style="background:${u.c}"><div>${I(u.i)} ${u.n}<small>${u.total}問・${done}/${u.lessons.length} レッスン完了</small></div><div style="font-size:22px">${done===u.lessons.length?"<i class=ms aria-hidden=true>&#xF0016;</i>":""}</div></div><div class="path">`;
   u.lessons.forEach((l,i)=>{const st=S.lessons[l.id];const isCur=!st&&!curFound;if(isCur)curFound=true;const off=[0,44,64,44,0,-44,-64,-44][i%8];
-   const nst=st?(st.perfect?3:st.best>=4?2:1):0;
-   h+=`<button class="node ${st?"":"todo"} ${st&&st.perfect?"gold":""} ${isCur?"cur":""}" style="--c:${u.c};--cd:${u.d};transform:translateX(${off}px)" onclick="startLesson('${l.id}')" aria-label="${u.n} レッスン${i+1}${st?`（星${nst}つ）`:""}">${isCur?`<span class="bubble">START</span>`:""}<span class="disc"></span><span class="ico">${st?(st.perfect?E("crown"):I("check")):I(u.i)}</span>${st?`<span class="stars">${[0,1,2].map(k=>E("star",k<nst?"":"off")).join("")}</span>`:""}</button>`});
+   const nst=st?(st.perfect?3:st.best>=4?2:1):0,fx=STAR_FX&&STAR_FX.lid===l.id,shS=fx?STAR_FX.from:nst,gNow=st&&st.perfect&&!(fx&&STAR_FX.gold);
+   h+=`<button class="node ${st?"":"todo"} ${gNow?"gold":""} ${isCur?"cur":""}" data-l="${l.id}" style="--c:${u.c};--cd:${u.d};transform:translateX(${off}px)" onclick="startLesson('${l.id}')" aria-label="${u.n} レッスン${i+1}${st?`（星${nst}つ）`:""}">${isCur?`<span class="bubble">START</span>`:""}<span class="disc"></span><span class="ico">${st?(gNow?E("crown"):I("check")):I(u.i)}</span>${st?`<span class="stars">${[0,1,2].map(k=>E("star",k<shS?"":"off")).join("")}</span>`:""}</button>`});
   h+=`</div>`}
  h+=`<div class="foot">出典：IPA 独立行政法人情報処理推進機構「プロジェクトマネージャ試験」過去問題（平成23〜29年度 午前Ⅱ，平成28〜令和7年度 解答例・出題趣旨）。過去問の正解はIPA公表の解答例と照合済み。解説・オリジナル問題・午後の設問例は本アプリ独自のもので，IPAとは関係ありません。最新の試験制度（CBT化等）は<a href="https://www.ipa.go.jp/shiken/kubun/pm.html" target="_blank" rel="noopener">IPA公式サイト</a>で確認してください。</div>`;
- $("#main").innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#ring");if(r)r.style.setProperty("--p",r.dataset.p)}));
+ $("#main").innerHTML=h;if(STAR_FX)runStarFx();requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#ring");if(r)r.style.setProperty("--p",r.dataset.p)}));
  if(!S.onboard)onboard()}
+/* レッスン後、パスに戻ったら獲得した星を1個ずつ付ける（フォロースルー＋セカンダリーアクション） */
+let STAR_FX=null;
+function runStarFx(){const fx=STAR_FX;STAR_FX=null;const n=$(`.node[data-l="${fx.lid}"]`);if(!n)return;
+ setTimeout(()=>n.scrollIntoView({block:"center",behavior:RM?"auto":"smooth"}),60); /* go()のscrollTo(0,0)の後で */const stars=$$(".stars .emo",n);let k=fx.from;
+ const goldUp=()=>setTimeout(()=>{n.classList.add("gold","flip");$(".ico",n).innerHTML=E("crown");SFX.badge();haptic("heavy");const r=n.getBoundingClientRect();hitmark(r.left+r.width/2,r.top+r.height/2,"#ffb800",1.4);confetti(60,.5)},200);
+ const step=()=>{if(!n.isConnected)return;if(k>=fx.to){if(fx.gold)goldUp();return}const s=stars[k];s.classList.remove("off");s.classList.add("earn");
+  SFX.ok(2+k*3);haptic(k===2?"heavy":"medium");const r=s.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,"#ffc531",9+k*3);
+  n.classList.remove("land");void n.offsetWidth;n.classList.add("land");k++;setTimeout(step,RM?0:300)};
+ setTimeout(step,RM?0:600)}
 function onboard(){S.onboard=true;save();modal(`${poco("happy","jump")}<h2 style="margin:6px 0">ようこそ PM試験クエストへ！</h2><p style="font-size:14px;text-align:left">ぼくは現場監督の<b>ポコ</b>。プロマネ試験の合格まで一緒に走るよ！<br>・登録不要。記録はこの端末に保存<br>・正解でXP，連続正解でコンボ<br>・毎日続けて<i class=ms aria-hidden=true>&#xF0026;</i>ストリークを伸ばそう</p><p class="muted" style="margin-top:0">1日の目標を選んでね</p><div class="grid2" style="grid-template-columns:repeat(3,1fr)">${[[20,"ゆるっと"],[50,"ふつう"],[100,"本気"]].map(([g,n])=>`<button class="btn ${g===50?"":"ghost"} sm" style="width:100%" onclick="S.goal=${g};save();closeModal();go('home')">${n}<br>${g}XP</button>`).join("")}</div>`)}
 
 /* ================= レッスンエンジン ================= */
@@ -888,8 +927,10 @@ async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.o
  if(L.firstTry[id]===undefined){L.firstTry[id]=ok;record(id,ok)}
  L.results.push({id,ok,sel:L.sel});
  if(mock){if(ok)L.ok++;else L.ng++;SFX.tap();next();return}
- L.busy=true;$("#go").disabled=true;
- const lf=$("#lf"),vd=$("#vd"),sb=bs[L.sel],r=sb.getBoundingClientRect(),x0=r.left+r.width/2,y0=r.top+r.height/2,dt=Date.now()-L.qt0;
+ L.busy=true;$("#go").disabled=true;$(".choices").classList.add("done");
+ const lf=$("#lf"),vd=$("#vd"),sb=bs[L.sel];
+ if(!RM&&sb.animate)await sb.animate([{transform:"none"},{transform:"scale(.955,.97)"}],{duration:70,easing:"ease-in"}).finished.catch(()=>{}); // 予備動作：判定の前に一瞬ためる
+ const r0=sb.getBoundingClientRect(),r=r0,x0=r.left+r.width/2,y0=r.top+r.height/2,dt=Date.now()-L.qt0;
  if(ok){L.ok++;L.combo++;S.maxCombo=Math.max(S.maxCombo,L.combo);const pw=Math.min(1.9,1+L.combo*.09);
   sb.classList.add("right");SFX.ok(L.combo);haptic([3,5,8,10,15,20,25,30].includes(L.combo)?"combo":L.combo>=5?"heavy":"medium");hitmark(x0,y0,"#21c16b",pw);jolt(sb,2+Math.min(6,L.combo*.5),110);
   await sleep(RM?0:60+Math.min(90,L.combo*10)); // ヒットストップ：コンボが伸びるほど長く
@@ -900,13 +941,13 @@ async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.o
   const cm=$("#cmb");if(cm){cm.innerHTML=I("local_fire_department")+L.combo;cm.classList.toggle("on",L.combo>=2);cm.animate([{transform:"scale(1.6) rotate(-8deg)"},{transform:"none"}],{duration:300,easing:"cubic-bezier(.3,1.6,.5,1)"})}
   if([3,5,8,10,15,20,25,30].includes(L.combo))setTimeout(()=>{SFX.combo(L.combo);comboPop(`<i class=ms aria-hidden=true>&#xF0026;</i> ${L.combo}連続正解！`);shakeScreen("m");flash("#ff8a00")},230);
   lf.className="lfoot ok";vd.innerHTML=`<div class="t">${poco("happy","xs jump")}${PRAISE(L.combo)}</div><div class="ex">${esc(q.ex)}</div>`;$("#go").className="btn ok";$("#go").textContent="つづける"}
- else{L.ng++;const lost=L.combo;L.combo=0;sb.classList.add("wrong");SFX.ng();haptic("error");jolt(sb,12,360,"x");shakeScreen("s");flash("#ff4d5e");
+ else{L.ng++;const lost=L.combo;L.combo=0;sb.classList.add("wrong");SFX.ng();haptic("error");jolt(sb,8,300,"x"); // ミスはやさしく：画面フラッシュ・全体揺れはなし
   await sleep(RM?0:110);bs[q.a].classList.add("right");bs[q.a].animate([{transform:"scale(.97)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:300});
   const cm=$("#cmb");if(cm)cm.classList.remove("on");
   if(!L.queue.slice(L.idx+1).includes(id))L.queue.push(id);
   lf.className="lfoot ng";vd.innerHTML=`<div class="t">${poco("sad","xs")}正解は「${KANA[q.a]}」</div><div class="ex">${esc(q.ex)}</div><div class="muted" style="margin-top:6px">${lost>=3?`<i class=ms aria-hidden=true>&#xF0026;</i>${lost}コンボが途切れた…でも`:""}この問題はあとでもう一度出ます</div>`;$("#go").className="btn ng";$("#go").textContent="わかった"}
  S.combo=L.combo;save();
- $(".bar").classList.toggle("fire",L.combo>=3);$(".bar i").style.width=Math.max(3,L.ok/L.ids.length*100)+"%";
+ {const br=$(".bar");br.classList.toggle("fire",L.combo>=3);$(".bar i").style.width=Math.max(3,L.ok/L.ids.length*100)+"%";if(ok&&!RM){br.classList.remove("gain");void br.offsetWidth;br.classList.add("gain")}}
  L.busy=false;$("#go").disabled=false;
 }
 function skipQ(){const id=L.queue[L.idx];SFX.tap();buzz(6);
@@ -918,11 +959,11 @@ function skipQ(){const id=L.queue[L.idx];SFX.tap();buzz(6);
 function next(){L.idx++;if(L.idx>=L.queue.length){finish();return}drawQ();$("#lb").classList.add("slide-in")}
 function ask(msg,yes,onYes){modal(`${poco("sad","s")}<h3 style="margin:8px 0 14px">${msg}</h3><button class="btn ng" id="askY">${yes}</button><div style="height:10px"></div><button class="btn ghost" onclick="closeModal()">つづける</button>`,null,()=>{$("#askY").onclick=()=>{closeModal();onYes()}})}
 function quitRun(){if(L.opt.kind==="mock")ask("模試を中断しますか？<br><span class='muted'>結果は保存されません</span>","中断する",()=>endRun(true));else if(L.ok>0)ask("本当にやめる？<br><span class='muted'>このレッスンの進捗は保存されません</span>","やめる",()=>endRun(true));else endRun(true)}
-function endRun(){clearInterval(L&&L.tm);clearTimeout(L&&L.seq);$("#lesson")?.remove();document.body.style.overflow="";L=null;go(TAB)}
+function endRun(){clearInterval(L&&L.tm);clearTimeout(L&&L.seq);const le=$("#lesson");if(le){if(RM||!le.animate)le.remove();else{le.style.pointerEvents="none";le.animate([{opacity:1},{transform:"translateY(28px)",opacity:0}],{duration:200,easing:"cubic-bezier(.55,0,1,.45)",fill:"forwards"}).finished.then(()=>le.remove(),()=>le.remove())}}document.body.style.overflow="";L=null;go(TAB)}
 function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
  const firstOk=L.ids.filter(id=>L.firstTry[id]).length,acc=Math.round(firstOk/L.ids.length*100),perfect=firstOk===L.ids.length;
  const bonus=10+(perfect?10:0);
- if(L.opt.lid){const o=S.lessons[L.opt.lid]||{best:0};S.lessons[L.opt.lid]={best:Math.max(o.best,firstOk),perfect:o.perfect||perfect,at:Date.now()};qprog("ls")}
+ if(L.opt.lid){const o=S.lessons[L.opt.lid]||{best:0};const sOf=x=>x?(x.perfect?3:x.best>=4?2:1):0,fromS=sOf(S.lessons[L.opt.lid]);S.lessons[L.opt.lid]={best:Math.max(o.best,firstOk),perfect:o.perfect||perfect,at:Date.now()};qprog("ls");const toS=sOf(S.lessons[L.opt.lid]);if(toS>fromS)STAR_FX={lid:L.opt.lid,from:fromS,to:toS,gold:!o.perfect&&perfect}}
  if(perfect)qprog("pf");if(L.opt.kind==="weak")qprog("wk");
  const total=L.xp+bonus,sec=Math.round((Date.now()-L.t0)/1000),beforeToday=todayXP(),xpB=S.xp,lvB=levelOf(S.xp),stB=S.last===today()?S.streak:null;
  addXP(total);const lv=levelOf(S.xp),pv=lvXP(lv),nx=lvXP(lv+1),fromP=lv>lvB?0:(xpB-pv)/(nx-pv)*100,toP=(S.xp-pv)/(nx-pv)*100;
