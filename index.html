@@ -43,7 +43,6 @@ body{font-family:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-se
 /* 和文組版：本文はプロポーショナル詰めなし（読みやすさ優先）、見出し・ボタン等の短い太字だけ palt */
 :where(h1,h2,h3,b,strong,button:not(.ch),.btn,.chip,.say,.stats,.t,.bubble){font-feature-settings:"palt" 1}
 :where(h1,h2,h3,.btn,.say,.verdict .t){word-break:auto-phrase;text-wrap:balance}
-:where(.qtext,.ch,.ex,.scen,p){text-wrap:pretty}
 :where(textarea,input,[contenteditable]){text-autospace:no-autospace}
 button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:0;background:none}
 textarea,input,select{font-family:inherit;font-size:16px;color:var(--ink)}
@@ -123,7 +122,7 @@ h3{font-size:17px;margin:0 0 6px;font-weight:700;line-height:1.25}
 .bar{flex:1;height:16px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
 .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--ok);transition:width .45s cubic-bezier(.3,1.4,.5,1);box-shadow:inset 0 -4px 0 rgba(0,0,0,.08)}
 .bar i::after{content:"";position:absolute;left:8px;right:8px;top:3px;height:4px;border-radius:9px;background:rgba(255,255,255,.4)}
-.bar.fire i{background:linear-gradient(90deg,#ffb21e,#ff5f1a,#ff2d55);background-size:200% 100%;animation:flow 1.2s linear infinite}
+.bar.fire i{background:linear-gradient(90deg,#ffb21e,#ff5f1a,#ff2d55);background-size:200% 100%;animation:flow 1.2s linear 1} /* コンボ突入時に1回だけ流す（常時アニメは集中を削ぐ） */
 @keyframes flow{to{background-position:-200% 0}}
 .lbody{flex:1;overflow:auto;padding:10px 16px 28px}
 .lbody,.modal,.verdict .ex{--ft:0px;--fb:0px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 var(--ft),#000 calc(100% - var(--fb)),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 var(--ft),#000 calc(100% - var(--fb)),transparent 100%)}
@@ -918,12 +917,15 @@ function startRun(ids,opt){regenHearts();
  L={ids:[...ids],queue:[...ids],idx:0,ok:0,ng:0,xp:0,combo:0,firstTry:{},opt,t0:Date.now(),sel:-1,answered:false,results:[]};
  const el=document.createElement("div");el.className="lesson";el.id="lesson";document.body.appendChild(el);document.body.style.overflow="hidden";drawQ()}
 const PRAISE=c=>c>=10?"止まらない！":c>=5?"絶好調！":c>=3?"ノッてきた！":["すばらしい！","正解！","その調子！","ナイス判断！","いいね！"][Math.random()*5|0];
+// 選択肢シャッフル：記号（ア〜エ）は本文とセットのまま並びだけ変える（解説の「イは〜」と対応させるため）
+const chOrder=q=>{const o=q.ch.map((_,i)=>i);return S.shufCh&&!q.ch.some(c=>/すべて|いずれも|以外の/.test(c))?shuf(o):o};
+const chBy=i=>$(`.ch[data-i="${i}"]`);
 function drawQ(){const el=$("#lesson");const id=L.queue[L.idx];const q=QID[id];const mock=L.opt.kind==="mock";
  const prog=mock?L.idx/L.queue.length:L.ok/(L.ids.length);
  el.innerHTML=`<div class="lhead"><button class="x" onclick="quitRun()" aria-label="やめる"><i class=ms aria-hidden=true>&#xF0013;</i></button><div class="bar ${L.combo>=3?"fire":""}"><i style="width:${Math.max(3,prog*100)}%"></i></div>${mock?`<span class="timer" id="tm"></span>`:`<span class="cmb ${L.combo>=2?"on":""}" id="cmb"><i class=ms aria-hidden=true>&#xF0026;</i>${L.combo}</span><button class="stat mute" onclick="toggleMute()" aria-label="効果音のオン／オフ">${I(S.sound?"volume_up":"volume_off")}</button>`}</div>
  <div class="lbody" id="lb"><div class="qmeta"><span class="pill" style="background:${CAT[q.cat].c};color:#fff">${I(CAT[q.cat].i)} ${CAT[q.cat].n}</span>${fmtSrc(q)}${L.firstTry[id]===false?'<span class="pill ng">リトライ</span>':""}${mock?`<span class="pill">${L.idx+1}/${L.queue.length}</span>`:""}</div>
  <div class="qtext">${esc(q.q)}</div>${q.fig==="lifecycle"?lifecycleSVG():""}${q.tbl?tblHTML(q.tbl):""}
- <div class="choices">${q.ch.map((c,i)=>`<button class="ch" data-i="${i}" style="--d:${i*45}ms"><span class="k">${KANA[i]}</span><span>${esc(c)}</span></button>`).join("")}</div></div>
+ <div class="choices">${chOrder(q).map((i,pos)=>`<button class="ch" data-i="${i}" style="--d:${pos*45}ms"><span class="k">${KANA[i]}</span><span>${esc(q.ch[i])}</span></button>`).join("")}</div></div>
  <div class="lfoot" id="lf"><div class="verdict" id="vd"></div><div class="lrow"><button class="btn ghost skip" id="sk">${I("skip_next")}${mock?"あとで":"スキップ"}</button><button class="btn" id="go" disabled>${mock?"回答する":"チェック"}</button></div></div>`;
  L.sel=-1;L.answered=false;L.qt0=Date.now();
  $$(".ch",el).forEach(b=>b.onclick=()=>{if(L.answered)return;SFX.sel();buzz(6);$$(".ch",el).forEach(x=>x.classList.remove("sel"));b.classList.add("sel");b.animate([{transform:"scale(.95)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:160,easing:"ease-out"});L.sel=+b.dataset.i;$("#go").disabled=false});
@@ -938,7 +940,7 @@ async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.o
  L.results.push({id,ok,sel:L.sel});
  if(mock){if(ok)L.ok++;else L.ng++;SFX.tap();next();return}
  L.busy=true;$("#go").disabled=true;$(".choices").classList.add("done");
- const lf=$("#lf"),vd=$("#vd"),sb=bs[L.sel];
+ const lf=$("#lf"),vd=$("#vd"),sb=chBy(L.sel);
  if(!RM&&sb.animate)await sb.animate([{transform:"none"},{transform:"scale(.955,.97)"}],{duration:70,easing:"ease-in"}).finished.catch(()=>{}); // 予備動作：判定の前に一瞬ためる
  const r0=sb.getBoundingClientRect(),r=r0,x0=r.left+r.width/2,y0=r.top+r.height/2,dt=Date.now()-L.qt0;
  if(ok){L.ok++;L.combo++;S.maxCombo=Math.max(S.maxCombo,L.combo);const pw=Math.min(1.9,1+L.combo*.09);
@@ -952,7 +954,7 @@ async function check(){const id=L.queue[L.idx],q=QID[id],ok=L.sel===q.a,mock=L.o
   if([3,5,8,10,15,20,25,30].includes(L.combo))setTimeout(()=>{SFX.combo(L.combo);comboPop(`<i class=ms aria-hidden=true>&#xF0026;</i> ${L.combo}連続正解！`);shakeScreen("m");flash("#ff8a00")},230);
   lf.className="lfoot ok";vd.innerHTML=`<div class="t">${poco("happy","xs jump")}${PRAISE(L.combo)}</div><div class="ex">${esc(q.ex)}</div>`;$("#go").className="btn ok";$("#go").textContent="つづける"}
  else{L.ng++;const lost=L.combo;L.combo=0;sb.classList.add("wrong");SFX.ng();haptic("error");jolt(sb,8,300,"x"); // ミスはやさしく：画面フラッシュ・全体揺れはなし
-  await sleep(RM?0:110);bs[q.a].classList.add("right");bs[q.a].animate([{transform:"scale(.97)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:300});
+  await sleep(RM?0:110);chBy(q.a).classList.add("right");chBy(q.a).animate([{transform:"scale(.97)"},{transform:"scale(1.02)"},{transform:"none"}],{duration:300});
   const cm=$("#cmb");if(cm)cm.classList.remove("on");
   if(!L.queue.slice(L.idx+1).includes(id))L.queue.push(id);
   lf.className="lfoot ng";vd.innerHTML=`<div class="t">${poco("sad","xs")}正解は「${KANA[q.a]}」</div><div class="ex">${esc(q.ex)}</div><div class="muted" style="margin-top:6px">${lost>=3?`<i class=ms aria-hidden=true>&#xF0026;</i>${lost}コンボが途切れた…でも`:""}この問題はあとでもう一度出ます</div>`;$("#go").className="btn ng";$("#go").textContent="わかった"}
@@ -1037,14 +1039,15 @@ function custom(){const C=cfg();
  <div class="cfh"><b>計算問題</b></div><div class="chips">${chip("calc","1",`${I("calculate")}含める`,C.calc)}${chip("calc","0","除外する",!C.calc)}</div>
  <div class="cfh"><b>問題数・順番</b></div><div class="chips">${[10,20,30,0].map(n=>chip("n",n,n?n+"問":"全部",C.n===n)).join("")}</div>
  <div class="chips" style="margin-top:6px">${chip("ord","rand","ランダム",C.ord==="rand")}${chip("ord","seq","年度順",C.ord==="seq")}</div>
+ <div class="cfh"><b>選択肢の並び</b></div><div class="chips">${chip("shuf","0","そのまま",!S.shufCh)}${chip("shuf","1","シャッフル",!!S.shufCh)}</div>
  </div><button class="btn" id="cgo" style="margin-top:14px"></button><div style="height:8px"></div><button class="btn ghost" onclick="yearPick()">年度ごとの一覧から選ぶ</button>`,null,()=>{
   const m=$(".modal");
   const upd=()=>{const n=cpool().length,k=C.n?Math.min(C.n,n):n,b=$("#cgo",m);b.disabled=!n;b.innerHTML=n?`${k}問はじめる<small style="opacity:.75;font-weight:400;margin-left:6px">対象 ${n}問</small>`:"該当する問題がありません";
-   $$(".chip",m).forEach(c=>{const g=c.dataset.g,v=c.dataset.v;c.classList.toggle("on",Array.isArray(C[g])?C[g].includes(v):g==="calc"?C.calc===(v==="1"):String(C[g])===v)})};
+   $$(".chip",m).forEach(c=>{const g=c.dataset.g,v=c.dataset.v;c.classList.toggle("on",Array.isArray(C[g])?C[g].includes(v):g==="calc"?C.calc===(v==="1"):g==="shuf"?!!S.shufCh===(v==="1"):String(C[g])===v)})};
   m.addEventListener("click",e=>{const c=e.target.closest(".chip,.lnk");if(!c)return;buzz(6);SFX.sel();
    if(c.dataset.all)C[c.dataset.all]=c.dataset.all==="cats"?CATS.map(x=>x.k):[...YEARS];
    else if(c.dataset.none)C[c.dataset.none]=[];
-   else{const g=c.dataset.g,v=c.dataset.v;if(Array.isArray(C[g]))C[g]=C[g].includes(v)?C[g].filter(x=>x!==v):[...C[g],v];else if(g==="calc")C.calc=v==="1";else if(g==="n")C.n=+v;else C[g]=v}
+   else{const g=c.dataset.g,v=c.dataset.v;if(Array.isArray(C[g]))C[g]=C[g].includes(v)?C[g].filter(x=>x!==v):[...C[g],v];else if(g==="calc")C.calc=v==="1";else if(g==="shuf")S.shufCh=v==="1";else if(g==="n")C.n=+v;else C[g]=v}
    save();upd()});
   $("#cgo",m).onclick=()=>{const ids=cpool().map(q=>q.id),k=C.n?Math.min(C.n,ids.length):ids.length;if(!k)return;
    const pick=C.ord==="rand"?shuf(fresh(ids,k)):ids.slice(0,k);closeModal();startRun(pick,{title:"条件を選んで出題",kind:"custom"})};
@@ -1146,15 +1149,15 @@ function vMe(){renderTop();const lv=levelOf(S.xp);const acc=S.totalAns?Math.roun
  ${S.mock.length?`<h2>模試の履歴</h2><div class="card">${S.mock.slice(-8).reverse().map(m=>`<div class="check"><span>${m.score>=15?"<i class=ms aria-hidden=true>&#xF0029;</i>":"<i class=ms aria-hidden=true>&#xF0005;</i>"}</span><span style="flex:1">${new Date(m.at).toLocaleDateString("ja-JP")}</span><b>${m.score}/25</b></div>`).join("")}</div>`:""}
  <h2>バッジ <span class="pill">${Object.keys(S.badges).length}/${BADGES.length}</span></h2><div class="card"><div class="bdg">${BADGES.map(b=>`<div class="${S.badges[b.k]?"":"off"}"><span class="m">${E(b.i)}</span>${b.n}</div>`).join("")}</div></div>
  <h2>設定</h2><div class="card">
-  <label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><div class="card" style="margin:4px 0 8px;padding:12px;box-shadow:none"><div style="font-size:13px"><b>振動の方式：</b>${hapticEnv().m}</div>${EMBED?`<div style="font-size:12px;color:var(--ng-d);margin-top:4px"><i class=ms aria-hidden=true>&#xF0041;</i> いまはClaudeなど別サイトの中（埋め込み表示）で開いています。ブラウザの制限で振動しないことがあります。公開ページをSafari／Chromeで直接開くと確実です。</div>`:""}${IOS?`<div class="muted" style="font-size:12px;margin-top:4px">iPhoneは「設定 → サウンドと触覚 → システムの触覚」がオンのとき、Safariで振動します。</div>`:""}${IOS?`<label class="row" style="margin-top:8px;font-size:13px;gap:10px"><input type="checkbox" switch style="width:44px;height:26px;flex:none"> <span>①このスイッチを指で切り替えて、ブルッとするか確認</span></label>`:""}<button class="btn gold sm" id="hpTest" style="width:100%;margin-top:8px"><i class=ms aria-hidden=true>&#xF003C;</i> 振動テスト</button></div><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
+  <label class="check" style="border:0"><input type="checkbox" id="shf" ${S.shufCh?"checked":""}><span>選択肢の並びをシャッフル<br><span class="muted" style="font-size:12px">ア〜エの記号は本文とセットのまま、表示順だけ入れ替えます</span></span></label><label class="check" style="border:0"><input type="checkbox" id="snd" ${S.sound?"checked":""}><span>効果音</span></label><label class="check" style="border:0"><input type="checkbox" id="hpt" ${S.noHaptic?"":"checked"}><span>触覚フィードバック（ブルッと振動）</span></label><div class="card" style="margin:4px 0 8px;padding:12px;box-shadow:none"><div style="font-size:13px"><b>振動の方式：</b>${hapticEnv().m}</div>${EMBED?`<div style="font-size:12px;color:var(--ng-d);margin-top:4px"><i class=ms aria-hidden=true>&#xF0041;</i> いまはClaudeなど別サイトの中（埋め込み表示）で開いています。ブラウザの制限で振動しないことがあります。公開ページをSafari／Chromeで直接開くと確実です。</div>`:""}${IOS?`<div class="muted" style="font-size:12px;margin-top:4px">iPhoneは「設定 → サウンドと触覚 → システムの触覚」がオンのとき、Safariで振動します。</div>`:""}${IOS?`<label class="row" style="margin-top:8px;font-size:13px;gap:10px"><input type="checkbox" switch style="width:44px;height:26px;flex:none"> <span>①このスイッチを指で切り替えて、ブルッとするか確認</span></label>`:""}<button class="btn gold sm" id="hpTest" style="width:100%;margin-top:8px"><i class=ms aria-hidden=true>&#xF003C;</i> 振動テスト</button></div><label class="check" style="border:0"><input type="checkbox" id="shk" ${S.noShake?"":"checked"}><span>画面の揺れ・フラッシュ</span></label>
   <div class="row" style="padding:8px 4px"><span style="flex:1;font-size:14px">1日の目標</span><select id="gl" style="padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)">${[20,50,100,150].map(g=>`<option ${S.goal===g?"selected":""} value="${g}">${g} XP</option>`).join("")}</select></div>
   <div class="grid2" style="margin-top:8px"><button class="btn ghost sm" style="width:100%" onclick="exportData()"><i class=ms aria-hidden=true>&#xF003B;</i> 引き継ぎコード発行</button><button class="btn ghost sm" style="width:100%" onclick="importData()"><i class=ms aria-hidden=true>&#xF001A;</i> コードで復元</button></div>
   <div class="muted" style="margin-top:8px">登録不要のため，記録はこの端末のブラウザに保存されます。機種変更や別の端末へは「引き継ぎコード」で移せます。</div>
   <button class="btn ghost sm" style="width:100%;margin-top:12px;color:var(--ng)" onclick="ask('すべての記録を消去しますか？','消去する',()=>{try{localStorage.removeItem(KEY)}catch(e){}load();go('home')})">記録をリセット</button></div>
  <button class="btn sky" style="margin-top:18px" onclick="share('プロマネ試験の対策アプリ「PM試験クエスト」で勉強中！<i class=ms aria-hidden=true>&#xF0026;</i>'+S.streak+'日連続・Lv.'+(levelOf(S.xp)+1))"><i class=ms aria-hidden=true>&#xF0032;</i> 友だちにシェア</button>
- <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。絵文字：Microsoft Fluent Emoji（MIT License）。アイコン：Material Symbols（Apache License 2.0）。</div>`;
+ <div class="foot">PM試験クエストは個人学習用の非公式アプリです。IPA（独立行政法人情報処理推進機構）とは関係ありません。過去問題の使用についてはIPAの「試験の過去問題の使用方法」に基づき出典を明記しています。絵文字：各OS標準。アイコン：Material Symbols（Apache License 2.0）。</div>`;
  $("#main").innerHTML=h;
- $("#snd").onchange=e=>{S.sound=e.target.checked;save();$$(".mute").forEach(b=>b.innerHTML=I(S.sound?"volume_up":"volume_off"));SFX.tap()};$("#hpTest").onclick=()=>{const was=S.noHaptic;S.noHaptic=false;haptic("big");S.noHaptic=was;toast(hapticEnv().ok?"振動しましたか？（しない場合は上の注意を確認）":"この環境は振動に未対応です")};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
+ $("#shf").onchange=e=>{S.shufCh=e.target.checked;save();toast(S.shufCh?"選択肢をシャッフルします":"選択肢を元の順に戻しました")};$("#snd").onchange=e=>{S.sound=e.target.checked;save();$$(".mute").forEach(b=>b.innerHTML=I(S.sound?"volume_up":"volume_off"));SFX.tap()};$("#hpTest").onclick=()=>{const was=S.noHaptic;S.noHaptic=false;haptic("big");S.noHaptic=was;toast(hapticEnv().ok?"振動しましたか？（しない場合は上の注意を確認）":"この環境は振動に未対応です")};$("#hpt").onchange=e=>{S.noHaptic=!e.target.checked;save();haptic("success")};$("#shk").onchange=e=>{S.noShake=!e.target.checked;save();if(!S.noShake)shakeScreen("m")};$("#gl").onchange=e=>{S.goal=+e.target.value;save();toast("目標を更新しました")}}
 function exportData(){const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));modal(`<h2 style="margin:0 0 8px">引き継ぎコード</h2><p class="muted">全文をコピーして，新しい端末の「コードで復元」に貼り付けてください。</p><textarea class="wa" readonly style="font-size:11px;min-height:140px">${code}</textarea><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value).then(()=>toast('コピーしました'))">コピー</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">閉じる</button>`)}
 function importData(){modal(`<h2 style="margin:0 0 8px">コードで復元</h2><textarea class="wa" id="imp" placeholder="引き継ぎコードを貼り付け"></textarea><button class="btn" onclick="try{const d=JSON.parse(decodeURIComponent(escape(atob($('#imp').value.trim()))));S=Object.assign({},DEF,d);save();closeModal();toast('復元しました！');go('home')}catch(e){toast('コードが正しくありません')}">復元する</button><div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">キャンセル</button>`)}
 
