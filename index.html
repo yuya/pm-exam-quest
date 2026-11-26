@@ -715,7 +715,17 @@ function todayXP(){return S.days[today()]||0}
 /* ================= サウンド（桜井流：アタック強め・残響ほどほど・影響度で優先順位） ================= */
 // 優先度（大→小）：レベルアップ ＞ レッスン完了/宝箱 ＞ コンボ ＞ 正解 ＞ 不正解 ＞ 選択 ＞ UIタップ
 let AC,MG,NZ;
-function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();const comp=AC.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=5;comp.attack.value=.002;comp.release.value=.12;MG=AC.createGain();MG.gain.value=.95;MG.connect(comp).connect(AC.destination);const len=AC.sampleRate*.6|0,b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;NZ=b}if(AC.state==="suspended")AC.resume();return AC}
+function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();const comp=AC.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=5;comp.attack.value=.002;comp.release.value=.12;MG=AC.createGain();MG.gain.value=.95;MG.connect(comp).connect(AC.destination);const len=AC.sampleRate*.6|0,b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;NZ=b}if(AC.state!=="running")AC.resume().catch(()=>{});return AC}
+/* iOSでは画面ロック・アプリ切替・通話・他アプリの音声のあと AudioContext が "interrupted"/"suspended" のまま戻らないことがある。
+   ユーザー操作のたびに復帰を試み、戻らなければ作り直す（復帰はユーザー操作中でないと許可されない） */
+function audioWake(){if(!S.sound)return;try{if(!AC){ac();return}
+ if(AC.state==="running")return;
+ if(AC.state==="closed"||AC.state==="interrupted"){try{AC.close()}catch(e){}AC=null;ac();return}
+ AC.resume().then(()=>{if(AC&&AC.state!=="running"){try{AC.close()}catch(e){}AC=null;ac()}}).catch(()=>{AC=null;ac()});
+ const b=AC.createBuffer(1,1,22050),src=AC.createBufferSource();src.buffer=b;src.connect(AC.destination);src.start(0) // 無音を鳴らしてロック解除
+}catch(e){}}
+["pointerdown","touchend","keydown"].forEach(t=>addEventListener(t,audioWake,{capture:true,passive:true}));
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&AC&&AC.state==="running")AC.suspend().catch(()=>{})});
 function osc(f,dur,st=0,type="sine",v=.2,f2){const a=ac(),t=a.currentTime+st,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(MG);o.start(t);o.stop(t+dur+.02)}
 function noise(dur,st=0,v=.2,hp=2000,lp=12000){const a=ac(),t=a.currentTime+st,s=a.createBufferSource(),g=a.createGain(),h=a.createBiquadFilter(),l=a.createBiquadFilter();s.buffer=NZ;h.type="highpass";h.frequency.value=hp;l.type="lowpass";l.frequency.value=lp;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(h).connect(l).connect(g).connect(MG);s.start(t);s.stop(t+dur+.02)}
 const play=fn=>{if(!S.sound)return;try{fn()}catch(e){}};
@@ -815,13 +825,13 @@ function levelUp(lv){SFX.lv();flash("#ffb21e");shakeScreen("l");confetti(200);bu
 const QPOOL=[{k:"ok",n:"10問正解する",g:10,i:"check_circle"},{k:"c5",n:"5連続正解を出す",g:1,i:"local_fire_department"},{k:"ls",n:"レッスンを2回クリア",g:2,i:"star"},{k:"pf",n:"パーフェクトを1回",g:1,i:"crown"},{k:"pm1",n:"記述問題に1問挑戦",g:1,i:"edit_note"},{k:"xp",n:"80XP獲得する",g:80,i:"diamond"},{k:"qk",n:"10秒以内の正解を5回",g:5,i:"bolt"},{k:"wk",n:"苦手復習をクリア",g:1,i:"psychology"}];
 function dq(){const t=today();if(!S.dq||S.dq.d!==t){let h=7;for(const c of t)h=(h*31+c.charCodeAt(0))>>>0;const pool=[...QPOOL],pick=[];for(let i=0;i<3;i++){h=(Math.imul(h,1103515245)+12345)>>>0;pick.push(pool.splice(h%pool.length,1)[0].k)}S.dq={d:t,ks:pick,p:{},done:{},bonus:false};save()}return S.dq}
 function qprog(k,n=1){const d=dq();if(!d.ks.includes(k)||d.done[k])return;const q=QPOOL.find(x=>x.k===k);d.p[k]=Math.min(q.g,(d.p[k]||0)+n);save();
- if(d.p[k]>=q.g){d.done[k]=true;save();setTimeout(()=>{SFX.quest();haptic("success");toast(`<i class=ms aria-hidden=true>&#xF0037;</i> クエスト達成「${q.n}」 +20XP`);addXP(20);if(d.ks.every(x=>d.done[x])&&!d.bonus){d.bonus=true;save();setTimeout(()=>openChest("デイリークエスト全達成！",2),1500)}},L?400:200)}}
+ if(d.p[k]>=q.g){d.done[k]=true;save();setTimeout(()=>{SFX.quest();haptic("success");toast(`<i class=ms aria-hidden=true>&#xF0037;</i> クエスト達成「${q.n}」 +20XP`);addXP(20);if(d.ks.every(x=>d.done[x])&&!d.bonus){d.bonus=true;save();setTimeout(()=>openChest("クエスト全達成ボーナス！",2),1500)}},L?400:200)}}
 function questHTML(){const d=dq();const all=d.ks.every(x=>d.done[x]);return `<div class="card" style="margin-top:14px"><div class="row" style="justify-content:space-between"><h3 style="margin:0"><i class=ms aria-hidden=true>&#xF0037;</i> 今日のクエスト</h3><span class="muted">${all?"全達成！<i class=ms aria-hidden=true>&#xF002F;</i>":"全達成で宝箱"}</span></div>${d.ks.map(k=>{const q=QPOOL.find(x=>x.k===k),p=d.p[k]||0,dn=d.done[k];return `<div class="qrow ${dn?"dn":""}"><span class="qi">${dn?"<i class=ms aria-hidden=true>&#xF0011;</i>":I(q.i)}</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">${q.n}</div><div class="gauge"><i style="width:${p/q.g*100}%;background:${dn?"var(--ok)":"var(--gold)"}"></i></div></div><span class="muted" style="font-weight:700">${p}/${q.g}</span></div>`}).join("")}</div>`}
 /* ===== 宝箱（ランダム報酬：ギュッと溜めてパッと開く） ===== */
 const RAR=[{n:"ノーマル",c:"#8b8aa8"},{n:"レア",c:"#1cb0f6"},{n:"スーパーレア",c:"#ce82ff"},{n:"ウルトラレア",c:"#ffb21e"}];
 function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,i:"shield",t:"ストリークシールド＋1",f:()=>{S.shield=Math.min(3,S.shield+1)}};if(r<.12){const x=50+(Math.random()*21|0);return{r:2,i:"gem_stone",t:`+${x} XP`,f:()=>addXP(x)}}if(r<.35){const x=25+(Math.random()*16|0);return{r:1,i:"gem_stone",t:`+${x} XP`,f:()=>addXP(x)}}const x=8+(Math.random()*11|0);return{r:0,i:"coin",t:`+${x} XP`,f:()=>addXP(x)}}
-function openChest(title="宝箱ゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
- modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">画面のどこでもタップして開けよう！</p><div id="chest" class="chest" aria-label="宝箱">${E("wrapped_gift")}</div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
+function openChest(title="クリアボーナス！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
+ modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">宝箱をタップして開けよう！（画面のどこでもOK）</p><div id="chest" class="chest" aria-label="宝箱">${E("wrapped_gift")}</div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
  const c=$("#chest"),ov=$$(".ov:not(.out)").pop();ov.classList.add("chesting");
  const tap=e=>{if(taps>=3)return;e.preventDefault();e.stopImmediatePropagation();taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);haptic(taps<3?"medium":"heavy");jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
   const x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;burst(x,y,"#ffb300",8+taps*3);
@@ -977,9 +987,9 @@ function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
  ${goalHit?`<div class="say pre"><i class=ms aria-hidden=true>&#xF0037;</i> 今日の目標 ${S.goal}XP 達成！</div>`:""}
  <div class="say pre ${streakUp?"stk":""}"><i class=ms aria-hidden=true>&#xF0026;</i> 連続 <b id="stn">${streakUp&&S.streak>1?S.streak-1:S.streak}</b> 日 ${S.streak>=S.best&&S.streak>1?"・自己ベスト！":""}</div>
  <div style="width:100%;text-align:left" class="pre">${L.ids.map(id=>{const q=QID[id];return `<div class="check"><span>${L.firstTry[id]?"<i class=ms aria-hidden=true>&#xF0011;</i>":"<i class=ms aria-hidden=true>&#xF0030;</i>"}</span><span style="font-size:13px">${esc(q.q.slice(0,46))}…</span></div>`}).join("")}</div></div></div>
- <div class="lfoot">${chest?`<button class="chestbtn" id="cb">${E("wrapped_gift","sm")} <span>宝箱をあけて つづける</span></button>`:`<button class="btn" onclick="endRun()">つづける</button>`}<div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・\u{1F525}${S.streak}日連続')">結果をシェア</button></div>`;
+ <div class="lfoot">${chest?`<button class="btn" id="cb">つづける</button>`:`<button class="btn" onclick="endRun()">つづける</button>`}<div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・\u{1F525}${S.streak}日連続')">結果をシェア</button></div>`;
  // 宝箱は必ず開けてから次へ（つづける＝宝箱を開ける）
- if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");if(b.disabled)return;b.disabled=true;finishAll();openChest(perfect?"パーフェクト宝箱！":"宝箱ゲット！",perfect?1:0,()=>endRun())};
+ if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");if(b.disabled)return;b.disabled=true;finishAll();openChest(perfect?"パーフェクトボーナス！":"クリアボーナス！",perfect?1:0,()=>endRun())};
  // 段階的に見せる（タップでスキップ可）
  const items=$$("#rb .pre");let i=0,n=0,done=false;const cnt=$("#cnt");
  const countUp=()=>{const step=Math.max(1,Math.ceil(total/24));const iv=setInterval(()=>{n=Math.min(total,n+step);cnt.textContent="+"+n;SFX.tick(n/step|0);if(n>=total){clearInterval(iv);cnt.parentNode.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:250})}},28)};
