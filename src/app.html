@@ -96,6 +96,7 @@ h3{font-size:17px;margin:0 0 6px;font-weight:700;line-height:1.25}
 .unit{margin:26px 0 6px;border-radius:18px;padding:14px 16px;color:#fff;font-weight:700;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 0 rgba(0,0,0,.15)}
 .unit small{display:block;font-weight:400;font-size:12px;opacity:.9}
 .path{display:flex;flex-direction:column;align-items:center;gap:26px;padding:34px 0 20px}
+.node:not(.todo)+.node.cur{margin-top:30px} /* 前ノードの星ピルとSTART吹き出しが重ならないように */
 .node{position:relative;width:72px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:28px;transition:transform .1s}
 .node .disc{position:absolute;inset:0;border-radius:50%;background:var(--c);box-shadow:0 7px 0 var(--cd)}
 .node:active .disc{transform:translateY(5px);box-shadow:0 2px 0 var(--cd)}
@@ -469,7 +470,7 @@ function rollChest(boost=0){const r=Math.random()-boost*.08;if(r<.03)return{r:3,
 function openChest(title="宝箱ゲット！",boost=0,onDone){let taps=0;const rw=rollChest(boost);
  modal(`<h2 style="margin:0 0 4px">${title}</h2><p class="muted" id="chint" style="margin:0 0 8px">画面のどこでもタップして開けよう！</p><div id="chest" class="chest" aria-label="宝箱">${E("wrapped_gift")}</div><div id="crw" style="min-height:96px"></div><div class="dots">${[0,1,2].map(i=>`<i id="cd${i}"></i>`).join("")}</div>`,onDone,()=>{
  const c=$("#chest"),ov=$$(".ov").pop();ov.classList.add("chesting");
- const tap=e=>{if(taps>=3)return;e.preventDefault();e.stopPropagation();taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);haptic(taps<3?"medium":"heavy");jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
+ const tap=e=>{if(taps>=3)return;e.preventDefault();e.stopImmediatePropagation();taps++;$("#cd"+(taps-1)).classList.add("on");SFX.shake(taps);haptic(taps<3?"medium":"heavy");jolt(c,4+taps*4,220+taps*40);c.style.transform=`scale(${1+taps*.08})`;
   const x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;burst(x,y,"#ffb300",8+taps*3);
   if(taps===3){ov.classList.remove("chesting");$("#chint").textContent="";setTimeout(()=>{const R=RAR[rw.r];SFX.open(rw.r);flash(R.c);shakeScreen("m");const b=c.getBoundingClientRect();hitmark(b.left+b.width/2,b.top+b.height/2,R.c,1.6+rw.r*.3);confetti(80+rw.r*60,.45);rw.f();save();renderTop();
    c.innerHTML=E(rw.i);c.classList.add("opened");const dt=$(".dots");if(dt)dt.remove();c.style.transform="";$("#crw").innerHTML=`<div class="rar" style="--rc:${R.c}">${R.n}</div><div style="font-weight:700;font-size:22px;margin:6px 0 12px">${rw.t}</div><button class="btn gold" onclick="closeModal()">うけとる</button>`},160)}};
@@ -610,10 +611,10 @@ function finish(){const mock=L.opt.kind==="mock";if(mock)return mockResult();
  <div class="card pre" style="width:100%;text-align:left;padding:12px 14px"><div class="row" style="justify-content:space-between;font-weight:700"><span>Lv.${lv+1} ${titleOf(lv)}</span><span class="muted">あと <b style="color:var(--pri-t)">${nx-S.xp}</b> XP</span></div><div class="gauge" style="height:12px"><i id="lvg" style="width:${fromP}%;background:linear-gradient(90deg,#ffd24a,#ffb300);transition:width .9s cubic-bezier(.3,1.3,.5,1)"></i></div></div>
  ${goalHit?`<div class="say pre"><i class=ms aria-hidden=true>&#xF0037;</i> 今日の目標 ${S.goal}XP 達成！</div>`:""}
  <div class="say pre ${streakUp?"stk":""}"><i class=ms aria-hidden=true>&#xF0026;</i> 連続 <b id="stn">${streakUp&&S.streak>1?S.streak-1:S.streak}</b> 日 ${S.streak>=S.best&&S.streak>1?"・自己ベスト！":""}</div>
- ${chest?`<button class="chestbtn pre" id="cb">${E("wrapped_gift","sm")} <span>宝箱をあける</span></button>`:""}
  <div style="width:100%;text-align:left" class="pre">${L.ids.map(id=>{const q=QID[id];return `<div class="check"><span>${L.firstTry[id]?"<i class=ms aria-hidden=true>&#xF0011;</i>":"<i class=ms aria-hidden=true>&#xF0030;</i>"}</span><span style="font-size:13px">${esc(q.q.slice(0,46))}…</span></div>`}).join("")}</div></div></div>
- <div class="lfoot"><button class="btn" onclick="endRun()">つづける</button><div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・\u{1F525}${S.streak}日連続')">結果をシェア</button></div>`;
- if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");b.disabled=true;b.classList.add("used");b.querySelector("span").textContent="開封済み";openChest(perfect?"パーフェクト宝箱！":"宝箱ゲット！",perfect?1:0)};
+ <div class="lfoot">${chest?`<button class="chestbtn" id="cb">${E("wrapped_gift","sm")} <span>宝箱をあけて つづける</span></button>`:`<button class="btn" onclick="endRun()">つづける</button>`}<div style="height:10px"></div><button class="btn ghost" onclick="share('PM試験クエストで「${esc(L.opt.title)}」をクリア！正答率${acc}%・\u{1F525}${S.streak}日連続')">結果をシェア</button></div>`;
+ // 宝箱は必ず開けてから次へ（つづける＝宝箱を開ける）
+ if(chest)$("#cb").onclick=e=>{e.stopPropagation();const b=$("#cb");if(b.disabled)return;b.disabled=true;finishAll();openChest(perfect?"パーフェクト宝箱！":"宝箱ゲット！",perfect?1:0,()=>endRun())};
  // 段階的に見せる（タップでスキップ可）
  const items=$$("#rb .pre");let i=0,n=0,done=false;const cnt=$("#cnt");
  const countUp=()=>{const step=Math.max(1,Math.ceil(total/24));const iv=setInterval(()=>{n=Math.min(total,n+step);cnt.textContent="+"+n;SFX.tick(n/step|0);if(n>=total){clearInterval(iv);cnt.parentNode.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:250})}},28)};
